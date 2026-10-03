@@ -1,0 +1,21 @@
+id: research-expert
+name: Mistral-Research-7B
+path: ''
+capabilities:
+- research
+- science
+ram_required: 3.1
+load_time: 1.2
+latency: 0.032
+quality: 0.92
+offline: true
+architecture: MistralForCausalLM
+parameters_billion: 7.2
+quantization: Q4_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Specialized in scientific literature analysis, equation extraction, and
+  domain hypothesis formation.
+status: DISK
+last_accessed: 0.0
+access_count: 0

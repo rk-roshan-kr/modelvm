@@ -1,0 +1,21 @@
+id: general-reasoner
+name: Llama-3.1-8B-Instruct
+path: ''
+capabilities:
+- general
+- research
+ram_required: 4.8
+load_time: 1.7
+latency: 0.038
+quality: 0.91
+offline: true
+architecture: LlamaForCausalLM
+parameters_billion: 8.0
+quantization: Q5_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Broad common-sense reasoning, task planning, decomposition, and multi-turn
+  conversational synthesis.
+status: DISK
+last_accessed: 0.0
+access_count: 0

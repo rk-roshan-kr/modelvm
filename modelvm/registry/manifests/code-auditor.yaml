@@ -1,0 +1,21 @@
+id: code-auditor
+name: StarCoder2-15B-Q4
+path: ''
+capabilities:
+- security
+- coding
+ram_required: 8.4
+load_time: 2.9
+latency: 0.045
+quality: 0.92
+offline: true
+architecture: StarCoder2ForCausalLM
+parameters_billion: 15.0
+quantization: Q4_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Deep security auditing, vulnerability scanning, static analysis, and
+  concurrency debugging.
+status: DISK
+last_accessed: 0.0
+access_count: 0

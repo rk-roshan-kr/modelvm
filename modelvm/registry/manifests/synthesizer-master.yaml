@@ -1,0 +1,21 @@
+id: synthesizer-master
+name: Qwen-2.5-32B-Q3
+path: ''
+capabilities:
+- synthesis
+- general
+ram_required: 15.6
+load_time: 4.5
+latency: 0.052
+quality: 0.97
+offline: true
+architecture: Qwen2ForCausalLM
+parameters_billion: 32.5
+quantization: Q3_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Comprehensive document synthesis, executive reporting, cross-domain reconciliation,
+  and final publication writing.
+status: DISK
+last_accessed: 0.0
+access_count: 0

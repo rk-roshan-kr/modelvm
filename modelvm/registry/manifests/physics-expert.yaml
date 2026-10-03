@@ -1,0 +1,21 @@
+id: physics-expert
+name: Llama-Physics-8B
+path: ''
+capabilities:
+- physics
+- science
+ram_required: 3.2
+load_time: 1.3
+latency: 0.034
+quality: 0.9
+offline: true
+architecture: LlamaForCausalLM
+parameters_billion: 8.0
+quantization: Q4_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Domain expert in classical mechanics, quantum theory, thermodynamic laws,
+  and physical interpretations.
+status: DISK
+last_accessed: 0.0
+access_count: 0

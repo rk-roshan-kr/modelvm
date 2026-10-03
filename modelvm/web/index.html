@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ModelVM — Virtual Memory for Intelligence</title>
+  <meta name="description" content="ModelVM: A local AI runtime treating open-weight models as pageable cognitive resources under hard memory constraints.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="cyber-grid"></div>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-box">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+            <path d="M7 8h.01M12 8h.01M17 8h.01M7 12h10"></path>
+          </svg>
+        </div>
+        <div>
+          <div class="logo-title">Model<span>VM</span></div>
+          <div class="logo-subtitle">Virtual Memory for Intelligence</div>
+        </div>
+      </div>
+      <div class="system-status-badge">
+        <span class="pulsing-dot" id="ws-dot"></span>
+        <span id="ws-status">KERNEL ONLINE</span>
+      </div>
+    </div>
+
+    <!-- Center Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="runtime-view" id="tab-runtime">
+        <span class="tab-icon">⚡</span> Runtime & Pager
+      </button>
+      <button class="nav-tab" data-tab="ablation-view" id="tab-ablation">
+        <span class="tab-icon">⚖️</span> Critical Ablation Study
+      </button>
+      <button class="nav-tab" data-tab="library-view" id="tab-library">
+        <span class="tab-icon">📦</span> Model Catalog (52.7 GB)
+      </button>
+    </nav>
+
+    <!-- Header Right Stats -->
+    <div class="header-right">
+      <div class="metric-pill">
+        <span class="pill-label">Model Library</span>
+        <span class="pill-value" id="header-lib-size">52.7 GB</span>
+      </div>
+      <div class="metric-pill highlighted">
+        <span class="pill-label">RAM Budget</span>
+        <span class="pill-value" id="header-budget-size">8.0 GB</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-body">
+
+    <!-- VIEW 1: RUNTIME & PAGER -->
+    <section class="view-panel active" id="runtime-view">
+      
+      <!-- Top Row: Memory Envelope & Metric Cards -->
+      <div class="dashboard-row top-row">
+        <!-- Memory Envelope Card -->
+        <div class="card glass-card memory-envelope-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">💾</span> Active Memory Envelope
+            </div>
+            <div class="card-tag" id="envelope-mode-tag">Hard Limit Enforced</div>
+          </div>
+
+          <div class="memory-meter-container">
+            <div class="meter-bar-wrapper">
+              <div class="meter-labels">
+                <span class="meter-label-left">Active RAM Footprint: <strong id="active-ram-val">0.0</strong> / <strong id="budget-ram-val">8.0</strong> GB</span>
+                <span class="meter-label-right" id="active-ram-pct">0% Used</span>
+              </div>
+              <div class="meter-track">
+                <div class="meter-fill" id="ram-meter-fill" style="width: 0%;"></div>
+                <div class="meter-marker" style="left: 100%;"></div>
+              </div>
+            </div>
+
+            <!-- Virtualization Multiplier Bar -->
+            <div class="virtualization-comparison">
+              <div class="comparison-bar">
+                <div class="comp-slice active-slice" id="comp-active-slice" style="width: 15%;">
+                  <span>Active: 7.6 GB</span>
+                </div>
+                <div class="comp-slice paged-slice" style="width: 85%;">
+                  <span>Virtual Library Available: 52.7 GB (Paged on Storage)</span>
+                </div>
+              </div>
+              <div class="comp-legend">
+                <span class="legend-item"><span class="dot active-dot"></span> Active in Memory</span>
+                <span class="legend-item"><span class="dot paged-dot"></span> Pageable on Storage (Zero RAM usage until needed)</span>
+                <span class="multiplier-badge" id="multiplier-badge">6.6× Memory Multiplier</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Stat Badges -->
+          <div class="stat-grid">
+            <div class="stat-badge">
+              <div class="stat-label">Memory Savings</div>
+              <div class="stat-val text-neon-green" id="stat-savings">85.6%</div>
+            </div>
+            <div class="stat-badge">
+              <div class="stat-label">Peak Resident RAM</div>
+              <div class="stat-val text-neon-blue" id="stat-peak">7.6 GB</div>
+            </div>
+            <div class="stat-badge">
+              <div class="stat-label">Capability Density</div>
+              <div class="stat-val text-neon-yellow" id="stat-density">0.64</div>
+            </div>
+            <div class="stat-badge">
+              <div class="stat-label">Cache Hit Rate</div>
+              <div class="stat-val text-neon-purple" id="stat-hitrate">16.7%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task Control Card -->
+        <div class="card glass-card task-control-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">🎯</span> Cognitive Task Controller
+            </div>
+            <div class="preset-selector">
+              <label for="task-presets">Preset Task:</label>
+              <select id="task-presets">
+                <option value="pdr_example">Scientific Paper Analysis (Research → Math → Coding → Physics → Synthesis)</option>
+                <option value="financial_quant">Algorithmic Trading & Stochastic Calculus (Finance → Math → Coding → Synthesis)</option>
+                <option value="clinical_trial">Clinical Trial & Pharmacology Pipeline (Medicine → Math → Coding → Synthesis)</option>
+                <option value="custom">Custom Task Input...</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="task-input-container">
+            <textarea id="task-goal-input" rows="3" placeholder="Enter multi-domain query...">Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.</textarea>
+          </div>
+
+          <div class="control-row">
+            <div class="control-group">
+              <label for="mode-select">Execution Architecture:</label>
+              <select id="mode-select">
+                <option value="D_FULL_MODELVM">Mode D: Full ModelVM (CSP + Predictive Working Set + Scheduling)</option>
+                <option value="C_DYNAMIC_WITH_CSP">Mode C: Dynamic Loading + CSP (LRU, No Prediction)</option>
+                <option value="B_DYNAMIC_NO_CSP">Mode B: Dynamic Loading (No CSP, State Loss)</option>
+                <option value="A_STATIC_ROUTER">Mode A: Static Single-Model Router (Monolithic)</option>
+              </select>
+            </div>
+
+            <div class="control-group budget-group">
+              <label for="budget-slider">RAM Budget: <span id="budget-slider-val">8.0</span> GB</label>
+              <input type="range" id="budget-slider" min="4.0" max="16.0" step="1.0" value="8.0">
+            </div>
+
+            <button class="btn btn-primary" id="btn-run-task">
+              <span class="btn-icon">▶</span>
+              <span class="btn-text">Execute Task</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle Row: Memory Architecture Residency Slots -->
+      <div class="dashboard-row memory-slots-row">
+        <!-- Resident in Active Memory -->
+        <div class="card glass-card resident-models-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">⚡</span> Active Memory Slots (RAM / VRAM)
+            </div>
+            <div class="slot-count" id="resident-count-badge">0 / 8.0 GB Used</div>
+          </div>
+          <div class="model-tiles-container" id="resident-tiles-list">
+            <div class="empty-state">No models currently paged in. Execute a task to trigger dynamic paging.</div>
+          </div>
+        </div>
+
+        <!-- Paged out in Model Library -->
+        <div class="card glass-card disk-models-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">📚</span> Model Library on Storage (52.7 GB)
+            </div>
+            <div class="slot-count" id="disk-count-badge">10 Models Available</div>
+          </div>
+          <div class="model-tiles-container" id="disk-tiles-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Live Timeline & Cognitive State Packet Inspector -->
+      <div class="dashboard-row bottom-row">
+        <!-- Live Paging Timeline -->
+        <div class="card glass-card timeline-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">⏱️</span> Live Paging & Cognitive Timeline
+            </div>
+            <button class="btn-small" id="btn-clear-timeline">Clear</button>
+          </div>
+          <div class="timeline-stream" id="timeline-stream">
+            <div class="timeline-empty">Kernel idle. Awaiting task execution...</div>
+          </div>
+        </div>
+
+        <!-- Cognitive State Packet (CSP) Viewer -->
+        <div class="card glass-card csp-card">
+          <div class="card-header">
+            <div class="card-title">
+              <span class="title-icon">🧠</span> Cognitive State Packet (CSP)
+            </div>
+            <div class="csp-stage-badge" id="csp-stage-indicator">Stage: Ready</div>
+          </div>
+
+          <!-- CSP Tabs -->
+          <div class="csp-tab-nav">
+            <button class="csp-tab active" data-tab="facts">Facts (<span id="count-facts">0</span>)</button>
+            <button class="csp-tab" data-tab="calculations">Calculations (<span id="count-calcs">0</span>)</button>
+            <button class="csp-tab" data-tab="evidence">Evidence (<span id="count-evidence">0</span>)</button>
+            <button class="csp-tab" data-tab="decisions">Decisions & Assumptions (<span id="count-decisions">0</span>)</button>
+            <button class="csp-tab" data-tab="artifacts">Artifacts (<span id="count-artifacts">0</span>)</button>
+            <button class="csp-tab" data-tab="raw-json">Raw JSON</button>
+          </div>
+
+          <div class="csp-content-body" id="csp-tab-content">
+            <div class="csp-empty">Cognitive State Packet will populate as stages execute.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: CRITICAL ABLATION STUDY (PDR SECTION 13) -->
+    <section class="view-panel" id="ablation-view">
+      <div class="ablation-hero card glass-card">
+        <div class="ablation-hero-header">
+          <div>
+            <h2>Critical Ablation Study (Section 13)</h2>
+            <p>Empirically proving which architectural mechanisms drive ModelVM's capability density and memory savings.</p>
+          </div>
+          <button class="btn btn-primary" id="btn-run-ablation">
+            <span class="btn-icon">⚡</span> Run 4-Configuration Benchmark
+          </button>
+        </div>
+
+        <div class="ablation-winner-banner" id="ablation-banner" style="display: none;">
+          <div class="winner-icon">🏆</div>
+          <div class="winner-text" id="ablation-winner-text"></div>
+        </div>
+      </div>
+
+      <div class="ablation-cards-grid" id="ablation-grid">
+        <!-- Configuration Cards dynamically rendered -->
+      </div>
+    </section>
+
+    <!-- VIEW 3: MODEL CATALOG (10 MODELS) -->
+    <section class="view-panel" id="library-view">
+      <div class="card glass-card library-overview-card">
+        <div class="card-header">
+          <div class="card-title">
+            <span class="title-icon">🏛️</span> ModelVM Heterogeneous Library (10 Models, 52.7 GB)
+          </div>
+          <div class="card-tag">All Open-Weight Models</div>
+        </div>
+        <p class="library-desc">
+          Each model is configured with a standardized manifest defining its parameter size, quantization, memory footprint, load latency, and capability specialties.
+        </p>
+
+        <div class="catalog-grid" id="catalog-full-grid">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

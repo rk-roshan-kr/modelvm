@@ -1,0 +1,20 @@
+id: coding-expert
+name: DeepSeek-Coder-6.7B
+path: ''
+capabilities:
+- coding
+ram_required: 3.0
+load_time: 1.1
+latency: 0.03
+quality: 0.94
+offline: true
+architecture: DeepSeekForCausalLM
+parameters_billion: 6.7
+quantization: Q4_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: High-efficiency code synthesis, algorithmic implementation, unit testing,
+  and numerical simulations.
+status: DISK
+last_accessed: 0.0
+access_count: 0

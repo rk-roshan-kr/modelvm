@@ -1,0 +1,20 @@
+id: multimodal-vision
+name: Phi-3.5-Vision-4.2B
+path: ''
+capabilities:
+- vision
+ram_required: 3.6
+load_time: 1.4
+latency: 0.035
+quality: 0.88
+offline: true
+architecture: Phi3VForCausalLM
+parameters_billion: 4.2
+quantization: FP16/Q4
+context_window: 8192
+energy_cost_factor: 1.0
+description: Chart parsing, visual scientific diagram extraction, image comprehension,
+  and OCR table extraction.
+status: DISK
+last_accessed: 0.0
+access_count: 0

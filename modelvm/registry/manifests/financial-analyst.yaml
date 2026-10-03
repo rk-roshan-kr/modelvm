@@ -1,0 +1,21 @@
+id: financial-analyst
+name: Fin-LLaMA-8B
+path: ''
+capabilities:
+- finance
+- mathematics
+ram_required: 4.5
+load_time: 1.6
+latency: 0.035
+quality: 0.89
+offline: true
+architecture: LlamaForCausalLM
+parameters_billion: 8.0
+quantization: Q5_K_M
+context_window: 8192
+energy_cost_factor: 1.0
+description: Quantitative risk modeling, Black-Scholes options pricing, financial
+  statement ratios, and macro forecasting.
+status: DISK
+last_accessed: 0.0
+access_count: 0

@@ -1,0 +1,21 @@
+id: biomedical-expert
+name: Bio-Mistral-7B
+path: ''
+capabilities:
+- medicine
+- science
+ram_required: 4.1
+load_time: 1.5
+latency: 0.036
+quality: 0.93
+offline: true
+architecture: MistralForCausalLM
+parameters_billion: 7.0
+quantization: Q5_K_S
+context_window: 8192
+energy_cost_factor: 1.0
+description: Genomics, pharmacological pathways, clinical trials analysis, and molecular
+  biology.
+status: DISK
+last_accessed: 0.0
+access_count: 0

@@ -1,0 +1,20 @@
+id: mathematics-expert
+name: Qwen-Math-7B
+path: ''
+capabilities:
+- mathematics
+ram_required: 2.4
+load_time: 0.9
+latency: 0.028
+quality: 0.96
+offline: true
+architecture: Qwen2ForCausalLM
+parameters_billion: 7.0
+quantization: Q4_K_S
+context_window: 8192
+energy_cost_factor: 1.0
+description: State-of-the-art formal mathematical reasoning, numerical computation,
+  and symbolic theorem derivation.
+status: DISK
+last_accessed: 0.0
+access_count: 0
