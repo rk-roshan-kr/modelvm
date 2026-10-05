@@ -277,7 +277,7 @@ Dynamic Paging serves as the fixed runtime substrate. The $2^3$ factorial design
 ## 9. Limitations & Engineering Roadmap
 
 1. **Sequential Paging Overhead:** On slower storage (e.g. SATA SSDs), cold-loading a 3 GB model introduces a 1.5–2.5 second pause. Modern PCIe 4.0/5.0 NVMe SSDs reduce this to sub-second durations ($<0.6$s).
-2. **Asynchronous DMA Prefetching:** Future work includes overlapping execution token generation with asynchronous direct memory access (DMA) weight streaming.
+2. **Overlapped Weight Streaming:** Future work includes overlapping execution token generation with asynchronous direct memory access (DMA) weight streaming.
 
 ---
 

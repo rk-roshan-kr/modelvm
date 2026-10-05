@@ -146,7 +146,7 @@ Where $k$ is the forward lookahead horizon (default $k=2$), and $C_{t+j}$ is the
 
 ### Systems Benefits of $W(t, k)$:
 1. **Eviction Shielding:** When Model A requires eviction of resident models to satisfy physical RAM constraints, any currently resident model $m \in W(t, k)$ receives an eviction penalty multiplier ($\delta \times 1.8$), preventing thrashing.
-2. **Background Prefetching:** If free physical memory permits ($\text{FreeRAM} \ge \text{RAM}(m_{\text{next}})$), the pager prefetches $m_{\text{next}}$ into spare memory during the execution of stage $t$, achieving zero cold-load latency for stage $t+1$.
+2. **Opportunistic Pre-staging:** If free physical memory permits ($\text{FreeRAM} \ge \text{RAM}(m_{\text{next}})$), the pager pre-stages $m_{\text{next}}$ into verified spare memory before the execution of stage $t+1$, minimizing cold-load stalls.
 
 ---
 
@@ -263,7 +263,7 @@ ModelVM uniquely bridges these fields by treating **the model capability itself 
 ## 8. Limitations & Engineering Roadmap
 
 1. **Cold-Start Paging Overhead:** On slower storage (e.g. SATA SSDs or HDDs), cold-loading a 3 GB model takes 1.5–2.5 seconds. On modern PCIe 4.0/5.0 NVMe SSDs (transfer speeds $\ge 5000$ MB/s), loading is sub-second ($<0.6$s). Quantized weight memory mapping (`mmap`) further reduces this latency.
-2. **Real-time Streaming:** Sequential paging introduces step pauses. Future work explores overlapping execution tokens with asynchronous DMA background paging.
+2. **Real-time Streaming:** Sequential paging uses non-preemptive staging between stages. Future work explores overlapping execution tokens with hardware-level asynchronous DMA weight streaming.
 
 ---
 

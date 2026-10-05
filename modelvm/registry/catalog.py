@@ -1,6 +1,7 @@
 """Model Catalog: Registry of available open-weight models."""
 
 from __future__ import annotations
+import json
 import os
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -222,8 +223,19 @@ class ModelCatalog:
 
     def load_defaults(self) -> None:
         """Populates the catalog with the 10 reference specialist models (52.7 GB total)."""
+        matrix_path = os.path.join(os.path.dirname(__file__), "capability_matrix.json")
+        matrix = {}
+        if os.path.exists(matrix_path):
+            try:
+                with open(matrix_path, "r", encoding="utf-8") as f:
+                    matrix = json.load(f)
+            except Exception as e:
+                print(f"[ModelCatalog] Could not load capability_matrix.json: {e}")
+
         for item in DEFAULT_MODELS:
             manifest = ModelManifest(**item)
+            if manifest.id in matrix:
+                manifest.empirical_capabilities = matrix[manifest.id]
             self._models[manifest.id] = manifest
 
     def register(self, manifest: ModelManifest) -> None:

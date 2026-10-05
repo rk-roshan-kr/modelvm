@@ -102,7 +102,7 @@ The novelty of ModelVM lies in the **unprecedented architectural synthesis of fo
 │  3. Predictive Cognitive Working Set (Denning's Principle for AI)           │
 │     • Anticipates upcoming capabilities: W(t, k) = [C_{t+1}, C_{t+2}, ...]  │
 │     • Eviction shielding: protects resident models needed in future stages  │
-│     • Background prefetching into spare memory during active inference       │
+│     • Opportunistic pre-staging into verified spare memory headroom          │
 │                                                                             │
 │  4. Joint Capability / Resource-Aware Systems Scheduling                    │
 │     • Score(m) = Fit - α(RAM) - β(Load) - γ(Energy) - δ(Evict) + η(Future)  │
@@ -127,7 +127,7 @@ The CSP solves this by establishing a **model-neutral, structured semantic inter
 #### Novelty 3: Translating Working Set Theory to Cognitive Workflows
 Peter Denning's seminal Working Set Model \cite{denning1968working} proved that systems thrash when physical memory cannot hold the referenced working set. ModelVM introduces the **Predictive Cognitive Working Set ($W(t, k)$)**: by predicting the capabilities needed in stages $t+1 \dots t+k$, ModelVM:
 * Applies an **eviction penalty** to resident models that will be needed soon (avoiding paging out a coding model that will be needed in the next step).
-* Performs **asynchronous background prefetching** into spare RAM if available, converting cold loads into zero-latency cache hits.
+* Performs **opportunistic non-preemptive pre-staging** into spare RAM if available, converting cold loads into zero-latency cache hits.
 
 #### Novelty 4: Joint Capability / Resource Scheduling Formulation
 Existing routers evaluate only query fit ($F_{\text{capability}}$) or monetary cost. ModelVM treats model selection as a systems optimization problem:
@@ -180,7 +180,7 @@ Through rigorous benchmarking across a 10-model library (52.7 GB) and an 8.0 GB 
 ### Reviewer Critique 3: *"Isn't model loading from disk too slow for real-time interaction?"*
 * **Rebuttal:**
   1. In multi-step cognitive reasoning (e.g. analyzing research, running proofs, writing simulations), execution time is dominated by thinking tokens ($\ge 10-30$ seconds per stage). A sub-second model load ($0.6-1.1$s on modern NVMe SSDs) represents $< 5\%$ of total task time.
-  2. ModelVM's **resident model caching** and **background prefetching** eliminate loading latency entirely for cached or pre-fetched stages (demonstrated by our $16.7\%$ cache hit rate and $0.00$s paging time on pre-fetched coding stages).
+  2. ModelVM's **resident model caching** and **opportunistic pre-staging** eliminate loading latency entirely for cached or pre-staged stages (demonstrated by our $16.7\%$ cache hit rate and $0.00$s paging time on pre-staged coding stages).
 
 ### Reviewer Critique 4: *"Why not just use cloud APIs (GPT-4o, Claude 3.5 Sonnet)?"*
 * **Rebuttal:**

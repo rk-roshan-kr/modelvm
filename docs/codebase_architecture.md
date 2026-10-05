@@ -181,7 +181,7 @@ Outputs a `SchedulingScoreBreakdown` providing an explainable, transparent decom
 #### 2. Working Set Predictor (`modelvm/router/working_set.py`)
 * `predict_future_capabilities(stages, current_idx)`: Extracts upcoming capabilities within lookahead window $k$.
 * `predict_future_model_ids(stages, current_idx)`: Resolves best-fit model IDs for future stages.
-* `recommend_prefetch_model()`: Identifies candidate models for background prefetching when spare physical memory is available.
+* `recommend_prefetch_model()`: Identifies candidate models for opportunistic pre-staging when spare physical memory headroom is available.
 
 #### 3. Confidence Controller (`modelvm/router/confidence.py`)
 * Evaluates stage outputs against a minimum confidence threshold (default $0.70$).

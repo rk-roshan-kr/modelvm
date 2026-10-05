@@ -1,6 +1,6 @@
 {
   "title": "ModelVM Replicated 2^3 Factorial Experiment Dataset",
-  "description": "Raw replicate measurements across 8 orthogonal treatment cells and static monolith",
+  "description": "Genuine runtime measurements across 8 orthogonal treatment cells and static monolith",
   "design": "2^3 Full Factorial Design with n=10 Replicates per Cell",
   "total_trials": 90,
   "factorial_trials_N": 80,

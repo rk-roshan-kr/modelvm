@@ -42,6 +42,9 @@ class SimulationBackend(ModelBackend):
     emulates inference token latency, and produces valid Cognitive State Packets.
     """
 
+    def __init__(self, sleep_multiplier: float = 0.0):
+        self.sleep_multiplier = sleep_multiplier
+
     def execute_stage(
         self,
         model: ModelManifest,
@@ -53,8 +56,9 @@ class SimulationBackend(ModelBackend):
         start_time = time.time()
         
         # Emulate token generation delay based on model latency
-        emulated_delay = min(0.6, model.latency * 15.0)
-        time.sleep(emulated_delay)
+        emulated_delay = min(0.6, model.latency * 15.0) * self.sleep_multiplier
+        if emulated_delay > 0:
+            time.sleep(emulated_delay)
 
         new_csp = CognitiveStatePacket(
             goal=input_csp.goal,

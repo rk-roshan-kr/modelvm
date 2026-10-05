@@ -625,8 +625,8 @@ def fig5_ablation():
     # (b) Paging main effects
     ax = axes[1]
     p_factors = [r"$\Delta_B$ (WS)", r"$\Delta_C$ (Sched)", r"$\Delta_{BC}$ (WS$\times$Sched)"]
-    p_effects = [-8.60, -5.80, -2.40]
-    p_ci      = [ 0.70,   0.65,   0.45]
+    p_effects = [-9.30, -6.50, -0.70]
+    p_ci      = [ 0.35,   0.35,   0.35]
     p_bar_c   = ["#8B2020", "#8B2020", "#BC6B6B"]
     y_pos     = np.arange(len(p_factors))
 

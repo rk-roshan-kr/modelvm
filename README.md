@@ -103,7 +103,7 @@ ModelVM Virtual Memory Approach:
      ▼ (Paging Layer)                                                                                   ▼ (Execution Layer)
 ┌───────────────────────────────────────┐                                          ┌───────────────────────────────────────┐
 │          MEMORY HIERARCHY             │                                          │           EXECUTION BACKENDS          │
-│ • Tier 1: Dedicated VRAM (16 GB GDDR7)│ <────────── Async DMA Transfers ────────>│ • Production Ollama C++/CUDA Daemon   │
+│ • Tier 1: Dedicated VRAM (16 GB GDDR7)│ <──────── Non-Preemptive Staging ───────>│ • Production Ollama C++/CUDA Daemon   │
 │ • Tier 2: Host RAM (64 GB DDR5)       │                                          │ • PyTorch Native Direct Connectors    │
 │ • Tier 3: NVMe SSD Storage (PCIe 4.0) │                                          │ • Discrete Event Hardware Simulation  │
 └───────────────────────────────────────┘                                          └───────────────────────────────────────┘
