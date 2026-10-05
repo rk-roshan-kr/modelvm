@@ -26,8 +26,8 @@
 Modern domain specialists (e.g., mathematics, coding, scientific literature, physical reasoning) significantly outperform monolithic generalist models within their respective domains. However, **holding an ensemble of heterogeneous specialists simultaneously in physical memory is impossible on consumer workstations and edge hardware**: a standard 10-model specialist library demands **52.7 GB** of memory, while consumer devices typically offer only **8.0–16.0 GB** of RAM/VRAM.
 
 ModelVM decouples cognitive execution from concurrent physical residency:
-1. **Semantic State Virtualization (Cognitive State Packet / CSP)**: Replaces token-level prompt concatenation with a model-neutral, typed semantic intermediate representation, cutting cumulative prompt context by **60.8%** and eliminating catastrophic amnesia.
-2. **Predictive Model Residency ($W(t, k)$)**: Employs a forward-looking working-set lookahead engine, cost-aware eviction shielding, and asynchronous background DMA prefetching, cutting physical pipeline wall-clock latency by **77.2%** ($65.05\,\text{s} \to 14.85\,\text{s}$).
+1. **Semantic State Virtualization (Cognitive State Packet / CSP)**: Replaces token-level prompt concatenation with a model-neutral, typed semantic intermediate representation, cutting cumulative prompt context by **60.8%** and maintaining bounded semantic drift.
+2. **Predictive Model Residency ($W(t, k)$)**: Employs a forward-looking working-set lookahead engine, cost-aware eviction shielding, and opportunistic non-preemptive prefetching into spare headroom, cutting physical pipeline wall-clock latency by **77.2%** ($65.05\,\text{s} \to 14.85\,\text{s}$).
 3. **Multi-Objective Cognitive Scheduling**: Arbitrates model execution via empirical held-out capability profiling, memory deficit penalties, cold-load latency, and future stage reuse.
 4. **Deterministic Memory Safety**: Strictly enforces runtime memory invariant ($\sum \text{RAM}_{\text{req}} \le \mathcal{B}_{\text{RAM}}$), eliminating Out-Of-Memory (OOM) fatal aborts across stress sweeps down to $4.0\,\text{GB}$.
 
@@ -114,7 +114,7 @@ ModelVM Virtual Memory Approach:
 ## ⚡ Key Systems Features
 
 ### 1. Semantic State Virtualization (Cognitive State Packet)
-Passing conversational chat logs across heterogeneous models produces catastrophic token accumulation ($O(N^2)$ prompt growth) and numeric hallucinations. ModelVM standardizes inter-model communication into a strongly typed **Cognitive State Packet (CSP)**:
+Passing conversational chat logs across heterogeneous models produces linear-cumulative prompt context accumulation ($O(t \cdot \bar{L}_{\text{gen}})$ token growth) and compounding numerical drift. ModelVM standardizes inter-model communication into a strongly typed **Cognitive State Packet (CSP)**:
 * **Factual Continuity**: Extracts and verifies ground-truth entity-attribute bindings.
 * **Non-Circular AST Verification**: Isolates arithmetic and symbolic math outside the LLM; calculations are strictly validated via Python Abstract Syntax Trees before admission into state.
 * **Diversity Discounting**: Dampens confidence amplification when models share pretraining priors ($w_{\text{div}} = 0.65$), preventing hallucinated echo loops.
@@ -123,7 +123,7 @@ Passing conversational chat logs across heterogeneous models produces catastroph
 Standard LRU caching fails catastrophically in multi-stage scientific loops by evicting critical models immediately before they are needed again. ModelVM implements:
 $$\text{Score}_{\text{evict}}(m) = \frac{\Delta t_{\text{recency}}(m)}{t_{\text{load}}(m) \cdot (1 + P_{\text{future}}(m))}$$
 * **Eviction Shielding**: Models residing inside the forward-looking working set $W(t, k)$ receive an impenetrable shielding penalty ($P_{\text{future}} = 1000.0$), eliminating bus thrashing across alternating derivation/simulation loops.
-* **Opportunistic Background Prefetching**: When execution headroom permits ($\text{RAM}_{\text{free}} - \text{RAM}_{\text{req}}(m) \ge 1.0\,\text{GB}$), upcoming specialists are prefetched into memory concurrently over the PCIe bus while foreground inference executes.
+* **Opportunistic Headroom Prefetching**: When execution headroom permits ($\text{RAM}_{\text{free}} - \text{RAM}_{\text{req}}(m) \ge 1.0\,\text{GB}$), upcoming specialists are staged into memory ahead of time without evicting active models.
 
 ### 3. Multi-Objective Cognitive Scheduling
 Rather than relying on arbitrary manual routing scores, ModelVM dynamically optimizes:
@@ -152,7 +152,7 @@ We deployed and verified ModelVM on physical consumer silicon executing real ope
 | **Peak GPU Generation Throughput** | $150.6\,\text{tok/s}$ (`qwen2.5-coder`) | $\mathbf{431.7\,\text{tok/s}}$ (`llama3.2:1b`) | **Deterministic Execution** |
 | **Physical Memory Faults / OOMs** | $0$ | $\mathbf{0}$ | **$100\%$ Memory Safe** |
 
-*(Raw physical telemetry traces are archived in [`docs/real_ollama_experiment_results.json`](docs/real_ollama_experiment_results.json))*.
+*(In the physical validation workload on consumer silicon, the ModelVM configuration completed the 5-stage pipeline 77.2% faster [$65.05\,\text{s} \to 14.85\,\text{s}$], driven jointly by a 60.8% reduction in prompt evaluation overhead and coordinated model residency. Raw physical telemetry traces are archived in [`docs/real_ollama_experiment_results.json`](docs/real_ollama_experiment_results.json)).*
 
 ---
 

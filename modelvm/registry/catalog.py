@@ -242,9 +242,17 @@ class ModelCatalog:
         matches = [m for m in self._models.values() if capability in m.capabilities]
         return sorted(matches, key=lambda m: (m.capability_score(capability), m.quality), reverse=True)
 
-    def total_library_size_gb(self) -> float:
-        """Calculates total disk footprint of the library (sum of RAM requirements)."""
+    def total_ram_required_gb(self) -> float:
+        """Calculates aggregate configured RAM requirement of all models in the library (52.7 GB)."""
         return round(sum(m.ram_required for m in self._models.values()), 2)
+
+    def total_disk_size_gb(self) -> float:
+        """Calculates total serialized secondary disk storage footprint of the library (64.0 GB)."""
+        return round(sum(m.disk_size_gb for m in self._models.values()), 2)
+
+    def total_library_size_gb(self) -> float:
+        """Backward-compatible alias returning aggregate configured RAM requirement (52.7 GB)."""
+        return self.total_ram_required_gb()
 
     def load_from_directory(self, dir_path: str) -> int:
         """Loads YAML model manifests from a directory."""

@@ -187,7 +187,7 @@ ModelVM implements two interchangeable eviction policies derived from abstract b
     \item \textbf{Cost-Aware Eviction (\texttt{CostAwareEvictionPolicy}):} Evaluates resident models using an eviction priority score $S_{\text{evict}}(m)$, where a higher score indicates greater desirability for eviction:
     \begin{equation}
     \begin{aligned}
-    S_{\text{evict}}(m) &= 0.5 \cdot \Delta t_{\text{recency}}(m) + 1.5 \cdot \text{RAM}(m) \\
+    S_{\text{evict}}(m) &= 0.5 \cdot \Delta t_{\text{recency}}(m) + 1.5 \cdot \text{RAM}_{\text{req}}(m) \\
     &\quad - 2.0 \cdot t_{\text{load}}(m) - P_{\text{future}}(m)
     \end{aligned}
     \label{eq:eviction_score}
@@ -197,7 +197,7 @@ ModelVM implements two interchangeable eviction policies derived from abstract b
     P_{\text{future}}(m) = \begin{cases} 1000.0, & \text{if } m \in W(t, k) \\ 0.0, & \text{otherwise} \end{cases}
     \end{equation}
 \end{itemize}
-Equation~(\ref{eq:eviction_score}) establishes an intuitive systems tradeoff: the memory manager prioritizes evicting models that yield substantial memory headroom, reload quickly over the bus if needed later, have been idle for extended durations, and critically, are \textbf{not} present in the projected future working set $W(t, k)$. Models in $W(t, k)$ receive an overwhelming $1000.0$ penalty deduction, effectively shielding them from premature eviction.
+The analytical eviction formulation establishes the conceptual cost-tradeoff objective; in the systems codebase (\texttt{modelvm/pager/policy.py}), this objective is evaluated directly via the deterministic empirical priority ranking heuristic of Equation~(\ref{eq:eviction_score}). The memory manager prioritizes evicting models that yield substantial memory headroom, reload quickly over the bus if needed later, have been idle for extended durations, and critically, are \textbf{not} present in the projected future working set $W(t, k)$. Models in $W(t, k)$ receive an overwhelming $1000.0$ penalty deduction, effectively shielding them from premature eviction.
 
 \paragraph{Weight Prefetching into Spare Headroom.}
 The method \texttt{prefetch(model\_id)} allows the runtime to stage weights into spare memory ahead of execution. Crucially, prefetching is non-preemptive and governed by a strict two-stage admission gate: prefetching is permitted only when the candidate model yields positive return-on-investment ($U_{\text{prefetch}}(m) > 0.0$) and staging it preserves at least 1.0\,GB of configured residency headroom ($\text{RAM}_{\text{free}} - \text{RAM}_{\text{req}}(m) \ge 1.0\,\text{GB}$). A prefetch operation is never permitted to trigger evictions of currently active models, ensuring that opportunistic staging operations do not induce thrashing in the primary compute path.

@@ -441,7 +441,7 @@ By 8 transitions ($W_4$), fact retention drops to $0.320$, calculation accuracy 
 \begin{equation}
 \begin{aligned}
 R_{\text{facts}}^{\text{CSP}}(N) &\ge 0.940, \quad R_{\text{calcs}}^{\text{CSP}}(N) \ge 0.920, \\
-&\forall N \in \{1, \dots, 12\}
+&\forall N \in \{1, 2, 4, 8, 12\}
 \end{aligned}
 \end{equation}
 Even after 12 heterogeneous specialist transitions across multiple cyclic loops ($W_5$), fact retention remains at $0.940$ [0.90, 0.98], calculation accuracy remains at $0.920$, and semantic drift is bounded at $D_{\text{drift}} = 0.035$. Because CSP serializes only formal state entities (verified mathematical equations, typed facts, code deliverables) rather than dialogue transcripts, its serialization footprint grows sub-linearly, reaching only $690 \pm 35$ tokens at 12 transitions ($16.8\%$ of $W_{\text{in}}$).
@@ -565,7 +565,7 @@ $S_5$: Synthesis   & \texttt{llama3.2:1b} & 1,673 & 439 & +73.8\% & 431.7 \\
 As reported in Table~\ref{tab:real_ollama_telemetry}, physical execution confirms three vital findings:
 \begin{enumerate}
     \item \textbf{Context Bloat Elimination:} Under raw transcript concatenation, prompt token size expands monotonically, growing from 103 to 1,673 tokens by Stage 5 (total 4,291 prompt tokens processed). In contrast, typed CSP bounds handoff state strictly to verified mathematical facts and parameter constraints, requiring only 439 tokens at Stage 5 (1,683 tokens total, a \textbf{60.8\% cumulative prompt context reduction}).
-    \item \textbf{Execution Latency Reduction:} While the raw execution baseline required 65.05\,s of total execution time due to cumulative prompt processing and uncoordinated model load stalls, ModelVM completed the identical 5-stage pipeline in \textbf{14.85\,s}—a \textbf{77.2\% reduction in end-to-end wall-clock latency}.
+    \item \textbf{Execution Latency Reduction:} In the physical validation workload, the ModelVM configuration completed the identical 5-stage pipeline in \textbf{14.85\,s} compared to 65.05\,s for the uncoordinated raw baseline—a \textbf{77.2\% reduction in end-to-end wall-clock latency}, driven jointly by reduced prompt evaluation overhead and coordinated model weight residency.
     \item \textbf{High Physical Throughput on Modern Silicon:} On the RTX 5070 Ti, the 7B/8B specialist models achieved peak generation throughputs of $139.1\text{--}152.8$\,tokens/sec, with the lightweight synthesis model reaching $431.7$\,tokens/sec.
 \end{enumerate}
 These physical silicon measurements corroborate our formal simulation results, demonstrating that ModelVM's architectural primitives provide immediate, measurable latency and memory advantages on physical commodity GPU silicon.

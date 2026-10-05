@@ -433,14 +433,14 @@ def fig3_scheduler():
         cx += cw
 
     catalog_rows = [
-        ("math-expert",     "+0.91", "-0.12", "-0.07", "-0.03", "-0.02", "+0.28", "+0.95",
+        ("math-expert",     "+0.96", "-0.06", "-0.05", "-0.02", "0.00", "0.00", "+0.83",
          "SELECTED",     "#EAF2E8", GREEN),
-        ("coding-expert",   "+0.48", "-0.15", "-0.08", "-0.03", "-0.04", "+0.10", "+0.28",
+        ("coding-expert",   "+0.05", "-0.08", "-0.06", "-0.02", "0.00", "+0.35", "+0.25",
          "AVAILABLE",    LGREY,    GREY),
-        ("research-expert", "+0.62", "-0.16", "-0.09", "-0.04", "-0.02", "+0.18", "+0.49",
-         "AVAILABLE",    "white",  GREY),
-        ("general-reasoner","+0.85", "-0.99", "-0.30", "-0.12", "-0.15", "+0.35", "-0.36",
-         "NOT ADMITTED", "#FDF0F0", RED),
+        ("research-expert", "+0.05", "-0.08", "0.00",  "-0.02", "0.00", "0.00", "-0.05",
+         "RESIDENT",     "white",  GREY),
+        ("general-reasoner","+0.46", "-0.18", "-0.11", "-0.03", "-0.08", "0.00", "+0.06",
+         "OUTSCORED",    "#FDF0F0", RED),
     ]
 
     for r_idx, (name, cap, ram, load, eng, evict, fut, total, outcome, fc, badge_c) in enumerate(catalog_rows):
@@ -456,7 +456,7 @@ def fig3_scheduler():
             fs = 5.2 if (i == 0 and len(name) > 12) else (5.6 if i == 0 else 6.0)
             try:
                 num = float(v)
-                vc = GREEN if num > 0 else RED
+                vc = GREEN if num > 0 else (RED if num < 0 else DARK)
             except ValueError:
                 vc = DARK
             ha = "left" if i == 0 else "center"
@@ -481,8 +481,8 @@ def fig3_scheduler():
         _vline(ax, cx, TBOT, TBL_TOP, lw=0.3, color="#aaaaaa")
 
     ax.text(TX, TBOT - 4.0,
-            "general-reasoner rejected: RAM requirement (7.1 GB) exceeds available headroom (4.9 GB).",
-            ha="left", va="top", fontsize=5.3, color=GREY, style="italic")
+            "general-reasoner admissible under 8.0 GB budget, but outscored by memory cost (7.1 GB) and eviction deficit (2.2 GB deficit vs 4.9 GB free RAM).",
+            ha="left", va="top", fontsize=5.0, color=GREY, style="italic")
 
     _savefig("fig3_scheduler.pdf")
 

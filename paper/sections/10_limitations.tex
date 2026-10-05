@@ -26,7 +26,7 @@ Under acute budgets ($\mathcal{B}_{\text{RAM}} = 4.0\text{--}6.0$\,GB) where dua
 \subsection{Computational and Serialization Overheads of Typed CSP}
 \label{sec:lim_csp_overhead}
 
-The Cognitive State Protocol enforces formal state boundaries through strongly typed serialization schemas, JSON-Schema constraints, and abstract syntax tree (AST) integrity verification. While this eliminates semantic drift across multi-stage handoffs (maintaining $R_{\text{facts}} \ge 0.940$ at $N=12$), it introduces CPU serialization and validation overheads absent in unstructured, streaming text concatenation.
+The Cognitive State Protocol enforces formal state boundaries through strongly typed serialization schemas, JSON-Schema constraints, and abstract syntax tree (AST) integrity verification. While this substantially reduces measured semantic drift across multi-stage handoffs (maintaining $R_{\text{facts}} \ge 0.940$ at $N=12$), it introduces CPU serialization and validation overheads absent in unstructured, streaming text concatenation.
 
 \paragraph{Empirical Overhead Profiling.}
 Table~\ref{tab:csp_overhead} quantifies the wall-clock computational latency of CSP operations across varying state entity counts on our physical AMD 16-Core host processor (Table~\ref{tab:hardware}).

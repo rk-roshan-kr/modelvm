@@ -101,7 +101,7 @@ The Cognitive Scheduler performs multi-objective model selection for each execut
 \subsection{The Formal Memory Invariant}
 \label{sec:memory_invariant}
 
-Deterministic execution on resource-constrained hardware requires formal mechanisms preventing memory exhaustion. We now formulate the residency state and prove that ModelVM strictly preserves the configured runtime memory invariant under all execution trajectories.
+Deterministic execution on resource-constrained hardware requires formal mechanisms preventing memory exhaustion. We now formulate the residency state and prove that ModelVM preserves the configured runtime memory invariant for all successful execution trajectories satisfying the admission assumptions.
 
 \paragraph{Residency State Space.}
 Let $\mathcal{M} = \{m_1, \dots, m_K\}$ denote the full catalog of $K$ available models, where each model $m \in \mathcal{M}$ is characterized by a static parameter RAM requirement $\text{RAM}_{\text{req}}(m) > 0$. At any discrete stage transition $t \in \{0, \dots, N\}$, the memory state of the runtime is completely defined by the resident set:

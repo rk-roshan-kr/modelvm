@@ -140,7 +140,7 @@ A higher score $S_{\text{evict}}(m)$ indicates higher priority for eviction. The
 
 The policy prioritizes evicting models that have remained idle for substantial periods, release large memory blocks, and can be reloaded rapidly over the bus. Crucially, the $1000.0$ penalty deduction in Equation~(\ref{eq:shielding_penalty}) establishes a \textbf{strong eviction penalty for predicted future demand}. The policy still retains future-demanded models within the candidate pool; however, the large 1000.0 penalty ensures they are selected only if all non-predicted resident models have been exhausted and a memory deficit remains.
 
-We explicitly clarify: the eviction scoring policy is a \textbf{deterministic runtime heuristic}, not a solution to an NP-hard multi-choice knapsack optimization. Solving exact dynamic programming formulations at every stage would introduce runtime scheduling overhead and assume static task execution without runtime branch variance.
+We explicitly clarify: the analytical eviction formulation establishes the theoretical cost-tradeoff objective; in the systems implementation (\texttt{modelvm/pager/policy.py}), this objective is evaluated via the deterministic empirical priority ranking heuristic of Equation~(\ref{eq:eviction_score_formal}), rather than an expensive dynamic programming knapsack solver that would introduce per-stage scheduling overhead and assume static task execution without runtime branch variance.
 
 \subsection{Time-Domain Prefetch Utility}
 \label{sec:prefetch_utility}
