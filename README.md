@@ -2,7 +2,7 @@
 
 > **A local AI runtime that treats open-weight models as pageable cognitive resources rather than permanently loaded applications under a strict memory budget.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-cyan.svg)](https://www.python.org/)
 [![ModelVM Architecture](https://img.shields.io/badge/Architecture-Cognitive%20OS-brightgreen.svg)](#architecture)
 [![Active Budget](https://img.shields.io/badge/Active%20RAM-8.0%20GB%20Envelope-magenta.svg)](#demonstration)
