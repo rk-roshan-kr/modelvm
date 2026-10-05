@@ -1,0 +1,103 @@
+\section{Limitations and Operational Boundaries}
+\label{sec:limitations}
+
+A rigorous systems contribution must delineate its operational boundaries and characterize its failure modes. ModelVM is explicitly engineered for sequential, heterogeneous multi-specialist pipelines executing under constrained host memory envelopes. In this section, we analyze four fundamental operational boundaries: branch misprediction under non-linear execution topologies, serialization overhead of formal state contracts, catalog scalability under pinned memory pressure, and worst-case adversarial workload dynamics.
+
+\subsection{Branch Misprediction in Non-Deterministic Execution Graphs}
+\label{sec:lim_branch_mispredict}
+
+ModelVM's predictive working-set engine relies on forward visibility exposed by the task decomposition directed acyclic graph (DAG) $\mathcal{G} = (\mathcal{V}, \mathcal{E})$. In deterministic linear pipelines ($S_1 \to S_2 \to \dots \to S_K$), the lookahead sequence is exact, enabling optimal opportunistic prefetching into free memory headroom. However, complex autonomous workflows frequently incorporate runtime conditional branching (e.g., self-debugging loops where a code execution test passes or fails, or iterative mathematical refinement that exits based on an error threshold $\epsilon$).
+
+When execution encounters a conditional branch with branching probability $p \in (0, 1)$, predictive prefetching is susceptible to \textbf{branch misprediction}. Suppose at stage $t$, the working-set engine predicts the primary branch requiring specialist $m_{\text{pred}}$, and pre-stages its weights into physical host RAM. If runtime evaluation diverges to the alternate branch requiring model $m_{\text{actual}} \neq m_{\text{pred}}$, the system incurs a \textbf{misprediction penalty}:
+\begin{equation}
+t_{\text{penalty}} = t_{\text{evict}}(m_{\text{pred}}) + t_{\text{load}}(m_{\text{actual}}) + t_{\text{stall}}
+\label{eq:mispredict_penalty}
+\end{equation}
+where $t_{\text{stall}}$ represents the cold I/O wait incurred while halting accelerator execution to pull $m_{\text{actual}}$ from secondary NVMe storage over the host bus.
+
+\paragraph{Mitigation and Boundary Analysis.}
+ModelVM bounds branch misprediction penalties through two complementary mechanisms:
+\begin{enumerate}
+    \item \textbf{Branch-Aware Probabilistic Working Sets:} When conditional vertices are registered in $\mathcal{G}$, the working-set engine computes probabilistic reuse scores $\Pr(m \in W(t, k)) = \sum_{\pi} P(\pi) \cdot \mathbb{I}(m \in \pi)$, where $\pi$ denotes prospective downstream execution paths.
+    \item \textbf{Headroom Partitioning:} If memory headroom permits ($\mathcal{M}_{\text{free}} \ge \mathcal{M}(m_A) + \mathcal{M}(m_B)$), ModelVM simultaneously pre-stages both candidate branch specialists, converting the conditional branch into a guaranteed cache hit ($H_{\text{cache}} = 1.0$).
+\end{enumerate}
+Under acute budgets ($\mathcal{B}_{\text{RAM}} = 4.0\text{--}6.0$\,GB) where dual residency is physically impossible, branch misprediction forces the runtime to fall back to demand-driven cost-aware paging. In the worst-case misprediction scenario, ModelVM incurs a latency penalty equal to a reactive cold reload ($\approx 7.2\text{--}14.8$\,s on PCIe Gen4 $\times 16$). Importantly, mispredictions compromise \textit{latency optimization}, but because CSP maintains semantic state invariants independently of weight residency, \textbf{task correctness and factual accuracy remain strictly uncompromised}.
+
+\subsection{Computational and Serialization Overheads of Typed CSP}
+\label{sec:lim_csp_overhead}
+
+The Cognitive State Protocol enforces formal state boundaries through strongly typed serialization schemas, JSON-Schema constraints, and abstract syntax tree (AST) integrity verification. While this eliminates semantic drift across multi-stage handoffs (maintaining $R_{\text{facts}} \ge 0.940$ at $N=12$), it introduces CPU serialization and validation overheads absent in unstructured, streaming text concatenation.
+
+\paragraph{Empirical Overhead Profiling.}
+Table~\ref{tab:csp_overhead} quantifies the wall-clock computational latency of CSP operations across varying state entity counts on our physical AMD 16-Core host processor (Table~\ref{tab:hardware}).
+
+\begin{table}[htbp]
+\small
+\centering
+\caption{Computational CPU Overhead of Typed CSP Serialization and Validation across State Entity Volumes ($n=100$ trials).}
+\label{tab:csp_overhead}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lccc}
+\toprule
+\textbf{Entities in State} & \textbf{Serialization} & \textbf{Schema Validation} & \textbf{Total CPU Time} \\
+($|\mathcal{E}_{\text{state}}|$) & ($t_{\text{ser}}$, ms) & ($t_{\text{val}}$, ms) & ($t_{\text{CSP}}$, ms) \\
+\midrule
+5 Entities (Minimal) & $0.42 \pm 0.04$ & $0.81 \pm 0.06$ & $1.23 \pm 0.08$ \\
+20 Entities (Standard) & $0.88 \pm 0.07$ & $1.72 \pm 0.11$ & $2.60 \pm 0.15$ \\
+50 Entities (Complex) & $1.64 \pm 0.12$ & $3.15 \pm 0.18$ & $4.79 \pm 0.24$ \\
+100 Entities (Stress) & $3.10 \pm 0.21$ & $5.82 \pm 0.32$ & $8.92 \pm 0.41$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\paragraph{Operational Trade-off.}
+The empirical measurements demonstrate that total CSP processing latency scales linearly with state complexity, requiring $2.60$\,ms for standard multi-stage scientific derivations ($20$ entities). In long-form generation stages where model inference consumes $2.0\text{--}8.0$\,s, this overhead represents less than $0.05\%$ of total execution time. 
+
+However, in micro-invocation regimes—such as high-frequency tool calling where each stage generates fewer than $15$ tokens ($< 150$\,ms inference time)—the $2.60$\,ms serialization budget becomes an observable fraction ($\approx 1.7\%$) of end-to-end latency. Thus, ModelVM is optimized for substantive multi-specialist cognitive reasoning stages rather than microsecond-level function dispatch.
+
+\subsection{Catalog Scalability and Host Memory Fragmentation}
+\label{sec:lim_catalog_scaling}
+
+A critical systems question is how ModelVM behaves when the available model catalog scales from our experimental catalog ($|\mathcal{M}| = 5\text{--}7$ models) to large enterprise registries containing dozens of specialized variants ($|\mathcal{M}| \ge 20\text{--}50$).
+
+\paragraph{Algorithmic Complexity of Cognitive Scheduling.}
+The multi-objective scheduler evaluates candidate models by calculating $S(m, C_t)$ across six terms:
+\begin{equation}
+\mathcal{T}_{\text{sched}} = \mathcal{O}(|\mathcal{M}| \cdot |\mathcal{C}| + |\mathcal{M}| \log |\mathcal{M}|)
+\end{equation}
+where $|\mathcal{C}|$ is the number of capability probe domains. Because $|\mathcal{C}| \le 10$ and sorting $|\mathcal{M}| = 50$ entries requires fewer than $300$ floating-point comparisons, the scheduling decision consumes only $0.42$\,ms of CPU time on standard hardware. Scheduling compute complexity is therefore entirely negligible.
+
+\paragraph{Physical Memory Buffer Fragmentation.}
+The primary bottleneck under large catalogs is physical host memory fragmentation. ModelVM maintains pinned, page-locked DMA buffers (\texttt{HostMemoryPool}) to enable asynchronous, overlap-capable transfers across the PCIe bus. When the catalog contains dozens of heterogeneous models with varying parameter counts ($1.3\text{B}$, $7\text{B}$, $14\text{B}$) and quantization formats (FP16, Q4\_K\_M, AWQ), repeatedly allocating and freeing non-uniform host memory blocks induces external physical memory fragmentation.
+
+To bound fragmentation, ModelVM implements fixed slab allocation classes ($2.0$\,GB, $4.5$\,GB, and $8.5$\,GB arena slabs). However, if an application requires frequent switching across more than $20$ heterogeneous models under an $8.0$\,GB budget, slab allocation overhead can result in up to $12\%$ internal buffer slack. Extending ModelVM with unified virtual memory compaction or sub-tensor page-swapping represents a promising direction for extreme-scale catalog deployments.
+
+\subsection{Adversarial Workload Topologies and Stress Scenarios}
+\label{sec:lim_adversarial}
+
+We construct an adversarial stress case designed to systematically remove the benefits of predictive prefetching and stress-test the runtime's baseline stability.
+
+\paragraph{Adversarial Sequence Construction.}
+Consider a cyclic pipeline executing across three mutually disjoint specialist domains:
+\begin{equation}
+\mathcal{W}_{\text{adv}} = (M_A \to M_B \to M_C \to M_A \to \dots)
+\end{equation}
+where each model requires physical memory $\mathcal{M}(M_i) = 0.65 \times \mathcal{B}_{\text{RAM}}$. Under this condition:
+\begin{enumerate}
+    \item No two models can reside simultaneously in host RAM ($\mathcal{M}(M_i) + \mathcal{M}(M_j) = 1.30 \times \mathcal{B}_{\text{RAM}} > \mathcal{B}_{\text{RAM}}$).
+    \item The post-admission headroom margin is strictly negative for any prospective second model ($\mathcal{B}_{\text{RAM}} - \mathcal{M}(M_i) - \mathcal{M}(M_j) < 0$), completely disabling opportunistic prefetching.
+    \item Every single stage transition forces an immediate, synchronous eviction of the resident model followed by a cold load from disk.
+\end{enumerate}
+
+\paragraph{Empirical Stress Lower Bound.}
+Under this adversarial condition, the cache hit rate collapses to $H_{\text{cache}} = 0.00$, and prefetching provides zero latency overlap. The total wall-clock latency converges to the unmitigated cold-paging sum:
+\begin{equation}
+L_{\text{adv}} = \sum_{t=1}^{T} \left( t_{\text{exec}}(M_{(t)}) + t_{\text{evict}}(M_{(t-1)}) + t_{\text{load}}(M_{(t)}) \right)
+\end{equation}
+Under this stress configuration, ModelVM maintains two operational protections:
+\begin{itemize}
+    \item \textbf{OOM Elimination Conditional on Admission Guard:} ModelVM's pre-allocation admission guard ($H_{\text{headroom}} \ge \mathcal{M}(m)$) strictly sequences eviction completion \textit{prior} to dispatching incoming allocations, preventing the uncoordinated allocation collisions that trigger OS-level OOM aborts.
+    \item \textbf{Negligible Scheduling Disadvantage:} Because scheduling evaluation consumes under $0.5$\,ms per stage handoff, ModelVM's decision overhead remains a negligible fraction of the multi-second cold transfer duration ($t_{\text{sched}} \ll t_{\text{load}}$), performing equivalently to demand paging without inducing scheduler-driven stalls.
+\end{itemize}
+Thus, while adversarial workloads can neutralize predictive prefetching gains, ModelVM provides robust performance fail-safes that preserve task execution integrity without pathological degradation.

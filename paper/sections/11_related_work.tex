@@ -1,0 +1,121 @@
+\section{Related Work}
+\label{sec:related_work}
+
+\begin{table*}[t]
+\small
+\centering
+\caption{Architectural Comparison: ModelVM vs.\ Representative State-of-the-Art Language Model Systems}
+\label{tab:related_work_matrix}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{>{\RaggedRight}p{2.6cm}>{\RaggedRight}p{1.9cm}>{\RaggedRight}p{2.1cm}>{\RaggedRight}p{1.9cm}>{\RaggedRight}p{1.9cm}>{\RaggedRight}p{2.0cm}>{\RaggedRight}p{1.9cm}>{\RaggedRight}p{2.3cm}}
+\toprule
+\textbf{Systems Dimension} & \textbf{FlexGen}~\cite{sheng2023flexgen} & \textbf{RouteLLM}~\cite{ong2024routellm} & \textbf{S-LoRA}~\cite{sheng2024slora} & \textbf{AIOS}~\cite{mei2024aios} & \textbf{FMplex}~\cite{shastri2026fmplex} & \textbf{FMOS}~\cite{bhattacharya2026fmos} & \textbf{ModelVM (Ours)} \\
+\midrule
+\textbf{Target Memory Environment} & Constrained GPU / CPU / NVMe & Cloud / Server (Unconstrained) & Multi-tenant Server GPU & Application Layer (Unconstrained) & Cluster / Server GPUs & Distributed Memory / Cloud & \textbf{Constrained Hardware ($\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$)} \\
+\textbf{Model Heterogeneity} & Monolithic Single Model & Heterogeneous Endpoints & Homogeneous Shared Base & Homogeneous Resident Base & Shared Backbone + Adapters & Foundation Model Pool & \textbf{Heterogeneous Specialists ($10$ Architectures)} \\
+\textbf{Virtualization Abstraction} & Tensor / Activation Paging & Stateless Request Routing & Paged Adapter Pool ($\Delta W$) & Agent Process / Kernel & Virtual FM (vFM) Instances & System-Layer FM VM Instance & \textbf{Physical Residency \& Typed State} \\
+\textbf{Paging / Scheduling Granularity} & Layer / Block Tensors & Single-Shot Query Call & LoRA Adapter Batch ($\Delta W$) & Tool / Agent Context Call & Batch-Aware Fair-Queue (BFQ) & Knowledge / Prompt Tiers & \textbf{Stage-Level Model Weights} \\
+\textbf{Inter-Model State Representation} & KV-Cache Tensors & Raw Conversational Strings & Shared Token Context & Unstructured Dialog Strings & Task Request Context & Episodic / Semantic Handles & \textbf{Typed 9-Tuple CSP ($\mathcal{S}_t$)} \\
+\textbf{Deterministic Verification} & None & None & None & None & None & Policy Verification Hooks & \textbf{Independent AST Verification} \\
+\textbf{Residency Management} & Zig-Zag Linear Program & None (Permanently Resident) & Unified Paged Adapter Pool & Tool Queue Scheduling & Resident Backbone Sharing & Dynamic Policy Orchestration & \textbf{Predictive Working Set $W(t, k)$} \\
+\textbf{Eviction / Replacement Policy} & Pre-computed Static Schedule & None & LRU Adapter Eviction & Priority Agent Scheduling & None (Queued Task Eviction) & Context Summarization Paging & \textbf{Cost-Aware Shielded Eviction} \\
+\textbf{Bus Contention Mitigation} & Pipelined Block Offloading & None & Adapter Tensor Prefetch & None & Task Batch Aggregation & Hierarchical Memory Caching & \textbf{Headroom-Gated Staging ($U_{\text{prefetch}}$)} \\
+\textbf{Zero-Training Deployment} & Yes & Requires Router Classifier & Requires LoRA Fine-Tuning & Yes & Requires PEFT Extensions & Yes & \textbf{Yes (Off-the-Shelf Models)} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+The challenge of deploying high-capability language model intelligence under constrained hardware resources has motivated substantial research across the machine learning systems and systems software communities. Existing efforts broadly span five distinct paradigms: (1)~LLM routing and model cascading, (2)~tensor and activation offloading, (3)~multi-agent frameworks and agent operating systems, (4)~multi-tenant parameter adapter serving, and (5)~foundation model operating systems and model virtualization. In this section, we provide a problem-oriented taxonomy analyzing these five paradigms, demonstrate through mechanism-level analysis why direct composition of these approaches fails under local memory constraints, and present a multi-dimensional feature comparison matrix contrasting ModelVM against representative state-of-the-art systems.
+
+\subsection{Problem-Oriented Systems Taxonomy}
+\label{sec:taxonomy}
+
+\paragraph{1. LLM Model Routing and Cascading.}
+Model routing systems, such as RouteLLM~\cite{ong2024routellm}, FrugalGPT~\cite{chen2023frugalgpt}, HyDRA~\cite{hydra2026}, FLARE~\cite{flare2026}, and empirical routing benchmarks such as RouterBench~\cite{hu2024routerbench}, optimize inference quality and commercial API expenditure by dispatching incoming user queries across heterogeneous models. For example, simple factual questions are routed to lightweight or cheaper models (e.g., 7B open-weight models or GPT-3.5), whereas complex multi-step reasoning queries are escalated to frontier models (e.g., 70B models or GPT-4).
+
+Existing routing systems generally treat model access as an externally available service and do not make local model-weight residency and transfer a first-class runtime constraint. While systems such as RouteLLM~\cite{ong2024routellm} explicitly evaluate API cost/quality tradeoffs and FLARE~\cite{flare2026} models latency-aware serving, they assume that candidate models are either hosted as pre-warmed remote HTTP endpoints in commercial cloud datacenters or held simultaneously resident in unconstrained cluster memory pools. Consequently, they optimize single-shot classification objectives without modeling the physical latency of streaming multi-gigabyte weight tensors over local memory buses. When deployed on local consumer hardware equipped with fixed physical memory ($\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$), standard routers suffer catastrophic thrashing or immediate Out-Of-Memory (OOM) aborts because dispatching a new model requires dynamically unloading and reloading tens of gigabytes of parameter weights. Furthermore, model routers treat queries as isolated, memoryless events, lacking mechanisms to virtualize and preserve cumulative state across multi-stage procedural pipelines. ModelVM resolves these limitations by explicitly unifying capability-aware scheduling with physical memory budgeting, predictive working-set eviction shielding, and typed state virtualization.
+
+\paragraph{2. Weight and Activation Offloading Systems.}
+To execute models exceeding physical accelerator capacity, offloading frameworks stream parameter tensors between storage tiers during forward inference. FlexGen~\cite{sheng2023flexgen} optimizes high-throughput batch generation on a single GPU by storing model weights, activations, and Key-Value (KV) caches across a three-tier memory hierarchy (GPU VRAM, host CPU RAM, and secondary NVMe SSD), scheduling tensor computation and I/O transfers via zig-zag linear programming. LLM in a Flash~\cite{alwani2023llmflash} leverages activation sparsity in Feed-Forward Networks (FFNs), dynamically streaming only the non-zero neuron parameter slices from high-speed flash storage into RAM. PowerInfer~\cite{song2024powerinfer} and PowerInfer-2~\cite{song2024powerinfer2} exploit activation locality by preloading ``hot'' neurons onto the GPU/NPU while evaluating rarely activated ``cold'' neurons on the host CPU.
+
+Despite their throughput innovations, offloading systems exhibit two foundational architectural constraints that separate them from ModelVM:
+\begin{enumerate}
+    \item \textbf{Monolithic Architectural Restriction:} Offloading frameworks virtualize the layers or neurons of a \textit{single homogeneous neural architecture} (e.g., a single monolithic OPT-66B, Llama-2-70B, or TurboSparse model). They cannot coordinate heterogeneous open-weight specialists trained under disparate architectural configurations, vocabulary tokenizers, and hidden-state manifolds.
+    \item \textbf{Microscopic Paging Latency Penalty:} By operating at the micro-granularity of individual transformer layers or FFN neurons, offloading systems stream parameters across the PCIe bus repeatedly for every generated token. On commodity consumer hardware (PCIe 4.0 $\times 4$ at $3.0$--$4.0\,\text{GB/s}$), offloading a 70B parameter model limits generation speeds to an interactive stall ($< 0.2$--$0.5\,\text{tokens/s}$).
+\end{enumerate}
+ModelVM adopts a macroscopic, \textit{stage-level capability paging abstraction}: rather than thrashing weight slices on every token, ModelVM stages entire specialized open-weight models (6.7B--14B) for whole computational phases, amortizing the PCIe bus transfer latency over long execution sequences while maintaining semantic continuity via the Cognitive State Packet.
+
+\paragraph{3. Multi-Agent Frameworks and Agent Operating Systems.}
+Multi-agent systems, such as AutoGen~\cite{wu2023autogen}, CAMEL~\cite{li2023camel}, and declarative programming frameworks like DSPy~\cite{khattab2023dspy}, orchestrate complex reasoning pipelines by passing natural language messages between autonomous LLM instances. Concurrently, emerging ``Agent Operating System'' architectures, such as MemGPT~\cite{packer2023memgpt}, AIOS~\cite{mei2024aios}, and cognitive agent architectures like CoALA~\cite{sumers2023coala}, propose systems abstractions for language models. MemGPT introduces OS-inspired hierarchical virtual memory to manage LLM context windows, paging conversational historical chunks between primary prompt memory and external vector databases. AIOS implements an agent kernel that schedules LLM tool invocations, manages context switching, and mediates access to external execution sandboxes.
+
+However, existing multi-agent and agent OS architectures operate strictly at the \textit{symbolic application layer}. In multi-agent frameworks, state transfer relies on raw conversational transcript concatenation, which triggers geometric context expansion ($L_{\text{ctx}} = O(t \cdot \bar{L}_{\text{gen}})$), lossy FIFO window truncation, and compounding arithmetic drift when crossing heterogeneous model boundaries (Section~\ref{sec:incompatibility_barrier}). Furthermore, agent operating systems such as AIOS do not manage physical hardware memory budgets for model weights; they assume the underlying LLM is an omniscient, permanently resident server process or remote cloud API. ModelVM bridges this fundamental systems gap by virtualizing both levels: virtualizing semantic state across disparate specialist models through typed, AST-verified 9-tuples ($\mathcal{S}_t$), and virtualizing physical weight residency through hardware-enforced working-set paging ($W(t, k)$).
+
+\paragraph{4. Multi-Tenant Parameter Adapter Serving.}
+Systems such as S-LoRA~\cite{sheng2024slora} and Punica~\cite{chen2023punica} address the multi-tenant deployment bottleneck by serving thousands of domain-specialized Low-Rank Adaptation (LoRA) adapters on top of a single shared base model. S-LoRA manages adapter parameter tensor allocations in unified host-GPU memory pools, dynamically loading low-rank weight matrices ($\Delta W = BA$) into GPU memory while reusing the frozen base model weights. vLLM~\cite{kwon2023vllm} optimizes memory management for attention states via PagedAttention, eliminating external memory fragmentation.
+
+While adapter multiplexing achieves high efficiency for homogeneous adapter sets, it cannot address the broader reality of open-weight open-source specialization:
+\begin{itemize}
+    \item \textbf{Heterogeneous Base Model Incompatibility:} The leading open-weight specialists are trained on completely independent foundational architectures and tokenizers. For example, state-of-the-art mathematical reasoning is achieved by \textit{Qwen2.5-Math} (specialized vocabulary, rotary base $10^6$), code synthesis by \textit{DeepSeek-Coder} (2T multi-language code pretraining), physical reasoning by \textit{Llama-3-Physics}, and biomedical extraction by \textit{Mistral-Research}. These models cannot be expressed as low-rank adjustments over a single generic base model.
+    \item \textbf{Architectural Freedom:} ModelVM treats the heterogeneous open-weight ecosystem as an unconstrained computational catalog, enabling edge workstations to orchestrate independently developed specialist models without requiring weight re-training, structural alignment, or shared base topologies.
+\end{itemize}
+
+\paragraph{5. Foundation Model Operating Systems and Model Virtualization.}
+Recent systems research explores higher-level operating system layers to manage foundation models at scale. FMOS~\cite{bhattacharya2026fmos} proposes a self-evolving foundation model operating system layer that virtualizes foundation model interactions for compound AI applications, managing resources across memory tiers, model selection, verification, and policy enforcement. FMplex~\cite{shastri2026fmplex} introduces foundation model virtualization for cluster serving, multiplexing logically private ``virtual foundation model'' (vFM) instances over a shared physical foundation model backbone via a Batch-Aware Fair-Queueing (BFQ) scheduler and PEFT task extensions.
+
+While FMOS and FMplex advance system-level abstractions for foundation models, their architectural goals diverge fundamentally from ModelVM. FMOS provides a broad system-layer operating-system abstraction and policy framework for compound agent workflows, while FMplex achieves virtualization by sharing and extending a single, homogeneous physical foundation model backbone across multi-tenant cluster tasks. In contrast, ModelVM addresses the physical residency virtualization of independently trained, architecturally heterogeneous open-weight specialists (spanning disparate neural architectures, tokenizers, and parameter spaces), macroscopic stage-level model paging via predictive working sets, and strongly typed semantic state transfer across those heterogeneous models under strict consumer hardware constraints ($\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$).
+
+\paragraph{6. Mixture-of-Experts (MoE) vs.\ Stage-Level Model Virtualization.}
+Sparse Mixture-of-Experts architectures, such as Switch Transformers~\cite{fedus2022switch}, Mixtral 8x7B / 8x22B~\cite{jiang2024mixtral}, and DeepSeek-MoE, achieve high parameter efficiency by replacing dense feed-forward blocks with sparse gating networks that dynamically route individual tokens to a subset of expert sub-networks (e.g., top-2 of 8 experts). While MoE shares ModelVM's broad motivation of specialized computation, its execution model differs fundamentally in scope, granularity, and hardware assumptions:
+\begin{itemize}
+    \item \textit{Token-Level Intra-Model Gating vs.\ Stage-Level Inter-Model Orchestration:} MoE operates at the micro-granularity of individual token activations inside a single, synchronized forward pass. In contrast, ModelVM operates at the macro-granularity of entire task stages ($S_1 \to S_5$), virtualizing standalone, self-contained specialist models.
+    \item \textit{Hardware Footprint Barrier:} Although an MoE model activates only a fraction of parameters per token (e.g., 13B active out of 47B total in Mixtral 8x7B), \textbf{all expert parameters must reside simultaneously in physical memory} to avoid intolerable per-token PCIe streaming latency. Serving Mixtral 8x7B in 16-bit precision requires $> 90$\,GB of VRAM across an enterprise GPU cluster, completely pricing out resource-constrained edge workstations. ModelVM breaks this barrier: by virtualizing model residency over time, it delivers multi-specialist performance on an 8\,GB RAM consumer budget.
+\end{itemize}
+
+\paragraph{7. High-Throughput Batch Serving and KV-Cache Memory Management.}
+High-throughput serving engines such as vLLM~\cite{kwon2023vllm}, SGLang~\cite{zheng2023sglang}, and TensorRT-LLM optimize large-scale multi-tenant batch serving on high-end datacenter GPUs. vLLM introduces PagedAttention, which draws inspiration from classical OS virtual memory to eliminate internal and external memory fragmentation in the Key-Value (KV) cache. SGLang proposes RadixAttention, enabling programmatic reuse and tree-structured prefix caching across complex multi-call programs.
+
+These systems address a problem that is strictly orthogonal to ModelVM:
+\begin{itemize}
+    \item \textit{KV-Cache Fragmentation vs.\ Model Weight Virtualization:} vLLM and SGLang manage dynamically allocated KV-cache activation memory for a \textit{single statically loaded model} serving hundreds of concurrent user requests. They assume model weights are permanently pinned in accelerator VRAM. In contrast, ModelVM manages \textit{model weight residency} across the host-accelerator PCIe bus for multi-model procedural workflows where models cannot fit concurrently in memory.
+    \item \textit{Complementary Synergies:} ModelVM is architecturally orthogonal to batch serving backends. In our implementation, ModelVM can utilize optimized execution engines (such as \texttt{llama.cpp} or vLLM backends) for individual stage executions, while providing the overarching cognitive scheduling, working-set prefetching, and typed state virtualization layers.
+\end{itemize}
+
+\paragraph{8. Speculative Decoding and Pipeline Parallelism.}
+Speculative decoding systems~\cite{leviathan2023fast} accelerate inference by coupling a lightweight draft model with a larger target model, using the draft model to generate candidate token sequences that the target model verifies in parallel. Similarly, pipeline parallelism partitions model layers across multiple physical accelerators. 
+
+While speculative decoding pairs multiple models, it operates synchronously at the token level, requiring both draft and target models to reside concurrently in memory. ModelVM differs fundamentally by decoupling execution from concurrent residency: models are scheduled asynchronously at cognitive task boundaries, enabling disparate specialists to execute sequentially without co-residency requirements.
+
+\subsection{Mechanism-Level Gap Analysis: Why Composing Prior Paradigms Fails}
+\label{sec:gap_analysis}
+
+A central scientific question is whether existing paradigms could simply be combined---for instance, pairing a model router with an offloading engine, or an agent operating system with an adapter server---to achieve multi-model specialist execution under constrained memory. A rigorous systems analysis reveals that naive compositions fail due to fundamental architectural mismatches:
+
+\paragraph{1. Why Router + Offloader Composition Fails.}
+Consider composing a state-of-the-art router (e.g., RouteLLM or HyDRA) with a weight offloading engine (e.g., FlexGen or PowerInfer). In this design, the router dispatches queries to specialists, while the offloading runtime handles memory paging. This composition breaks down on two distinct mechanical fronts:
+\begin{itemize}
+    \item \textit{Stateless I/O Thrashing:} Model routers evaluate incoming prompts greedily without modeling physical memory occupancy or transfer latency. When operating under a fixed memory ceiling ($\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$), each routing switch triggers a synchronous cold load of a 7B--14B model ($7.0$--$14.0\,\text{GB}$) across the PCIe bus, requiring $2.0$--$3.5\,\text{s}$ of bus transfer time. In multi-stage workflows with alternating capability demands (e.g., mathematical derivation $\to$ code synthesis $\to$ numerical verification), greedy routing evicts and reloads the same models cyclically, causing total execution time to be overwhelmed by paging latency ($t_{\text{paging}} \gg t_{\text{compute}}$).
+    \item \textit{Monolithic Execution DAGs:} Weight offloading runtimes assume a static, single-model computation graph where tensor blocks can be scheduled deterministically (e.g., via linear programming). They possess no abstractions for dynamically staging, binding, or unloading structurally disparate model containers with distinct vocabulary embeddings and execution runtimes.
+\end{itemize}
+
+\paragraph{2. Why Agent OS + Adapter Serving Composition Fails.}
+Consider pairing an agent operating system (e.g., AIOS or MemGPT) with a multi-tenant adapter server (e.g., S-LoRA). Here, the agent OS orchestrates multi-step problem solving, while S-LoRA swaps task-specific LoRA adapters on a resident base model. This composition encounters two architectural limitations:
+\begin{itemize}
+    \item \textit{The Shared-Base Specialization Ceiling:} Adapter-serving runtimes require all adapters to attach to an identical frozen base model. However, state-of-the-art open-weight specialists derive their capabilities from distinct pre-training distributions, architectural dimensions, and specialized tokenizers. A generic 7B base model cannot match the performance of independently trained specialists across divergent domains (e.g., mathematics, code generation, and biomedical extraction) solely through low-rank parameter adjustments.
+    \item \textit{Cross-Model Semantic Degradation:} Agent operating systems pass state via unstructured natural language transcripts. When transitioning across distinct base models, transcript concatenation triggers geometric context expansion ($L_{\text{ctx}} = O(t \cdot \bar{L}_{\text{gen}})$), lossy FIFO truncation, and compounding arithmetic drift. Without strongly typed, AST-verified state contracts, intermediate numerical errors cascade uncontrollably across workflow stages.
+\end{itemize}
+
+\paragraph{3. Why Classical OS Working-Set Paging Fails.}
+Classical operating system memory management (Denning's working-set model~\cite{denning1968working}) monitors page references \textit{retrospectively} over a backward-looking window $\tau$, because hardware CPU execution cannot foresee future control-flow branches. Applying retrospective working-set management to language model serving is ineffective: a reactive page fault on a 7B parameter model causes an unacceptable multi-second execution stall.
+
+ModelVM exploits explicit future visibility available in structured multi-stage workloads: the \texttt{TaskDecomposer} produces an explicit, declarative stage plan $G_{\text{plan}} = (S, E)$ before execution begins. This forward-looking visibility enables ModelVM to construct the \textbf{Predictive Cognitive Working Set} ($W(t, k)$), proactively prefetching upcoming models into verified memory headroom ($\Delta_{\text{headroom}} \ge 1.0\,\text{GB}$) while shielding currently resident models from eviction based on future stage reuse distance rather than historical recency alone.
+
+\subsection{Multi-Dimensional Feature Comparison Matrix}
+\label{sec:feature_matrix}
+
+Table~\ref{tab:related_work_matrix} provides a comprehensive, multi-dimensional feature comparison contrasting ModelVM against prominent systems across the LLM systems landscape.
+
+As demonstrated in Table~\ref{tab:related_work_matrix}, to the best of our knowledge, existing systems do not jointly provide these capabilities within a single runtime abstraction. ModelVM differs from these systems by jointly addressing physical model residency, heterogeneous specialist execution, predictive working-set management, and typed semantic state preservation.
+\FloatBarrier
+
+

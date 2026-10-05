@@ -27,3 +27,21 @@ htmlcov/
 venv/
 ENV/
 *.log
+
+# LaTeX artifacts
+*.aux
+*.bbl
+*.blg
+*.out
+*.synctex.gz
+*.toc
+*.fls
+*.fdb_latexmk
+
+# Scratch and intermediate preview files
+paper/scratch/
+paper/scratch_*
+paper/*_preview*
+paper/*_px.png
+paper/test_*.pdf
+paper/fig9_pareto_clean_verified.png

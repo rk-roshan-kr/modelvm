@@ -1,0 +1,32 @@
+\section{Conclusion and Future Directions}
+\label{sec:conclusion}
+
+In this paper, we addressed the foundational systems challenge of orchestrating deep ensembles of specialized open-weight language models on resource-constrained consumer hardware. The prevailing paradigm—relying on a single monolithic generalist or executing naive, uncoordinated model loading—forces practitioners to accept either compromised domain capability, catastrophic Out-of-Memory process termination, or debilitating I/O bus thrashing.
+
+ModelVM resolves this dilemma by introducing a clean, pragmatic runtime architecture founded on a central architectural insight: \textbf{heterogeneous language models can cooperate reliably under tight memory constraints if cumulative task state is virtualized as a strongly typed, model-independent intermediate representation, and physical model residency is orchestrated via predictive working-set lookahead}. ModelVM realizes this principle through three co-designed subsystems:
+\begin{enumerate}
+    \item The \textbf{Cognitive State Protocol (CSP)}, which virtualizes semantic state across disparate specialist models through typed, AST-verified 9-tuples ($\mathcal{S}_t$), eliminating conversational bloat and preserving factual constants ($R_{\text{facts}} \ge 0.940$) and mathematical calculations ($R_{\text{calcs}} \ge 0.920$) across extended transition sequences ($N=12$).
+    \item The \textbf{Predictive Cognitive Working Set} ($W(t, k)$), which adapts Denning's working-set principles to structured execution graphs, proactively pre-staging upcoming specialist weights into verified memory headroom while shielding resident models via reuse-distance cost accounting, cutting paging stalls by $66.7\%$.
+    \item The \textbf{Multi-Objective Cognitive Scheduler}, which dispatches execution stages to candidate models via an explainable, 6-term utility scoring function balancing capability fitness, memory footprint, load latency, energy, eviction penalties, and downstream reuse, bounding scheduler regret within $\le 7.8\%$ of an offline prescient oracle.
+\end{enumerate}
+
+Comprehensive empirical evaluations—spanning an orthogonal $2^3$ factorial ablation study and memory-pressure sweeps down to $4.0$\,GB on a $52.7$\,GB catalog of ten heterogeneous specialists, alongside real physical silicon execution on an NVIDIA GeForce RTX 5070 Ti—demonstrate that ModelVM enables an 8.0\,GB host memory envelope to orchestrate domain specialists with observed zero OOM aborts, a 60.8\% reduction in cumulative prompt context, and a \textbf{77.2\% reduction in end-to-end physical wall-clock latency} ($65.05$\,s down to $14.85$\,s) compared to uncoordinated execution.
+
+\subsection{Future Research Horizons}
+\label{sec:future_work}
+
+ModelVM establishes a robust foundation for memory-virtualized cognitive execution, opening several compelling avenues for future systems research:
+
+\paragraph{1. Dynamic and Non-Deterministic Execution Graphs.}
+While ModelVM currently optimizes structured procedural DAGs produced by task decomposition, autonomous agents increasingly exhibit dynamic control flow, including recursive self-debugging loops and opportunistic web tool retrieval. Extending predictive working-set management to support speculative branch prefetching—where multiple candidate branch specialists are staged probabilistically into partitioned memory headroom—presents an exciting algorithmic frontier.
+
+\paragraph{2. Sub-Tensor and Layer-Granularity Hybrid Paging.}
+ModelVM operates at the macroscopic granularity of entire model checkpoints, amortizing PCIe transfer latency over complete reasoning stages. In ultra-constrained regimes ($\mathcal{B}_{\text{RAM}} < 3.0$\,GB) where even a single 7B quantized model cannot fully reside in physical memory, unifying ModelVM's stage-level cognitive scheduling with fine-grained layer-level streaming (e.g., FlexGen or PowerInfer) could unlock multi-specialist reasoning on micro-controller and mobile edge silicon.
+
+\paragraph{3. Distributed Peer-to-Peer Edge Virtualization.}
+Rather than restricting execution to an isolated workstation, ModelVM's decoupled state abstraction naturally extends to heterogeneous edge clusters (e.g., pooling a local laptop, desktop workstation, and mobile NPU over low-latency Thunderbolt or Wi-Fi 7 interconnects). By treating distributed edge devices as remote memory tiers within a unified cognitive address space, ModelVM can orchestrate collaborative multi-agent intelligence across localized environments without relying on centralized commercial cloud infrastructure.
+
+\subsection{Artifact Availability and Open Science}
+\label{sec:open_science}
+
+To support open science, reproducibility, and practical deployment by the community, the complete ModelVM systems codebase, modular runtime components, benchmark harnesses, pre-registered model manifests, and raw physical hardware telemetry traces are open-sourced under the Apache-2.0 license at \url{https://github.com/rk-roshan-kr/modelvm}.

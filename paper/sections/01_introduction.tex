@@ -1,0 +1,72 @@
+\begin{abstract}
+Deploying multi-specialist language model ensembles on resource-constrained hardware exposes an acute systems conflict: while domain-specialized open-weight models achieve superior accuracy on targeted engineering, mathematical, and coding sub-tasks, their aggregate parameter footprint (often exceeding $50$\,GB) far outstrips the physical memory of local consumer workstations and edge accelerators ($\le 8.0$\,GB RAM). Existing execution paradigms either suffer Out-Of-Memory (OOM) aborts, thrash secondary storage buses under reactive demand-paging, or experience catastrophic state degradation and compounding arithmetic drift when passing unstructured conversational transcripts across model boundaries. 
+
+We present \textbf{ModelVM}, an integrated systems runtime that virtualizes both \textit{semantic state} and \textit{model weight residency} for multi-specialist language model workflows on memory-constrained devices. ModelVM is founded on a central architectural insight: \textbf{heterogeneous models can cooperate reliably under tight memory constraints if cumulative task state is decoupled from model-specific representations and conversational prose}. ModelVM realizes this principle through three co-designed subsystems: (1)~the \textbf{Cognitive State Protocol (CSP)}, a strongly typed 9-tuple state representation with deterministic Abstract Syntax Tree (AST) validation that replaces lossy natural language transcripts with formal mathematical and code invariants; (2)~the \textbf{Predictive Cognitive Working Set} ($W(t, k)$), which adapts Denning's working-set principles to structured execution graphs, opportunistically pre-staging upcoming weights into verified headroom while shielding resident models via reuse-distance cost accounting; and (3)~the \textbf{Multi-Objective Cognitive Scheduler}, an interpretable dispatch engine that scores candidate models across empirical capability fitness, memory footprint, bus load latency, energy, eviction penalties, and downstream reuse. 
+
+In a controlled runtime evaluation across a $52.7$\,GB catalog of ten heterogeneous specialists under an enforced $8.0$\,GB budget, ModelVM maintains high factual retention ($R_{\text{facts}} \ge 0.940$) and calculation accuracy ($R_{\text{calcs}} \ge 0.920$) across extended handoff depths ($N=12$), with observed zero OOM aborts across evaluated $4.0$\,GB stress runs. Furthermore, in a live physical silicon deployment on an NVIDIA GeForce RTX 5070 Ti executing open-weight model instances (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}), ModelVM reduces cumulative prompt context by \textbf{60.8\%} and cuts physical wall-clock execution latency by \textbf{77.2\%} ($65.05$\,s down to $14.85$\,s) with zero GPU memory faults.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+The open-weight language model ecosystem has entered an era of profound domain specialization. Rather than relying solely on monolithic generalist models that attempt to master every discipline simultaneously, open-source researchers have developed highly capable, domain-specialized checkpoints. Models such as \textit{Qwen2.5-Math} achieve graduate-level formal mathematical derivation; \textit{DeepSeek-Coder} delivers state-of-the-art multi-language program synthesis; \textit{Mistral-Research} excels in archival literature extraction; and domain-tuned variants provide targeted expertise in classical mechanics, biomedical diagnosis, and financial modeling. For complex multi-step technical workflows—such as analyzing an archival scientific paper, deriving its closed-form governing equations, implementing an executable numerical simulation, and physically verifying phase-space boundaries—orchestrating an ensemble of specialized models produces reasoning deliverables that dramatically surpass the capability ceiling of any individual compact generalist.
+
+However, deploying an ensemble of specialized models on local consumer hardware exposes an acute systems failure: \textbf{domain specialists are highly capable, but their parameter weights are massive}. A minimal catalog of ten specialized 7B--14B models requires over $52.7$\,GB of physical memory in quantized 4-bit representation ($64.0$\,GB on disk). In contrast, local consumer workstations, developer laptops, and edge robotic platforms are physically constrained by memory envelopes of $8.0\text{--}16.0$\,GB of RAM. Consequently, running multiple specialist models simultaneously is physically impossible; memory capacity is an uncompromising physical ceiling, not an adjustable configuration parameter.
+
+\subsection{The Three Systemic Barriers of Multi-Model Serving}
+\label{sec:intro_barriers}
+
+When systems designers attempt to deploy multi-specialist pipelines on memory-constrained hardware using existing deployment paradigms, execution collapses against three fundamental systems barriers:
+
+\paragraph{1. The Memory Capacity \& Crash Barrier.}
+Modern operating systems and inference runtimes possess no native mechanisms to coordinate the aggregate weight allocations of multiple deep language models. When a workflow attempts to load a second specialist alongside a resident model without strict global coordination, aggregate memory allocations immediately breach physical RAM. The operating system kernel invokes the Out-Of-Memory (OOM) killer, terminating the process catastrophically. As our empirical sweeps demonstrate, naive dynamic allocation under an acute $4.0$\,GB envelope triggers unhandled fatal process aborts in $60.0\%$ of task runs (Section~\ref{sec:results_r1}).
+
+\paragraph{2. The State Incompatibility \& Conversational Bloat Barrier.}
+When execution must transition between two disparate specialist models (e.g., passing intermediate mathematical derivations from a math model to a code synthesis model), existing multi-agent frameworks pass state by concatenating the full natural language conversation history into prompt text. This naive mechanism triggers catastrophic failure modes:
+\begin{itemize}
+    \item \textbf{Accumulating Context Bloat:} Conversational prompt length grows with cumulative prior-stage output ($L_{\text{ctx}} = \mathcal{O}(t \cdot \bar{L}_{\text{gen}})$). When forced into bounded context windows ($W_{\text{in}} = 4,096$), FIFO sliding-window truncation continually discards early foundational constraints.
+    \item \textbf{Compounding Arithmetic Drift:} Conversational text lacks structural typing. When numerical constants and mathematical formulas are repeatedly paraphrased through conversational prose across multiple heterogeneous models, floating-point precision degrades, culminating in severe arithmetic hallucinations ($R_{\text{facts}}$ collapses to $0.180$ after 12 transitions).
+    \item \textbf{Latent Incommensurability:} Because independently trained models operate over disparate hidden-state dimensions, rotary embeddings, and vocabulary tokenizers, internal KV-cache or activation tensors cannot be transferred across model boundaries without prohibitive $O(K^2)$ calibration bridges.
+\end{itemize}
+
+\paragraph{3. The I/O Bus Thrashing \& Latency Barrier.}
+Because all models cannot reside simultaneously in active memory, weights must be dynamically swapped across the secondary storage bus (e.g., PCIe 4.0/5.0 from NVMe SSD to host RAM and accelerator VRAM). However, applying classical retrospective memory management (such as Least Recently Used / LRU caching) produces catastrophic bus thrashing. When a cyclic workflow alternates between mathematical derivation, code simulation, and numerical validation, LRU evicts the mathematical specialist to make room for coding weights, forcing an immediate, multi-gigabyte cold reload over the PCIe bus when mathematics is invoked again. In our baseline benchmarks, uncoordinated demand paging squanders up to $42.6$\,s in idle I/O stall time, causing paging latency to overwhelm actual GPU compute duration ($t_{\text{paging}} \gg t_{\text{compute}}$).
+
+\subsection{The Architectural Insight of ModelVM}
+\label{sec:intro_insight}
+
+In this paper, we present \textbf{ModelVM}, a clean, pragmatic systems runtime that resolves this fundamental conflict between domain specialization and physical memory capacity. ModelVM is founded on a single unifying systems principle:
+
+\begin{quote}
+\textit{Heterogeneous language models can cooperate reliably under resource-constrained hardware budgets if cumulative task state is virtualized as a strongly typed, model-independent intermediate representation, and physical model residency is orchestrated via predictive working-set lookahead rather than retrospective demand paging.}
+\end{quote}
+
+Just as classical operating systems virtualized physical memory by decoupling virtual address spaces from physical DRAM pages, ModelVM virtualizes \textbf{semantic state} and \textbf{model weight residency}. ModelVM enables an 8.0\,GB workstation to execute a 52.7\,GB catalog of heterogeneous open-weight specialists, delivering the full reasoning capability of an unconstrained multi-model cluster on commodity edge silicon.
+
+\subsection{Summary of Contributions}
+\label{sec:intro_contributions}
+
+This paper makes four concrete, empirically validated systems contributions:
+
+\begin{enumerate}
+    \item \textbf{Semantic State Virtualization (The Cognitive State Protocol - CSP):} We design and formalize CSP, a strongly typed, AST-verified 9-tuple state representation ($\mathcal{S}_t$) that replaces unstructured conversational transcripts. CSP isolates mathematical invariants, verified calculations, domain facts, and active artifacts from transient natural language, formally constraining verified arithmetic and state updates, with empirical factual retention $R_{\text{facts}} \ge 0.940$ and calculation accuracy $R_{\text{calcs}} \ge 0.920$ across $N=12$ transitions.
+    \item \textbf{Predictive Cognitive Working-Set Management ($W(t, k)$):} We translate Peter Denning's foundational working-set theory into a forward-looking cognitive memory manager. By exploiting the explicit stage graph produced by task decomposition, ModelVM forecasts upcoming specialist requirements, opportunistically pre-staging weights into verified memory headroom while shielding resident models from eviction using reuse-distance cost accounting, slashing paging stalls by $66.7\%$ ($21.60$\,s down to $7.20$\,s).
+    \item \textbf{Multi-Objective Cognitive Scheduling:} We implement an explainable, transparent 6-term utility scoring engine that dispatches execution stages to candidate models by jointly balancing empirical benchmark capability, memory footprint, load latency, energy, eviction penalties, and downstream reuse, provably bounding scheduler regret within $\le 7.8\%$ of an offline prescient oracle across divergent workload topologies.
+    \item \textbf{Full Factorial Decomposition and Physical Silicon Validation:} We conduct an exhaustive $2^3$ orthogonal factorial ablation study isolating the main effects and synergistic two-way interactions ($B \times C$) of our architectural primitives across the full 10-model catalog. Furthermore, we validate these runtime principles on physical GPU silicon (an NVIDIA GeForce RTX 5070 Ti with 16.0\,GB GDDR7 driven by the Ollama inference daemon), demonstrating a \textbf{60.8\% prompt token reduction}, observed zero OOM failures across evaluated runs, and a \textbf{77.2\% reduction in end-to-end execution wall-clock time} ($65.05$\,s down to $14.85$\,s) on real open-weight checkpoints.
+\end{enumerate}
+
+\subsection{Paper Organization}
+\label{sec:intro_organization}
+
+The remainder of this paper is structured as follows. 
+Section~\ref{sec:problem_formulation} establishes the formal system model, capacity inequalities, and foundational design goals. 
+Section~\ref{sec:runtime_architecture} details the ModelVM runtime architecture and memory pager lifecycle. 
+Section~\ref{sec:semantic_state} presents the formal specification, structural typing, and correctness proofs of the Cognitive State Protocol. 
+Section~\ref{sec:predictive_residency} formalizes the Predictive Cognitive Working Set and cost-aware eviction policies. 
+Section~\ref{sec:cognitive_scheduling} details the Multi-Objective Cognitive Scheduler and empirical model profiler. 
+Section~\ref{sec:implementation} outlines the concrete software engineering and storage implementation. 
+Section~\ref{sec:methodology} describes our experimental methodology, non-circular verification harness, and physical hardware testbed. 
+Section~\ref{sec:results} presents comprehensive empirical results across baseline progressions, factorial ablations, Pareto frontiers, budget stress sweeps, and real GPU silicon telemetry. 
+Section~\ref{sec:limitations} provides a rigorous, transparent analysis of operational boundaries and failure modes. 
+Section~\ref{sec:related_work} positions ModelVM against mixture-of-experts, batch serving engines, and agent operating systems. 
+Finally, Section~\ref{sec:conclusion} concludes the paper and outlines future research directions.

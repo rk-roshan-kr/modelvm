@@ -7,6 +7,7 @@ from modelvm.core.manifest import ModelManifest
 from modelvm.core.types import ModelStatus, PagingAction, PagingEvent
 from modelvm.pager.policy import CostAwareEvictionPolicy, EvictionPolicy, LRUEvictionPolicy
 from modelvm.registry.catalog import ModelCatalog
+from modelvm.telemetry.hardware import HardwareTelemetry
 
 
 class ModelPager:
@@ -28,6 +29,7 @@ class ModelPager:
         self.catalog = catalog
         self.memory_budget_gb = memory_budget_gb
         self.policy: EvictionPolicy = policy or CostAwareEvictionPolicy()
+        self.telemetry = HardwareTelemetry()
         
         self._resident: Dict[str, ModelManifest] = {}
         self._pinned: Set[str] = set()
@@ -63,7 +65,11 @@ class ModelPager:
         self._listeners.append(listener)
 
     def _emit(self, event: PagingEvent) -> None:
-        """Records and broadcasts a paging event."""
+        """Records and broadcasts a paging event enriched with hardware telemetry."""
+        snapshot = self.telemetry.take_snapshot()
+        event.metadata.setdefault("host_rss_mb", snapshot.process_rss_mb)
+        event.metadata.setdefault("gpu_vram_used_mb", snapshot.gpu_vram_used_mb)
+        event.metadata.setdefault("device_name", snapshot.device_name)
         self.event_log.append(event)
         for listener in self._listeners:
             try:
@@ -262,6 +268,7 @@ class ModelPager:
         self.cache_misses = 0
         self.total_paging_time_sec = 0.0
         self.event_log.clear()
+        self.telemetry.reset()
 
     def get_status(self) -> Dict:
         """Returns comprehensive virtual memory status."""

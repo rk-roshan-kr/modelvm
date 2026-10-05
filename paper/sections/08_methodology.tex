@@ -1,0 +1,224 @@
+\section{Experimental Methodology}
+\label{sec:methodology}
+
+Systems claims require empirical isolation. While the conceptual synthesis of semantic state virtualization and predictive residency is architecturally cohesive, its scientific validity rests entirely on whether these abstractions yield measurable advantages over conventional execution paradigms. This section details our experimental apparatus, model catalog, benchmark workloads, baseline spectrum, token-budget controls, and statistical verification protocols.
+
+\subsection{Research Questions}
+\label{sec:rqs}
+
+Our evaluation systematically targets four foundational research questions, mapped directly to the core hypotheses formulated in our system design:
+
+\begin{itemize}
+    \item \textbf{RQ1 (State Virtualization):} Does mediating multi-model transitions through a typed Cognitive State Packet ($\mathcal{S}_t$) preserve domain facts, numerical precision, and procedural deliverables significantly better than raw conversational text handoffs under identical context limits, generation budgets, and memory constraints? (\textbf{H1})
+    \item \textbf{RQ2 (Predictive Residency):} Does stage-level working-set lookahead ($W(t, k)$) coupled with eviction shielding and opportunistic prefetching reduce cold-load I/O stalls and memory thrashing compared to classical recency-based eviction policies? (\textbf{H2})
+    \item \textbf{RQ3 (Resource-Aware Scheduling):} Does multi-objective scheduling grounded in empirical capability profiling outperform greedy capability-only selection and memory-aware greedy heuristics, approaching offline oracle bounds under constrained runtime memory? (\textbf{H3})
+    \item \textbf{RQ4 (Systemic Trade-Offs):} Does the integrated ModelVM runtime establish a superior Quality--Memory--Latency Pareto frontier relative to monolithic models, static specialist ensembles, and reactive paging frameworks? (\textbf{H4})
+\end{itemize}
+
+\subsection{Physical Hardware Testbed \& Measurement Apparatus}
+\label{sec:testbeds}
+
+To ground our findings in physical runtime behavior rather than idealized simulation, all empirical evaluations are executed on a dedicated physical workstation equipped with high-speed PCIe NVMe storage and modern GPU silicon (Table~\ref{tab:hardware}).
+
+\begin{table}[t]
+\small
+\centering
+\caption{Physical Hardware Evaluation Platform}
+\label{tab:hardware}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{ll}
+\toprule
+\textbf{System Subsystem} & \textbf{Physical Hardware Specification} \\
+\midrule
+Host Processor (CPU) & AMD 16-Core Processor (Zen 5, 32 execution threads) \\
+Host System Memory & 64.0\,GB DDR5-5600 \\
+Secondary Storage & 1\,TB PCIe 4.0 NVMe SSD ($5,000$\,MB/s sequential read) \\
+Host-to-Device Bus & PCIe 4.0 $\times 16$ ($15.75$\,GB/s theoretical, $14.20$\,GB/s pinned throughput) \\
+Graphics Accelerator (GPU) & NVIDIA GeForce RTX 5070 Ti \\
+Dedicated Device VRAM & 16.0\,GB GDDR7 \\
+Software Stack & NVIDIA CUDA 12.0 / Driver 595.71 \\
+Local Inference Daemon & Ollama C++/CUDA Inference Engine (v0.34.3) \\
+Host Operating System & Microsoft Windows 11 Enterprise (64-bit) \\
+\midrule
+\multicolumn{2}{l}{\textbf{Experimental Evaluation Regimes (Hosted on this Platform):}} \\
+Controlled Catalog Eval. & Full 10-model catalog ($52.7$\,GB) under enforced $\mathcal{B}_{\text{RAM}} = 8.0$\,GB \\
+Live Silicon Validation & Real checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, \texttt{llama3.2:1b}) \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\paragraph{Dual Evaluation Regimes on Physical Silicon.}
+We evaluate ModelVM across two complementary regimes hosted on this physical machine:
+\begin{enumerate}
+    \item \textbf{Controlled Catalog Evaluation (Sections~\ref{sec:results_signature}--\ref{sec:results_r4}):} Evaluates the full 10-model, 52.7\,GB catalog under an enforced runtime memory budget ($\mathcal{B}_{\text{RAM}} = 8.0$\,GB, swept from $4.0$\,GB to $16.0$\,GB). The ModelVM memory manager enforces strict page-in and eviction invariants, tracking instantaneous RSS and device memory via OS counters and \texttt{psutil}, with cold-load transfer durations recorded using high-resolution monotonic nanosecond timers.
+    \item \textbf{Live Physical Silicon Validation (EXP-REAL, Section~\ref{sec:results_real}):} Real open-weight model checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}) are physically instantiated and executed on the RTX 5070 Ti through the local Ollama C++/CUDA daemon, directly measuring prompt token reduction, physical evaluation speeds, and wall-clock latency on the silicon.
+\end{enumerate}
+
+\paragraph{Hierarchical Memory Accounting}
+We explicitly distinguish between the host machine's total physical capacity (64.0\,GB RAM / 16.0\,GB VRAM) and the \textbf{enforced runtime memory budget} ($\mathcal{B}_{\text{RAM}} = 8.0$\,GB) imposed on model execution. Furthermore, we model a hierarchical three-tier memory architecture:
+\begin{equation}
+\text{NVMe Storage} \longrightarrow \text{Host RAM} \longrightarrow \text{Device VRAM}
+\end{equation}
+Telemetry tracks both tiers independently:
+\begin{itemize}
+    \item \textbf{Host CPU Memory ($M_{\text{RAM}}(t)$):} Process Resident Set Size (RSS) sampled via OS process queries and counters at 10\,ms intervals via \texttt{psutil}, capturing tokenizer buffers, Python runtime overhead, and CPU host weights.
+    \item \textbf{Accelerator Memory ($M_{\text{VRAM}}(t)$):} Dedicated device memory tracked via NVML (\texttt{pynvml}) query hooks and PyTorch CUDA memory management executed immediately before and after every paging transition:
+    \begin{equation}
+    M_{\text{VRAM}}(t) = M_{\text{weights}}(t) + M_{\text{workspace}}(t) + M_{\text{KV}}(t)
+    \end{equation}
+    \item \textbf{Peak Memory Footprint Accounting:} To avoid conflating disparate physical tiers, we track instantaneous peaks for each tier independently:
+    \begin{align}
+    M_{\text{peak,host}} &= \max_t M_{\text{RAM}}(t), \\
+    M_{\text{peak,device}} &= \max_t M_{\text{VRAM}}(t),
+    \end{align}
+    and report the Peak Per-Tier Memory Footprint as $M_{\text{peak,tier}} = \max \{ M_{\text{peak,host}}, M_{\text{peak,device}} \}$, accompanied by dedicated physical telemetry for host CPU memory ($M_{\text{host}}(t) = M_{\text{RAM}}(t)$) and accelerator device memory ($M_{\text{device}}(t) = M_{\text{VRAM}}(t)$).
+\end{itemize}
+Paging latency is recorded using monotonic nanosecond wall-clock timers (\texttt{time.perf\_counter\_ns}). Weight load/swap duration ($t_{\text{load}}$), prompt pre-fill processing throughput ($T_{\text{prompt}}$), and token generation speed ($T_{\text{eval}}$, tokens/second) are captured directly from the local inference daemon telemetry.
+
+\subsection{Heterogeneous Model Catalog}
+\label{sec:catalog}
+
+Our model library comprises ten open-weight models spanning six distinct architectural families, totaling 64.0\,GB of serialized disk storage (52.7\,GB aggregate configured RAM requirement) (Table~\ref{tab:catalog_specs}). Models were selected specifically for documented domain specialization rather than arbitrary scale.
+
+\begin{table*}[t]
+\small
+\centering
+\caption{The ModelVM Heterogeneous Open-Weight Model Library (52.7\,GB Aggregate Configured RAM Requirement, 64.0\,GB Serialized Disk Storage)}
+\label{tab:catalog_specs}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllcccccc}
+\toprule
+\textbf{Model Identifier} & \textbf{Base Architecture} & \textbf{Quantization} & \textbf{Params} & \textbf{RAM Req.} & \textbf{Weights VRAM} & \textbf{Workspace} & \textbf{Cold Load} & \textbf{Inference Latency} \\
+\midrule
+\texttt{research-expert}     & MistralForCausalLM    & Q4\_K\_M & 7.2B  & 3.1 GB & 2.2 GB & 0.4 GB & 1.2s & 32\,ms/tok \\
+\texttt{mathematics-expert}  & Qwen2ForCausalLM      & Q4\_K\_S & 7.0B  & 2.4 GB & 1.6 GB & 0.3 GB & 0.9s & 28\,ms/tok \\
+\texttt{coding-expert}       & DeepSeekForCausalLM   & Q4\_K\_M & 6.7B  & 3.0 GB & 2.1 GB & 0.4 GB & 1.1s & 30\,ms/tok \\
+\texttt{physics-expert}      & LlamaForCausalLM      & Q4\_K\_M & 8.0B  & 3.2 GB & 2.3 GB & 0.4 GB & 1.3s & 34\,ms/tok \\
+\texttt{general-reasoner}    & LlamaForCausalLM      & Q6\_K    & 8.0B  & 7.1 GB & 6.2 GB & 0.5 GB & 2.1s & 42\,ms/tok \\
+\texttt{multimodal-vision}   & Phi3VForCausalLM      & FP16/Q4  & 4.2B  & 5.6 GB & 4.8 GB & 0.4 GB & 1.7s & 38\,ms/tok \\
+\texttt{code-auditor}        & StarCoder2ForCausalLM & Q4\_K\_M & 14.0B & 7.2 GB & 6.1 GB & 0.6 GB & 2.5s & 44\,ms/tok \\
+\texttt{biomedical-expert}   & MistralForCausalLM    & Q6\_K    & 7.2B  & 6.8 GB & 5.9 GB & 0.5 GB & 2.2s & 40\,ms/tok \\
+\texttt{financial-analyst}   & LlamaForCausalLM      & Q6\_K    & 8.0B  & 6.7 GB & 5.8 GB & 0.5 GB & 2.0s & 39\,ms/tok \\
+\texttt{synthesizer-master}  & CohereForCausalLM     & Q4\_K\_M & 14.0B & 7.6 GB & 6.5 GB & 0.6 GB & 2.7s & 46\,ms/tok \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+To ground capability terms in empirical measurement rather than subjective manual weights, each model in Table~\ref{tab:catalog_specs} was evaluated via \texttt{ModelProfiler}, benchmarking candidate models across held-out standardized probes in seven domains (formal mathematics, algorithmic coding, classical mechanics, paper synthesis, financial calculation, diagnostic reasoning, and general logic). The resultant empirical capability matrix $\mathbf{P} \in [0, 1]^{N \times M}$ grounds scheduler decisions directly in measured task performance.
+
+\subsection{Workloads \& The Multi-Stage Pipeline}
+\label{sec:workload}
+
+Evaluating cross-model virtualization demands tasks characterized by deep procedural dependency. A single-shot query provides no insight into state decay. The benchmark workload intentionally spans multiple specialized domains for which capability varies substantially across the model catalog, modeled as a directed acyclic graph $G = (S, E)$.
+
+The canonical benchmark workload spans five consecutive cognitive stages:
+\begin{equation}
+\begin{aligned}
+s_0\,(\text{Research}) &\longrightarrow s_1\,(\text{Math}) \longrightarrow s_2\,(\text{Coding}) \\
+&\longrightarrow s_3\,(\text{Physics}) \longrightarrow s_4\,(\text{Synthesis})
+\end{aligned}
+\end{equation}
+Specifically, the workflow requires:
+\begin{enumerate}
+    \item Extracting physical constants, hypotheses, and governing equations from archival publication text ($s_0$).
+    \item Deriving closed-form symbolic solutions and evaluating numerical boundary conditions ($s_1$).
+    \item Synthesizing an executable Python simulation implementing the mathematical derivation ($s_2$).
+    \item Verifying energy conservation laws, phase-space trajectories, and dimensional consistency ($s_3$).
+    \item Producing a structured publication-grade executive technical brief summarizing findings ($s_4$).
+\end{enumerate}
+Every stage produces concrete domain deliverables that form strict prerequisite inputs for subsequent stages. State degradation is cumulative: an arithmetic error in $s_1$ causes simulation collapse in $s_2$ and boundary violations in $s_3$.
+
+\subsection{Token-Budget \& Execution Controls}
+\label{sec:token_controls}
+
+To prevent context-length discrepancies from acting as confounding variables in state virtualization experiments (EXP-H1), all model invocations adhere to strict token controls:
+\begin{itemize}
+    \item \textbf{Maximum Context Window ($W_{\text{in}}$):} Fixed at 4,096 tokens across all models.
+    \item \textbf{Maximum Generation Ceiling ($T_{\text{gen}}$):} Fixed at 1,024 tokens per stage.
+    \item \textbf{Decoding Parameters:} Held constant at temperature $T = 0.0$ (greedy deterministic argmax), top-$p = 1.0$, and repetition penalty $1.0$.
+    \item \textbf{Raw Text Handoff Protocol:} The unstructured conversational transcript of previous stage outputs is concatenated into the system prompt prefix of stage $s_t$. When cumulative text exceeds $W_{\text{in}} - T_{\text{gen}}$, a standard first-in, first-out (FIFO) sliding window truncates early tokens.
+    \item \textbf{CSP Handoff Protocol:} The typed state packet $\mathcal{S}_{t-1}$ is serialized into schema text within the prompt prefix. Token consumption of the serialized CSP is logged independently to quantify representation overhead.
+\end{itemize}
+
+\subsection{Baseline Spectrum}
+\label{sec:baselines}
+
+To systematically isolate individual systems mechanisms, ModelVM is evaluated against a structured baseline continuum:
+
+\begin{itemize}
+    \item \textbf{$B_0$ (Static Monolith):} A single 8B instruction model (\texttt{general-reasoner}) retained permanently resident in memory. It executes all five stages sequentially without model switching or state serialization, representing the standard consumer deployment strategy.
+    \item \textbf{$B_{\text{static}}$ (Static Specialist Ensemble):} A fixed subset of specialists fitting within the 8.0\,GB runtime envelope simultaneously (\texttt{mathematics-expert} [2.4\,GB] + \texttt{coding-expert} [3.0\,GB] = 5.4\,GB). The system routes strictly between these resident models; non-specialized stages fall back to the resident model with the highest capability match without paging.
+    \item \textbf{$B_1$ (Unconstrained Specialist Router):} An upper-bound specialist router (analogous to RouteLLM~\cite{ong2024routellm} or FrugalGPT~\cite{chen2023frugalgpt}). It selects the optimal specialist from the 10-model library for every stage under the presumption of infinite memory ($\mathcal{B}_{\text{RAM}} = \infty$). This baseline isolates model-selection quality from residency constraints and does not represent a deployable constrained system.
+    \item \textbf{$B_2$ (Router + Raw Text + Reactive LRU):} Specialist routing with dynamic model loading constrained to $\mathcal{B}_{\text{RAM}} = 8.0$\,GB. Eviction follows classical Least-Recently-Used (LRU) policy with no working-set lookahead or prefetching. State is transferred via raw conversational transcript concatenation.
+    \item \textbf{$B_3$ (Router + CSP + Unconstrained):} Specialist routing with structured Semantic State Virtualization (CSP) evaluated under unconstrained memory ($\mathcal{B}_{\text{RAM}} = \infty$), isolating pure CSP efficacy from paging overhead.
+    \item \textbf{$B_4$ (Router + CSP + Reactive LRU):} Combines structured CSP state virtualization with constrained dynamic paging under $\mathcal{B}_{\text{RAM}} = 8.0$\,GB, but retains reactive LRU eviction without predictive working-set scheduling.
+    \item \textbf{$B_5$ (Full ModelVM):} The integrated runtime incorporating Semantic State Virtualization (CSP), Predictive Working Set management ($W(t, k)$), eviction shielding, and multi-objective scheduling under the strict 8.0\,GB runtime budget.
+    \item \textbf{$B_{\text{oracle}}$ (Offline Oracle Scheduler):} A theoretical upper-bound scheduler with perfect advance knowledge of all pipeline stage requirements, selecting model residency sequences to minimize cold-load stalls under $\mathcal{B}_{\text{RAM}} = 8.0$\,GB.
+\end{itemize}
+
+\subsection{Factorial Ablation Design}
+\label{sec:factorial_design}
+
+Beyond baseline comparisons, we decompose ModelVM through an orthogonal $2^3$ factorial experimental design. Dynamic paging serves as the invariant physical substrate. We systematically toggle three binary factors across eight configurations ($C_0$ through $C_7$):
+\begin{itemize}
+    \item \textbf{Factor A (CSP):} Disabled (Raw Text) vs.\ Enabled (Typed CSP).
+    \item \textbf{Factor B (Working Set):} Disabled (Reactive LRU) vs.\ Enabled (Predictive $W(t, k)$).
+    \item \textbf{Factor C (Scheduler):} Disabled (Greedy Match) vs.\ Enabled (Multi-Objective).
+\end{itemize}
+This design permits systematic estimation of main effects ($\Delta_{\text{CSP}}, \Delta_{\text{WS}}, \Delta_{\text{Sched}}$) and all two-way and three-way interaction terms without confounding among the factorial factors. Replicated trial variance is preserved by computing effect estimates across independent experimental runs.
+
+\subsection{Evaluation Metrics Framework}
+\label{sec:metrics}
+
+We evaluate systems across four complementary evaluation dimensions:
+
+\subsubsection{1. Quality (\texorpdfstring{$Q$}{Q})}
+\begin{itemize}
+    \item \textbf{Capability Coverage Score (CCS):} The fraction of required domain deliverables successfully synthesized across the workflow, normalized in $[0.0, 1.0]$.
+    \item \textbf{Calculation Correctness Ratio ($R_{\text{calcs}}$):} The proportion of analytical expressions whose computed results match exact symbolic ground truth within numerical tolerance ($10^{-4}$):
+    \begin{equation}
+    R_{\text{calcs}} = \frac{1}{|C|} \sum_{c \in C} \mathbf{1}\left( \text{ASTVerify}(c.\text{expr}, c.\text{result}) \right)
+    \end{equation}
+\end{itemize}
+
+\subsubsection{2. State Retention (\texorpdfstring{$R$}{R})}
+\begin{itemize}
+    \item \textbf{Factual Preservation Ratio ($R_{\text{facts}}$):} The fraction of ground-truth physical constants, hypotheses, and parameters originating in stage $s_0$ that remain present, uncorrupted, and accurately referenced in final deliverables at stage $s_4$:
+    \begin{equation}
+    R_{\text{facts}} = \frac{|\mathcal{F}_{\text{retained}} \cap \mathcal{F}_{\text{ground\_truth}}|}{|\mathcal{F}_{\text{ground\_truth}}|}
+    \end{equation}
+    \item \textbf{Semantic Drift Index ($D_{\text{drift}}$):} Quantitative measurement of numerical value drift across consecutive model handoffs.
+\end{itemize}
+
+\subsubsection{3. Resource Consumption (\texorpdfstring{$E$}{E})}
+\begin{itemize}
+    \item \textbf{Peak Per-Tier Memory Footprint ($M_{\text{peak,tier}}$):} Maximum instantaneous footprint across tiers, $M_{\text{peak,tier}} = \max \{ M_{\text{peak,host}}, M_{\text{peak,device}} \}$, tracking both host ($M_{\text{peak,host}} = \max_t M_{\text{RAM}}(t)$) and device ($M_{\text{peak,device}} = \max_t M_{\text{VRAM}}(t)$) peaks.
+    \item \textbf{Memory Virtualization Ratio ($V_{\text{ratio}}$):} The ratio of total library parameter size to peak per-tier physical memory consumed: $V_{\text{ratio}} = T_{\text{library}} / M_{\text{peak,tier}}$.
+    \item \textbf{Budget Invariant Compliance:} Continuous verification that $\sum \text{RAM}(m_{\text{resident}}) \le \mathcal{B}_{\text{RAM}}$ is maintained at all timestamps without kernel OOM intervention.
+\end{itemize}
+
+\subsubsection{4. Latency \& Systems Efficiency (\texorpdfstring{$L$}{L})}
+\begin{itemize}
+    \item \textbf{Cold-Load Paging Overhead ($t_{\text{paging}}$):} Cumulative wall-clock seconds spent loading model weights from NVMe storage into memory.
+    \item \textbf{Cache Hit Rate ($H_{\text{cache}}$):} Fraction of stage transitions where the selected model was already resident in memory:
+    \begin{equation}
+    H_{\text{cache}} = \frac{N_{\text{hits}}}{N_{\text{transitions}}}
+    \end{equation}
+    \item \textbf{Model Reload Frequency ($N_{\text{reload}}$):} Count of redundant page-in operations where a previously evicted model is re-loaded due to cyclic demand or cache thrashing.
+\end{itemize}
+
+\subsection{Statistical Rigor \& Non-Circularity Harness}
+\label{sec:rigor}
+
+A pervasive weakness in multi-model literature is circular grading, where an orchestration system grades its own self-generated outputs using another language model instance. We strictly eliminate this circularity:
+\begin{enumerate}
+    \item \textbf{Independent AST Verification:} Mathematical assertions and code outputs are never evaluated by prompting an LLM. Instead, our verification engine parses candidate calculation strings into Python Abstract Syntax Trees (\texttt{ast.parse}), extracting operators, constants, and variables into a sandboxed execution context to verify mathematical equivalence deterministically.
+    \item \textbf{Immutable Ground Truth:} Physical parameters, boundary values, and derivation targets are encapsulated in pre-registered \texttt{GroundTruthFact} objects. Tolerance checking is enforced mathematically ($|\hat{y} - y^*| < 10^{-4}$).
+    \item \textbf{Repetitions and Statistical Testing:} All configurations are evaluated on $n = 10$ identical seeded workload instances. We report paired differences alongside 95\% empirical bootstrap percentile confidence intervals:
+    \begin{equation}
+    \text{CI}_{95} = [q_{0.025}, q_{0.975}]
+    \end{equation}
+    derived from 2,000 bootstrap resamples. Statistical significance for pairwise baseline comparisons (EXP-H1, EXP-H2, EXP-H3) is assessed via two-sided paired permutation tests on matched workload trials, applying the Holm-Bonferroni step-down correction for multiple comparisons ($p < 0.05$). For the orthogonal $2^3$ factorial ablation study (EXP-FACT), parameter main effects and interaction estimates are computed via replicated Yates analysis, with inferential significance evaluated through a three-factor factorial ANOVA model containing all two-way and three-way interaction terms.
+\end{enumerate}

@@ -17,7 +17,11 @@ class CalculationItem(BaseModel):
     expression: str = Field(description="Mathematical expression or formula")
     result: str = Field(description="Computed numerical or symbolic result")
     units: Optional[str] = Field(default=None, description="Physical or logical units")
-    verified: bool = Field(default=True, description="Whether calculation was verified")
+    verified: bool = Field(default=False, description="Whether calculation was verified by an independent verifier")
+    verification_method: Optional[str] = Field(
+        default=None,
+        description="Method used for verification: 'arithmetic', 'symbolic', 'external_tool', 'human', or None"
+    )
 
 
 class EvidenceItem(BaseModel):
@@ -25,6 +29,30 @@ class EvidenceItem(BaseModel):
     claim: str = Field(description="The claim or finding")
     source: str = Field(default="Inference", description="Source reference or derivation")
     confidence: float = Field(default=0.9, ge=0.0, le=1.0, description="Confidence score")
+    timestamp: Optional[str] = Field(default_factory=lambda: datetime.now().isoformat(), description="Generation timestamp")
+    model_id: Optional[str] = Field(default=None, description="Which model generated this")
+
+
+def diversity_weighted_confidence_aggregation(
+    c1: float,
+    c2: float,
+    source1: str,
+    source2: str,
+    w_diversity: float = 0.65,
+) -> float:
+    """Diversity-weighted confidence aggregation heuristic.
+    
+    NOTE: This is a conservative engineering heuristic, NOT Bayesian inference.
+    - Repeated claims from identical or overlapping sources apply no amplification (max rule).
+    - Cross-model claims apply a diversity discount exponent (w_diversity) to penalize
+      correlated priors across language models.
+    """
+    s1_clean = (source1 or "").strip().lower()
+    s2_clean = (source2 or "").strip().lower()
+    if s1_clean == s2_clean or s1_clean in s2_clean or s2_clean in s1_clean:
+        return round(max(c1, c2), 4)
+    p_combined = 1.0 - (1.0 - c1) * ((1.0 - c2) ** w_diversity)
+    return round(min(0.99, max(c1, c2, p_combined)), 4)
 
 
 class StageTrace(BaseModel):
@@ -82,11 +110,13 @@ class CognitiveStatePacket(BaseModel):
             sections.append(f"#### Established Facts:\n{facts_str}")
             
         if self.calculations:
-            calc_str = "\n".join(
-                f"- `{c.expression}` = **{c.result}**" + (f" ({c.units})" if c.units else "")
-                for c in self.calculations
-            )
-            sections.append(f"#### Verified Calculations:\n{calc_str}")
+            calc_lines = []
+            for c in self.calculations:
+                status = f"[VERIFIED: {c.verification_method}]" if (c.verified and c.verification_method) else "[UNVERIFIED]"
+                calc_lines.append(
+                    f"- {status} `{c.expression}` = **{c.result}**" + (f" ({c.units})" if c.units else "")
+                )
+            sections.append("#### Calculations:\n" + "\n".join(calc_lines))
             
         if self.evidence:
             ev_str = "\n".join(f"- [{e.confidence * 100:.0f}% confidence] {e.claim} (Source: {e.source})" for e in self.evidence)
@@ -118,6 +148,20 @@ class CognitiveStatePacket(BaseModel):
 
         return "\n\n".join(sections)
 
+    def merge_artifacts(self, update_artifacts: Dict[str, Any]) -> None:
+        """Merges artifacts with version tracking for conflicts."""
+        for key, val in update_artifacts.items():
+            if key in self.artifacts and self.artifacts[key] != val:
+                version = 1
+                versioned_key = f"{key}_v{version}"
+                while versioned_key in self.artifacts:
+                    version += 1
+                    versioned_key = f"{key}_v{version}"
+                self.artifacts[versioned_key] = val
+                self.artifacts[f"{key}_CONFLICT"] = True
+            else:
+                self.artifacts[key] = val
+
     def merge_update(self, update: "CognitiveStatePacket") -> "CognitiveStatePacket":
         """Accumulates newly discovered knowledge into the state packet without losing prior context."""
         # Add new facts preserving uniqueness
@@ -125,19 +169,37 @@ class CognitiveStatePacket(BaseModel):
             if fact not in self.facts:
                 self.facts.append(fact)
                 
-        # Add new calculations
-        existing_exprs = {c.expression for c in self.calculations}
+        # Add or update calculations
         for calc in update.calculations:
-            if calc.expression not in existing_exprs:
+            existing = next((c for c in self.calculations if c.expression == calc.expression), None)
+            if existing:
+                # If newly presented calculation is verified, upgrade existing entry
+                if calc.verified and not existing.verified:
+                    existing.verified = True
+                    existing.verification_method = calc.verification_method
+                    existing.result = calc.result
+            else:
                 self.calculations.append(calc)
-                existing_exprs.add(calc.expression)
                 
-        # Add evidence
-        existing_claims = {e.claim for e in self.evidence}
+        # Add evidence with diversity-weighted confidence aggregation & source diversity tracking
         for ev in update.evidence:
-            if ev.claim not in existing_claims:
+            existing = next((e for e in self.evidence if e.claim == ev.claim), None)
+            if existing:
+                existing.confidence = diversity_weighted_confidence_aggregation(
+                    existing.confidence,
+                    ev.confidence,
+                    existing.source,
+                    ev.source,
+                )
+                # Track source diversity
+                if ev.source and ev.source not in existing.source:
+                    existing.source = f"{existing.source} + {ev.source}"
+                if ev.model_id and existing.model_id and ev.model_id not in existing.model_id:
+                    existing.model_id = f"{existing.model_id}, {ev.model_id}"
+                elif ev.model_id and not existing.model_id:
+                    existing.model_id = ev.model_id
+            else:
                 self.evidence.append(ev)
-                existing_claims.add(ev.claim)
                 
         # Update assumptions, uncertainties, decisions, questions
         for a in update.assumptions:
@@ -152,14 +214,15 @@ class CognitiveStatePacket(BaseModel):
             if d not in self.decisions:
                 self.decisions.append(d)
                 
-        # If an open question was answered in facts or decisions, it can be resolved
-        self.open_questions = [
-            q for q in update.open_questions 
-            if q not in self.facts and q not in self.decisions
-        ]
+        # Accumulate open questions, resolving any answered in facts or decisions
+        combined_questions = []
+        for q in self.open_questions + update.open_questions:
+            if q not in combined_questions and q not in self.facts and q not in self.decisions:
+                combined_questions.append(q)
+        self.open_questions = combined_questions
         
-        # Merge artifacts
-        self.artifacts.update(update.artifacts)
+        # Merge artifacts with conflict handling
+        self.merge_artifacts(update.artifacts)
         
         # Update stage and capability
         self.stage_index = update.stage_index

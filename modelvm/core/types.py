@@ -61,6 +61,33 @@ class AblationMode(str, Enum):
     D_FULL_MODELVM = "D_FULL_MODELVM"
 
 
+class FactorialConfig(str, Enum):
+    """The 8 configurations of the 2^3 factorial matrix on the dynamic paging substrate,
+    plus the external reference baseline.
+    
+    Factors:
+    - Factor A: CSP in {0, 1}
+    - Factor B: Predictive Working Set W(t, k) in {0, 1}
+    - Factor C: Multi-Objective Scheduler in {0, 1}
+    """
+    REF_STATIC_MONOLITH = "REF_STATIC_MONOLITH"   # Paging: 0, CSP: 0, WS: 0, Sched: 0
+    C0_PAGING_BASE = "C0_PAGING_BASE"             # Paging: 1, CSP: 0, WS: 0, Sched: 0
+    C1_CSP = "C1_CSP"                             # Paging: 1, CSP: 1, WS: 0, Sched: 0
+    C2_WS = "C2_WS"                               # Paging: 1, CSP: 0, WS: 1, Sched: 0
+    C3_SCHEDULER = "C3_SCHEDULER"                 # Paging: 1, CSP: 0, WS: 0, Sched: 1
+    C4_CSP_WS = "C4_CSP_WS"                       # Paging: 1, CSP: 1, WS: 1, Sched: 0
+    C5_CSP_SCHEDULER = "C5_CSP_SCHEDULER"         # Paging: 1, CSP: 1, WS: 0, Sched: 1
+    C6_WS_SCHEDULER = "C6_WS_SCHEDULER"           # Paging: 1, CSP: 0, WS: 1, Sched: 1
+    C7_FULL_MODELVM = "C7_FULL_MODELVM"           # Paging: 1, CSP: 1, WS: 1, Sched: 1
+
+
+class ExecutionMode(str, Enum):
+    """Execution backend fidelity and enforcement mode."""
+    SIMULATION = "SIMULATION"        # Explicitly synthetic deterministic emulation
+    REAL = "REAL"                    # Real local inference (e.g., Ollama) with configurable fallback
+    STRICT_REAL = "STRICT_REAL"      # Strict real execution: failures raise exceptions, never silently simulate
+
+
 @dataclass
 class PagingEvent:
     """Telemetry log record for memory management actions."""

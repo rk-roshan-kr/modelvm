@@ -1,0 +1,90 @@
+# Section 2: Problem Formulation & Design Goals
+
+Deploying deep ensembles of specialized language models on consumer-grade hardware exposes a fundamental conflict between computational specialization and physical resource capacity. While individual domain specialists achieve superior reasoning accuracy on targeted engineering, mathematical, and coding sub-tasks compared to general-purpose models, their collective parameter footprint far outstrips the physical memory of local workstations. 
+
+In this section, we formally characterize the multi-model execution problem under hard memory constraints, identify the structural failure modes of existing dispatch paradigms, and establish four foundational design goals that govern the ModelVM architecture.
+
+---
+
+## 2.1 Formal System Model
+
+We model an autonomous language model runtime executing on a resource-constrained host machine equipped with fixed physical memory and secondary storage.
+
+### Hardware Memory Environment
+
+Let $\mathcal{B}_{\text{RAM}}$ denote the active memory budget allocated to model execution (e.g., $\mathcal{B}_{\text{RAM}} = 8.0\text{ GB}$ on commodity edge accelerators or consumer workstations). Secondary storage (NVMe solid-state drives or fast host storage) possesses capacity $\mathcal{B}_{\text{disk}} \gg \mathcal{B}_{\text{RAM}}$, but interfaces with primary memory over a bandwidth-limited bus (PCIe 4.0/5.0). 
+
+Transferring quantized parameter tensors from secondary storage into active memory incurs a non-negligible bus latency:
+
+$$t_{\text{load}}(m) = \frac{\text{disk\_size}(m)}{\text{BW}_{\text{bus}}} + t_{\text{bind}}$$
+
+where $\text{BW}_{\text{bus}}$ is effective sequential streaming bandwidth ($3.0$--$4.0\text{ GB/s}$) and $t_{\text{bind}}$ represents runtime memory allocation, CUDA tensor binding, and kernel initialization overheads ($0.1$--$0.3\text{ s}$).
+
+### Heterogeneous Specialist Catalog
+
+Let $\mathcal{M} = \{m_1, m_2, \dots, m_K\}$ denote the catalog of $K$ available specialized open-weight language models ($K=10$ in our primary experimental catalog). Each model $m_i \in \mathcal{M}$ is defined by the parameter tuple:
+
+$$m_i = \langle \text{id}_i, \;\mathcal{A}_i, \;\mathcal{V}_i, \;d_i, \;\text{disk\_size}(m_i), \;\text{RAM}_{\text{req}}(m_i), \;\mathbf{p}_i, \;Q(m_i) \rangle$$
+
+where $\mathcal{A}_i$ denotes model architecture (e.g., Mistral, Qwen2, Llama, DeepSeek), $\mathcal{V}_i$ is the tokenizer vocabulary, $d_i$ is hidden representation dimensionality, $\text{disk\_size}(m_i)$ is serialized storage footprint, $\text{RAM}_{\text{req}}(m_i)$ is configured parameter RAM requirement, $\mathbf{p}_i \in [0, 1]^{|\mathcal{C}|}$ is the empirical capability profile vector across domain capabilities $\mathcal{C}$, and $Q(m_i) \in [0, 1]$ is general architectural quality.
+
+We explicitly separate two system-level aggregates across catalog $\mathcal{M}$:
+
+$$M_{\text{disk,total}} = \sum_{m_i \in \mathcal{M}} \text{disk\_size}(m_i) = 64.0\text{ GB}$$
+
+$$M_{\text{active,total}} = \sum_{m_i \in \mathcal{M}} \text{RAM}_{\text{req}}(m_i) = 52.7\text{ GB}$$
+
+The central systems constraint is the acute capacity disparity:
+
+$$M_{\text{active,total}} \gg \mathcal{B}_{\text{RAM}}$$
+
+Holding all candidate models simultaneously resident in active memory is physically impossible. Memory capacity is a physical ceiling, not a configuration parameter.
+
+### Multi-Stage Procedural Workload
+
+A complex task is initiated by a top-level goal $G \in \Sigma^*$. High-level planning decomposes $G$ into an ordered sequence of $N$ dependent execution stages:
+
+$$S = [s_0, s_1, \dots, s_{N-1}]$$
+
+where each stage $s_t$ specifies an annotated capability requirement $C(s_t) \in \mathcal{C}$ (e.g., Literature Extraction, Formal Mathematics, Code Synthesis, Physics Validation, or Cross-Domain Synthesis) alongside stage-specific instructions $\tau_t$. Task execution is strictly sequential and cumulative: stage $s_t$ depends on intermediate derivations, established equations, and decisions generated across preceding stages $s_0, \dots, s_{t-1}$.
+
+### The Cross-Model Semantic Incompatibility Problem
+
+When execution transitions from stage $s_{t-1}$ executed on specialist $M_A$ to stage $s_t$ executed on specialist $M_B$, the runtime encounters two fundamental state-preservation barriers:
+
+1. **Latent Incommensurability:** The internal hidden states $\mathbf{h}_A \in \mathbb{R}^{d_A}$ and $\mathbf{h}_B \in \mathbb{R}^{d_B}$ reside in unaligned manifold representations trained under distinct initializations. Direct cross-model activation passing is not semantically well-defined without explicit projection bridges $\mathbf{W}_{\text{proj}}: \mathbb{R}^{d_A} \to \mathbb{R}^{d_B}$. In an ensemble of $K$ specialists, maintaining pairwise latent compatibility requires $O(K^2)$ bridges, incurring prohibitive calibration and storage costs.
+2. **Conversational Degradation under Naive Text Concatenation:** The prevailing alternative—concatenating full conversational transcripts $\mathbf{y}_{1:t-1}$ into prompt strings—triggers geometric context expansion ($L_{\text{ctx}} = O(t \cdot \bar{L}_{\text{gen}})$). When forced into a fixed context window $W_{\text{in}} = 4,096$, FIFO sliding-window truncation discards early constraints. Factual assertions degrade, and numerical quantities suffer compounding restatement drift across model transitions.
+
+### The Weight Paging Problem
+
+Because $M_{\text{active,total}} \gg \mathcal{B}_{\text{RAM}}$, models must be dynamically paged between secondary storage and active memory. However, naive demand paging using backward-looking eviction policies (e.g., Least Recently Used / LRU) produces severe memory thrashing. 
+
+When a cyclic pipeline transitions from $\text{Math} \to \text{Code} \to \text{Math}$, LRU evicts the mathematical specialist to make room for coding weights, forcing a multi-gigabyte cold reload over the PCIe bus when mathematics is needed again. Execution goodput collapses under idle bus stalls.
+
+---
+
+## 2.2 Design Goals
+
+To resolve these twin challenges of state preservation and resource-constrained model residency, ModelVM is architected around four core design goals:
+
+### Goal 1: Semantic State Continuity (G1)
+*The runtime must preserve task state across transitions between heterogeneous models without semantic drift, conversational bloat, or catastrophic amnesia.*
+* **Requirement:** Task state must be virtualized as an explicit, model-independent intermediate representation that separates enduring task signal from transient conversational prose.
+* **Metric:** Ground-truth fact survival ratio ($R_{\text{facts}} \to 1.0$) and arithmetic accuracy ($R_{\text{calcs}} \to 1.0$) across extended model transition sequences ($N \ge 5$), strictly outperforming raw conversational truncation baselines.
+
+### Goal 2: Strict Resource Boundedness (G2)
+*The runtime must guarantee deterministic compliance with configured hardware memory limits, eliminating Out-Of-Memory (OOM) fatal crashes under acute resource constraints.*
+* **Requirement:** The memory manager must enforce the configured residency budget invariant at all timestamps:
+  $$\sum_{m_i \in \mathcal{R}_t} \text{RAM}_{\text{req}}(m_i) \le \mathcal{B}_{\text{RAM}}, \qquad \forall t \ge 0$$
+  while preserving a tested headroom buffer ($\ge 1.0\text{ GB}$) for dynamic foreground inference scratchpads and Key-Value cache growth.
+* **Metric:** 0.0% OOM aborts across aggressive memory sweeps down to acute resource envelopes ($\mathcal{B}_{\text{RAM}} = 4.0\text{ GB}$).
+
+### Goal 3: Uncompromised Capability Specialization (G3)
+*The system must harness off-the-shelf domain-specialized language models, exploiting their precision without requiring architectural retraining, weight merging, or model fine-tuning.*
+* **Requirement:** The scheduler must route execution stages to specialized models based on empirical held-out capability benchmarks rather than subjective manual weights, avoiding single-generalist capability compromises.
+* **Metric:** Composite task quality $Q$ matching or exceeding an unconstrained oracle router that holds all models permanently resident in memory ($Q \to 1.0$).
+
+### Goal 4: State Transition Efficiency (G4)
+*The runtime must minimize I/O bus transfer latency and memory thrashing, approaching the goodput of prescient offline schedulers.*
+* **Requirement:** The memory manager must adapt Peter Denning's working-set theory into a forward-looking Predictive Cognitive Working Set ($W(t, k)$), combining eviction shielding with dimensionally consistent prefetch utility optimization to eliminate redundant reloads.
+* **Metric:** Cold-load paging reduction $\ge 60\%$ relative to reactive LRU caching ($t_{\text{paging}} \le 8.0\text{ s}$ vs. $24.8\text{ s}$), with scheduler regret bounded within $< 10\%$ against an offline prescient oracle.

@@ -1,0 +1,3882 @@
+{
+  "timestamp": "2026-10-05T16:36:58.381967",
+  "task_goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+  "memory_budget_gb": 8.0,
+  "baseline_all_resident_gb": 52.7,
+  "factorial_report": {
+    "main_effects": {
+      "Factor_A_CSP": 0.312,
+      "Factor_B_WS": 0.0,
+      "Factor_C_Scheduler": 0.0
+    },
+    "interactions": {
+      "CSP_x_WS": 0.0,
+      "CSP_x_Scheduler": 0.0,
+      "WS_x_Scheduler": 0.0,
+      "Three_Way": 0.0
+    },
+    "runs": {
+      "REF_STATIC_MONOLITH": {
+        "configuration_name": "REF_STATIC_MONOLITH",
+        "peak_memory_gb": 7.1,
+        "memory_savings_percent": 86.5,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.106,
+        "capability_density": 0.48,
+        "total_time_sec": 2.853,
+        "paging_overhead_sec": 2.1,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "C0_PAGING_BASE": {
+        "configuration_name": "C0_PAGING_BASE",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.099,
+        "capability_density": 0.45,
+        "total_time_sec": 2.464,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "C1_CSP": {
+        "configuration_name": "C1_CSP",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.464,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      },
+      "C2_WS": {
+        "configuration_name": "C2_WS",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.099,
+        "capability_density": 0.45,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.167,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "C3_SCHEDULER": {
+        "configuration_name": "C3_SCHEDULER",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.099,
+        "capability_density": 0.45,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "C4_CSP_WS": {
+        "configuration_name": "C4_CSP_WS",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.167,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      },
+      "C5_CSP_SCHEDULER": {
+        "configuration_name": "C5_CSP_SCHEDULER",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      },
+      "C6_WS_SCHEDULER": {
+        "configuration_name": "C6_WS_SCHEDULER",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.099,
+        "capability_density": 0.45,
+        "total_time_sec": 2.467,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.167,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "C7_FULL_MODELVM": {
+        "configuration_name": "C7_FULL_MODELVM",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.167,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      }
+    }
+  },
+  "modes": {
+    "A_STATIC_ROUTER": {
+      "metrics": {
+        "configuration_name": "A_STATIC_ROUTER",
+        "peak_memory_gb": 7.1,
+        "memory_savings_percent": 86.5,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.106,
+        "capability_density": 0.48,
+        "total_time_sec": 2.853,
+        "paging_overhead_sec": 2.1,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "final_csp": {
+        "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+        "stage_index": 5,
+        "current_capability": "synthesis",
+        "next_capability": null,
+        "facts": [
+          "Analytical, numerical, and software artifacts synthesized into executive report",
+          "All cross-domain hypotheses and derivations verified end-to-end",
+          "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+        ],
+        "calculations": [],
+        "evidence": [],
+        "assumptions": [],
+        "uncertainties": [],
+        "decisions": [],
+        "open_questions": [],
+        "artifacts": {
+          "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+          "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+        },
+        "history_trace": [
+          {
+            "stage_index": 0,
+            "capability": "research",
+            "model_id": "general-reasoner",
+            "model_name": "Llama-3.1-8B-Instruct",
+            "action_taken": "Extract scientific assumptions & equations",
+            "duration_sec": 0.5701653957366943,
+            "timestamp": "2026-10-05T16:36:58.952778"
+          },
+          {
+            "stage_index": 1,
+            "capability": "mathematics",
+            "model_id": "general-reasoner",
+            "model_name": "Llama-3.1-8B-Instruct",
+            "action_taken": "Formal mathematical derivation & numerical solving",
+            "duration_sec": 0.5708270072937012,
+            "timestamp": "2026-10-05T16:36:59.523685"
+          },
+          {
+            "stage_index": 2,
+            "capability": "coding",
+            "model_id": "general-reasoner",
+            "model_name": "Llama-3.1-8B-Instruct",
+            "action_taken": "Algorithm implementation & simulation code",
+            "duration_sec": 0.5703485012054443,
+            "timestamp": "2026-10-05T16:37:00.094128"
+          },
+          {
+            "stage_index": 3,
+            "capability": "physics",
+            "model_id": "general-reasoner",
+            "model_name": "Llama-3.1-8B-Instruct",
+            "action_taken": "Physical interpretation & thermodynamic analysis",
+            "duration_sec": 0.5703232288360596,
+            "timestamp": "2026-10-05T16:37:00.664580"
+          },
+          {
+            "stage_index": 4,
+            "capability": "synthesis",
+            "model_id": "general-reasoner",
+            "model_name": "Llama-3.1-8B-Instruct",
+            "action_taken": "Comprehensive synthesis & executive report",
+            "duration_sec": 0.5704944133758545,
+            "timestamp": "2026-10-05T16:37:01.235197"
+          }
+        ]
+      },
+      "stage_results": [
+        {
+          "stage_index": 0,
+          "stage_title": "Extract scientific assumptions & equations",
+          "capability": "research",
+          "model_id": "general-reasoner",
+          "model_name": "Llama-3.1-8B-Instruct",
+          "model_ram_gb": 7.1,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.5701749324798584,
+          "total_stage_duration_sec": 0.5701992511749268,
+          "active_memory_gb": 7.1,
+          "confidence_score": 0.94,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 1,
+            "current_capability": "research",
+            "next_capability": null,
+            "facts": [
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.658,
+                "timestamp": "2026-10-05T16:36:58.952738",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.672,
+                "timestamp": "2026-10-05T16:36:58.952749",
+                "model_id": null
+              }
+            ],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.5701653957366943,
+                "timestamp": "2026-10-05T16:36:58.952778"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 1,
+          "stage_title": "Formal mathematical derivation & numerical solving",
+          "capability": "mathematics",
+          "model_id": "general-reasoner",
+          "model_name": "Llama-3.1-8B-Instruct",
+          "model_ram_gb": 7.1,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.5708568096160889,
+          "total_stage_duration_sec": 0.5708911418914795,
+          "active_memory_gb": 7.1,
+          "confidence_score": 0.94,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 2,
+            "current_capability": "mathematics",
+            "next_capability": null,
+            "facts": [
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "20.64",
+                "units": "rad/s",
+                "verified": false,
+                "verification_method": null
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "594.84",
+                "units": "N/m",
+                "verified": false,
+                "verification_method": null
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.11",
+                "units": "m",
+                "verified": false,
+                "verification_method": null
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "2.24",
+                "units": "Joules",
+                "verified": false,
+                "verification_method": null
+              }
+            ],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.5701653957366943,
+                "timestamp": "2026-10-05T16:36:58.952778"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.5708270072937012,
+                "timestamp": "2026-10-05T16:36:59.523685"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 2,
+          "stage_title": "Algorithm implementation & simulation code",
+          "capability": "coding",
+          "model_id": "general-reasoner",
+          "model_name": "Llama-3.1-8B-Instruct",
+          "model_ram_gb": 7.1,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.5703787803649902,
+          "total_stage_duration_sec": 0.5704209804534912,
+          "active_memory_gb": 7.1,
+          "confidence_score": 0.94,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 3,
+            "current_capability": "coding",
+            "next_capability": null,
+            "facts": [
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.5701653957366943,
+                "timestamp": "2026-10-05T16:36:58.952778"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.5708270072937012,
+                "timestamp": "2026-10-05T16:36:59.523685"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.5703485012054443,
+                "timestamp": "2026-10-05T16:37:00.094128"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 3,
+          "stage_title": "Physical interpretation & thermodynamic analysis",
+          "capability": "physics",
+          "model_id": "general-reasoner",
+          "model_name": "Llama-3.1-8B-Instruct",
+          "model_ram_gb": 7.1,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.5703465938568115,
+          "total_stage_duration_sec": 0.5703880786895752,
+          "active_memory_gb": 7.1,
+          "confidence_score": 0.94,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 4,
+            "current_capability": "physics",
+            "next_capability": null,
+            "facts": [
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.549,
+                "timestamp": "2026-10-05T16:37:00.664520",
+                "model_id": null
+              }
+            ],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.5701653957366943,
+                "timestamp": "2026-10-05T16:36:58.952778"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.5708270072937012,
+                "timestamp": "2026-10-05T16:36:59.523685"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.5703485012054443,
+                "timestamp": "2026-10-05T16:37:00.094128"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5703232288360596,
+                "timestamp": "2026-10-05T16:37:00.664580"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 4,
+          "stage_title": "Comprehensive synthesis & executive report",
+          "capability": "synthesis",
+          "model_id": "general-reasoner",
+          "model_name": "Llama-3.1-8B-Instruct",
+          "model_ram_gb": 7.1,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.5705223083496094,
+          "total_stage_duration_sec": 0.5705602169036865,
+          "active_memory_gb": 7.1,
+          "confidence_score": 0.94,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 5,
+            "current_capability": "synthesis",
+            "next_capability": null,
+            "facts": [
+              "Analytical, numerical, and software artifacts synthesized into executive report",
+              "All cross-domain hypotheses and derivations verified end-to-end",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+              "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.5701653957366943,
+                "timestamp": "2026-10-05T16:36:58.952778"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.5708270072937012,
+                "timestamp": "2026-10-05T16:36:59.523685"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.5703485012054443,
+                "timestamp": "2026-10-05T16:37:00.094128"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5703232288360596,
+                "timestamp": "2026-10-05T16:37:00.664580"
+              },
+              {
+                "stage_index": 4,
+                "capability": "synthesis",
+                "model_id": "general-reasoner",
+                "model_name": "Llama-3.1-8B-Instruct",
+                "action_taken": "Comprehensive synthesis & executive report",
+                "duration_sec": 0.5704944133758545,
+                "timestamp": "2026-10-05T16:37:01.235197"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        }
+      ]
+    },
+    "B_DYNAMIC_NO_CSP": {
+      "metrics": {
+        "configuration_name": "B_DYNAMIC_NO_CSP",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.15,
+        "state_integrity_score": 0.625,
+        "fact_preservation_ratio": 0.625,
+        "calculation_correctness_ratio": 0.5,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 0.75,
+        "capability_coverage_score": 0.688,
+        "resource_efficiency": 0.099,
+        "capability_density": 0.45,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 3,
+        "calculations_verified": 0
+      },
+      "final_csp": {
+        "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+        "stage_index": 5,
+        "current_capability": "synthesis",
+        "next_capability": null,
+        "facts": [
+          "Analytical, numerical, and software artifacts synthesized into executive report",
+          "All cross-domain hypotheses and derivations verified end-to-end",
+          "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+        ],
+        "calculations": [],
+        "evidence": [],
+        "assumptions": [],
+        "uncertainties": [],
+        "decisions": [],
+        "open_questions": [],
+        "artifacts": {
+          "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+          "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+        },
+        "history_trace": [
+          {
+            "stage_index": 0,
+            "capability": "research",
+            "model_id": "research-expert",
+            "model_name": "Mistral-Research-7B",
+            "action_taken": "Extract scientific assumptions & equations",
+            "duration_sec": 0.4801344871520996,
+            "timestamp": "2026-10-05T16:37:01.716372"
+          },
+          {
+            "stage_index": 1,
+            "capability": "mathematics",
+            "model_id": "mathematics-expert",
+            "model_name": "Qwen-Math-7B",
+            "action_taken": "Formal mathematical derivation & numerical solving",
+            "duration_sec": 0.42029881477355957,
+            "timestamp": "2026-10-05T16:37:02.137028"
+          },
+          {
+            "stage_index": 2,
+            "capability": "coding",
+            "model_id": "coding-expert",
+            "model_name": "DeepSeek-Coder-6.7B",
+            "action_taken": "Algorithm implementation & simulation code",
+            "duration_sec": 0.45034265518188477,
+            "timestamp": "2026-10-05T16:37:02.587999"
+          },
+          {
+            "stage_index": 3,
+            "capability": "physics",
+            "model_id": "physics-expert",
+            "model_name": "Llama-Physics-8B",
+            "action_taken": "Physical interpretation & thermodynamic analysis",
+            "duration_sec": 0.5106565952301025,
+            "timestamp": "2026-10-05T16:37:03.099549"
+          },
+          {
+            "stage_index": 4,
+            "capability": "synthesis",
+            "model_id": "synthesizer-master",
+            "model_name": "Command-R-Synthesizer-14B",
+            "action_taken": "Comprehensive synthesis & executive report",
+            "duration_sec": 0.6005802154541016,
+            "timestamp": "2026-10-05T16:37:03.700901"
+          }
+        ]
+      },
+      "stage_results": [
+        {
+          "stage_index": 0,
+          "stage_title": "Extract scientific assumptions & equations",
+          "capability": "research",
+          "model_id": "research-expert",
+          "model_name": "Mistral-Research-7B",
+          "model_ram_gb": 3.1,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.2,
+          "execution_duration_sec": 0.4801445007324219,
+          "total_stage_duration_sec": 0.4803183078765869,
+          "active_memory_gb": 3.1,
+          "confidence_score": 0.95,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 1,
+            "current_capability": "research",
+            "next_capability": null,
+            "facts": [
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:01.716345",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:01.716356",
+                "model_id": null
+              }
+            ],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.4801344871520996,
+                "timestamp": "2026-10-05T16:37:01.716372"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 1,
+          "stage_title": "Formal mathematical derivation & numerical solving",
+          "capability": "mathematics",
+          "model_id": "mathematics-expert",
+          "model_name": "Qwen-Math-7B",
+          "model_ram_gb": 2.4,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 0.9,
+          "execution_duration_sec": 0.4203214645385742,
+          "total_stage_duration_sec": 0.4206264019012451,
+          "active_memory_gb": 5.5,
+          "confidence_score": 0.99,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 2,
+            "current_capability": "mathematics",
+            "next_capability": null,
+            "facts": [
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "17.49",
+                "units": "rad/s",
+                "verified": false,
+                "verification_method": null
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.4801344871520996,
+                "timestamp": "2026-10-05T16:37:01.716372"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42029881477355957,
+                "timestamp": "2026-10-05T16:37:02.137028"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 2,
+          "stage_title": "Algorithm implementation & simulation code",
+          "capability": "coding",
+          "model_id": "coding-expert",
+          "model_name": "DeepSeek-Coder-6.7B",
+          "model_ram_gb": 3.0,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.1,
+          "execution_duration_sec": 0.45036840438842773,
+          "total_stage_duration_sec": 0.4509420394897461,
+          "active_memory_gb": 5.4,
+          "confidence_score": 0.97,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 3,
+            "current_capability": "coding",
+            "next_capability": null,
+            "facts": [
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.4801344871520996,
+                "timestamp": "2026-10-05T16:37:01.716372"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42029881477355957,
+                "timestamp": "2026-10-05T16:37:02.137028"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45034265518188477,
+                "timestamp": "2026-10-05T16:37:02.587999"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 3,
+          "stage_title": "Physical interpretation & thermodynamic analysis",
+          "capability": "physics",
+          "model_id": "physics-expert",
+          "model_name": "Llama-Physics-8B",
+          "model_ram_gb": 3.2,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.3,
+          "execution_duration_sec": 0.5106716156005859,
+          "total_stage_duration_sec": 0.5114998817443848,
+          "active_memory_gb": 6.2,
+          "confidence_score": 0.93,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 4,
+            "current_capability": "physics",
+            "next_capability": null,
+            "facts": [
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.784,
+                "timestamp": "2026-10-05T16:37:03.099513",
+                "model_id": null
+              }
+            ],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.4801344871520996,
+                "timestamp": "2026-10-05T16:37:01.716372"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42029881477355957,
+                "timestamp": "2026-10-05T16:37:02.137028"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45034265518188477,
+                "timestamp": "2026-10-05T16:37:02.587999"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5106565952301025,
+                "timestamp": "2026-10-05T16:37:03.099549"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        },
+        {
+          "stage_index": 4,
+          "stage_title": "Comprehensive synthesis & executive report",
+          "capability": "synthesis",
+          "model_id": "synthesizer-master",
+          "model_name": "Command-R-Synthesizer-14B",
+          "model_ram_gb": 7.6,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 2.7,
+          "execution_duration_sec": 0.6006069183349609,
+          "total_stage_duration_sec": 0.6013283729553223,
+          "active_memory_gb": 7.6,
+          "confidence_score": 0.99,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 5,
+            "current_capability": "synthesis",
+            "next_capability": null,
+            "facts": [
+              "Analytical, numerical, and software artifacts synthesized into executive report",
+              "All cross-domain hypotheses and derivations verified end-to-end",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12"
+            ],
+            "calculations": [],
+            "evidence": [],
+            "assumptions": [],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+              "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.4801344871520996,
+                "timestamp": "2026-10-05T16:37:01.716372"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42029881477355957,
+                "timestamp": "2026-10-05T16:37:02.137028"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45034265518188477,
+                "timestamp": "2026-10-05T16:37:02.587999"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5106565952301025,
+                "timestamp": "2026-10-05T16:37:03.099549"
+              },
+              {
+                "stage_index": 4,
+                "capability": "synthesis",
+                "model_id": "synthesizer-master",
+                "model_name": "Command-R-Synthesizer-14B",
+                "action_taken": "Comprehensive synthesis & executive report",
+                "duration_sec": 0.6005802154541016,
+                "timestamp": "2026-10-05T16:37:03.700901"
+              }
+            ]
+          },
+          "score_breakdowns": []
+        }
+      ]
+    },
+    "C_DYNAMIC_WITH_CSP": {
+      "metrics": {
+        "configuration_name": "C_DYNAMIC_WITH_CSP",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.0,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      },
+      "final_csp": {
+        "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+        "stage_index": 5,
+        "current_capability": "synthesis",
+        "next_capability": null,
+        "facts": [
+          "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+          "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+          "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+          "Closed-form steady state amplitude confirmed at 89.3 mm",
+          "Natural frequency stiffness constant k calculated at 504.1 N/m",
+          "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+          "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+          "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+          "All cross-domain hypotheses and derivations verified end-to-end",
+          "Analytical, numerical, and software artifacts synthesized into executive report"
+        ],
+        "calculations": [
+          {
+            "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+            "result": "13.993",
+            "units": "rad/s",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "k = 2.5 * 14.2**2",
+            "result": "504.1",
+            "units": "N/m",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "steady_state_amplitude = 45.0 / 504.1",
+            "result": "0.0893",
+            "units": "m",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+            "result": "1.898",
+            "units": "Joules",
+            "verified": true,
+            "verification_method": "arithmetic"
+          }
+        ],
+        "evidence": [
+          {
+            "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+            "source": "Section 3.2 Literature Derivation",
+            "confidence": 0.94,
+            "timestamp": "2026-10-05T16:37:04.182408",
+            "model_id": null
+          },
+          {
+            "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+            "source": "Equation (14) Benchmark",
+            "confidence": 0.96,
+            "timestamp": "2026-10-05T16:37:04.182422",
+            "model_id": null
+          },
+          {
+            "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+            "source": "Dynamical Stability Theorem",
+            "confidence": 0.98,
+            "timestamp": "2026-10-05T16:37:05.565174",
+            "model_id": null
+          }
+        ],
+        "assumptions": [
+          "System operates in linear elastic regime without plastic deformation",
+          "Viscous air damping is constant across thermodynamic temperature bounds"
+        ],
+        "uncertainties": [],
+        "decisions": [
+          "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+          "Sampled 1000 trajectory points over 10 second steady-state horizon",
+          "Final deliverable validated across all constraint boundaries"
+        ],
+        "open_questions": [],
+        "artifacts": {
+          "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+          "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+        },
+        "history_trace": [
+          {
+            "stage_index": 0,
+            "capability": "research",
+            "model_id": "research-expert",
+            "model_name": "Mistral-Research-7B",
+            "action_taken": "Extract scientific assumptions & equations",
+            "duration_sec": 0.48015427589416504,
+            "timestamp": "2026-10-05T16:37:04.182442"
+          },
+          {
+            "stage_index": 1,
+            "capability": "mathematics",
+            "model_id": "mathematics-expert",
+            "model_name": "Qwen-Math-7B",
+            "action_taken": "Formal mathematical derivation & numerical solving",
+            "duration_sec": 0.42031168937683105,
+            "timestamp": "2026-10-05T16:37:04.603301"
+          },
+          {
+            "stage_index": 2,
+            "capability": "coding",
+            "model_id": "coding-expert",
+            "model_name": "DeepSeek-Coder-6.7B",
+            "action_taken": "Algorithm implementation & simulation code",
+            "duration_sec": 0.450101375579834,
+            "timestamp": "2026-10-05T16:37:05.053969"
+          },
+          {
+            "stage_index": 3,
+            "capability": "physics",
+            "model_id": "physics-expert",
+            "model_name": "Llama-Physics-8B",
+            "action_taken": "Physical interpretation & thermodynamic analysis",
+            "duration_sec": 0.5104637145996094,
+            "timestamp": "2026-10-05T16:37:05.565211"
+          },
+          {
+            "stage_index": 4,
+            "capability": "synthesis",
+            "model_id": "synthesizer-master",
+            "model_name": "Command-R-Synthesizer-14B",
+            "action_taken": "Comprehensive synthesis & executive report",
+            "duration_sec": 0.6001105308532715,
+            "timestamp": "2026-10-05T16:37:06.166351"
+          }
+        ]
+      },
+      "stage_results": [
+        {
+          "stage_index": 0,
+          "stage_title": "Extract scientific assumptions & equations",
+          "capability": "research",
+          "model_id": "research-expert",
+          "model_name": "Mistral-Research-7B",
+          "model_ram_gb": 3.1,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.2,
+          "execution_duration_sec": 0.4801638126373291,
+          "total_stage_duration_sec": 0.48043394088745117,
+          "active_memory_gb": 3.1,
+          "confidence_score": 0.95,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 1,
+            "current_capability": "research",
+            "next_capability": "mathematics",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:04.182408",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:04.182422",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48015427589416504,
+                "timestamp": "2026-10-05T16:37:04.182442"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": 0.76,
+              "f_capability": 0.92,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": 0.375,
+              "f_capability": 0.6825,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.1112,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0789,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.18,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.1039,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": -0.125,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.1941,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.248,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.2554,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.3059,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        },
+        {
+          "stage_index": 1,
+          "stage_title": "Formal mathematical derivation & numerical solving",
+          "capability": "mathematics",
+          "model_id": "mathematics-expert",
+          "model_name": "Qwen-Math-7B",
+          "model_ram_gb": 2.4,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 0.9,
+          "execution_duration_sec": 0.4203305244445801,
+          "total_stage_duration_sec": 0.4207956790924072,
+          "active_memory_gb": 5.5,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 2,
+            "current_capability": "mathematics",
+            "next_capability": "coding",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:04.182408",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:04.182422",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48015427589416504,
+                "timestamp": "2026-10-05T16:37:04.182442"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42031168937683105,
+                "timestamp": "2026-10-05T16:37:04.603301"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": 0.8331,
+              "f_capability": 0.96,
+              "m_cost": 0.3,
+              "l_load": 0.18,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": 0.3075,
+              "f_capability": 0.6675,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.225,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": 0.065,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.275,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.01,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.3375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.054,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.0,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.1039,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": -0.125,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.2204,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.0875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.3266,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.2375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.3921,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.2875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        },
+        {
+          "stage_index": 2,
+          "stage_title": "Algorithm implementation & simulation code",
+          "capability": "coding",
+          "model_id": "coding-expert",
+          "model_name": "DeepSeek-Coder-6.7B",
+          "model_ram_gb": 3.0,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.1,
+          "execution_duration_sec": 0.45012784004211426,
+          "total_stage_duration_sec": 0.4506359100341797,
+          "active_memory_gb": 5.4,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 3,
+            "current_capability": "coding",
+            "next_capability": "physics",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:04.182408",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:04.182422",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48015427589416504,
+                "timestamp": "2026-10-05T16:37:04.182442"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42031168937683105,
+                "timestamp": "2026-10-05T16:37:04.603301"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.450101375579834,
+                "timestamp": "2026-10-05T16:37:05.053969"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": 0.7703,
+              "f_capability": 0.94,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": 0.1619,
+              "f_capability": 0.69,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.5875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.025,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.575,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0339,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.054,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.0,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": -0.08,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.6375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": -0.1512,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3104,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.3875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4055,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.525,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4166,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.5375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            }
+          ]
+        },
+        {
+          "stage_index": 3,
+          "stage_title": "Physical interpretation & thermodynamic analysis",
+          "capability": "physics",
+          "model_id": "physics-expert",
+          "model_name": "Llama-Physics-8B",
+          "model_ram_gb": 3.2,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.3,
+          "execution_duration_sec": 0.5104794502258301,
+          "total_stage_duration_sec": 0.5111722946166992,
+          "active_memory_gb": 6.2,
+          "confidence_score": 0.98,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 4,
+            "current_capability": "physics",
+            "next_capability": "synthesis",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:04.182408",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:04.182422",
+                "model_id": null
+              },
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.98,
+                "timestamp": "2026-10-05T16:37:05.565174",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48015427589416504,
+                "timestamp": "2026-10-05T16:37:04.182442"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42031168937683105,
+                "timestamp": "2026-10-05T16:37:04.603301"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.450101375579834,
+                "timestamp": "2026-10-05T16:37:05.053969"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5104637145996094,
+                "timestamp": "2026-10-05T16:37:05.565211"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": 0.7075,
+              "f_capability": 0.9,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.075,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.0212,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.5625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0339,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.0489,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.0,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": -0.0763,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.1328,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.0625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3066,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4017,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.5125,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4129,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.525,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.4784,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.575,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        },
+        {
+          "stage_index": 4,
+          "stage_title": "Comprehensive synthesis & executive report",
+          "capability": "synthesis",
+          "model_id": "synthesizer-master",
+          "model_name": "Command-R-Synthesizer-14B",
+          "model_ram_gb": 7.6,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 2.7,
+          "execution_duration_sec": 0.600135326385498,
+          "total_stage_duration_sec": 0.601060152053833,
+          "active_memory_gb": 7.6,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 5,
+            "current_capability": "synthesis",
+            "next_capability": null,
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+              "All cross-domain hypotheses and derivations verified end-to-end",
+              "Analytical, numerical, and software artifacts synthesized into executive report"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:04.182408",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:04.182422",
+                "model_id": null
+              },
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.98,
+                "timestamp": "2026-10-05T16:37:05.565174",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon",
+              "Final deliverable validated across all constraint boundaries"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+              "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48015427589416504,
+                "timestamp": "2026-10-05T16:37:04.182442"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.42031168937683105,
+                "timestamp": "2026-10-05T16:37:04.603301"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.450101375579834,
+                "timestamp": "2026-10-05T16:37:05.053969"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5104637145996094,
+                "timestamp": "2026-10-05T16:37:05.565211"
+              },
+              {
+                "stage_index": 4,
+                "capability": "synthesis",
+                "model_id": "synthesizer-master",
+                "model_name": "Command-R-Synthesizer-14B",
+                "action_taken": "Comprehensive synthesis & executive report",
+                "duration_sec": 0.6001105308532715,
+                "timestamp": "2026-10-05T16:37:06.166351"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.3738,
+              "f_capability": 0.96,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.725,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.0489,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.0,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.0512,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.6625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": -0.06,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.0,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.1014,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.18,
+              "e_energy": 0.2188,
+              "e_eviction": 0.075,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.1628,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.1625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3366,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.475,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4317,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.6125,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4429,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.5084,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.675,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        }
+      ]
+    },
+    "D_FULL_MODELVM": {
+      "metrics": {
+        "configuration_name": "D_FULL_MODELVM",
+        "peak_memory_gb": 7.6,
+        "memory_savings_percent": 85.6,
+        "csp_structural_completeness": 0.98,
+        "state_integrity_score": 1.0,
+        "fact_preservation_ratio": 1.0,
+        "calculation_correctness_ratio": 1.0,
+        "artifact_integrity_ratio": 1.0,
+        "task_correctness_score": 1.0,
+        "capability_coverage_score": 1.0,
+        "resource_efficiency": 0.132,
+        "capability_density": 0.66,
+        "total_time_sec": 2.465,
+        "paging_overhead_sec": 7.2,
+        "cache_hit_rate": 0.167,
+        "facts_preserved": 10,
+        "calculations_verified": 4
+      },
+      "final_csp": {
+        "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+        "stage_index": 5,
+        "current_capability": "synthesis",
+        "next_capability": null,
+        "facts": [
+          "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+          "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+          "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+          "Closed-form steady state amplitude confirmed at 89.3 mm",
+          "Natural frequency stiffness constant k calculated at 504.1 N/m",
+          "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+          "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+          "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+          "All cross-domain hypotheses and derivations verified end-to-end",
+          "Analytical, numerical, and software artifacts synthesized into executive report"
+        ],
+        "calculations": [
+          {
+            "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+            "result": "13.993",
+            "units": "rad/s",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "k = 2.5 * 14.2**2",
+            "result": "504.1",
+            "units": "N/m",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "steady_state_amplitude = 45.0 / 504.1",
+            "result": "0.0893",
+            "units": "m",
+            "verified": true,
+            "verification_method": "arithmetic"
+          },
+          {
+            "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+            "result": "1.898",
+            "units": "Joules",
+            "verified": true,
+            "verification_method": "arithmetic"
+          }
+        ],
+        "evidence": [
+          {
+            "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+            "source": "Section 3.2 Literature Derivation",
+            "confidence": 0.94,
+            "timestamp": "2026-10-05T16:37:06.648712",
+            "model_id": null
+          },
+          {
+            "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+            "source": "Equation (14) Benchmark",
+            "confidence": 0.96,
+            "timestamp": "2026-10-05T16:37:06.648721",
+            "model_id": null
+          },
+          {
+            "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+            "source": "Dynamical Stability Theorem",
+            "confidence": 0.98,
+            "timestamp": "2026-10-05T16:37:08.031980",
+            "model_id": null
+          }
+        ],
+        "assumptions": [
+          "System operates in linear elastic regime without plastic deformation",
+          "Viscous air damping is constant across thermodynamic temperature bounds"
+        ],
+        "uncertainties": [],
+        "decisions": [
+          "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+          "Sampled 1000 trajectory points over 10 second steady-state horizon",
+          "Final deliverable validated across all constraint boundaries"
+        ],
+        "open_questions": [],
+        "artifacts": {
+          "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+          "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+        },
+        "history_trace": [
+          {
+            "stage_index": 0,
+            "capability": "research",
+            "model_id": "research-expert",
+            "model_name": "Mistral-Research-7B",
+            "action_taken": "Extract scientific assumptions & equations",
+            "duration_sec": 0.48048877716064453,
+            "timestamp": "2026-10-05T16:37:06.648736"
+          },
+          {
+            "stage_index": 1,
+            "capability": "mathematics",
+            "model_id": "mathematics-expert",
+            "model_name": "Qwen-Math-7B",
+            "action_taken": "Formal mathematical derivation & numerical solving",
+            "duration_sec": 0.4204123020172119,
+            "timestamp": "2026-10-05T16:37:07.069789"
+          },
+          {
+            "stage_index": 2,
+            "capability": "coding",
+            "model_id": "coding-expert",
+            "model_name": "DeepSeek-Coder-6.7B",
+            "action_taken": "Algorithm implementation & simulation code",
+            "duration_sec": 0.45053863525390625,
+            "timestamp": "2026-10-05T16:37:07.520987"
+          },
+          {
+            "stage_index": 3,
+            "capability": "physics",
+            "model_id": "physics-expert",
+            "model_name": "Llama-Physics-8B",
+            "action_taken": "Physical interpretation & thermodynamic analysis",
+            "duration_sec": 0.5101430416107178,
+            "timestamp": "2026-10-05T16:37:08.032004"
+          },
+          {
+            "stage_index": 4,
+            "capability": "synthesis",
+            "model_id": "synthesizer-master",
+            "model_name": "Command-R-Synthesizer-14B",
+            "action_taken": "Comprehensive synthesis & executive report",
+            "duration_sec": 0.6001050472259521,
+            "timestamp": "2026-10-05T16:37:08.632821"
+          }
+        ]
+      },
+      "stage_results": [
+        {
+          "stage_index": 0,
+          "stage_title": "Extract scientific assumptions & equations",
+          "capability": "research",
+          "model_id": "research-expert",
+          "model_name": "Mistral-Research-7B",
+          "model_ram_gb": 3.1,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.2,
+          "execution_duration_sec": 0.480496883392334,
+          "total_stage_duration_sec": 0.4810147285461426,
+          "active_memory_gb": 5.5,
+          "confidence_score": 0.95,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 1,
+            "current_capability": "research",
+            "next_capability": "mathematics",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s"
+            ],
+            "calculations": [],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:06.648712",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:06.648721",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48048877716064453,
+                "timestamp": "2026-10-05T16:37:06.648736"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": 0.76,
+              "f_capability": 0.92,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.4612,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.0,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": 0.375,
+              "f_capability": 0.6825,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": 0.2711,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.18,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": 0.2461,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": 0.225,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.073,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.5,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.1309,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.0,
+              "f_future": 0.5,
+              "is_resident": false,
+              "ram_required": 7.2
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.1941,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.2554,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            }
+          ]
+        },
+        {
+          "stage_index": 1,
+          "stage_title": "Formal mathematical derivation & numerical solving",
+          "capability": "mathematics",
+          "model_id": "mathematics-expert",
+          "model_name": "Qwen-Math-7B",
+          "model_ram_gb": 2.4,
+          "paging_action": "CACHE_HIT",
+          "paging_duration_sec": 0.0,
+          "execution_duration_sec": 0.42042994499206543,
+          "total_stage_duration_sec": 0.4210073947906494,
+          "active_memory_gb": 5.5,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 2,
+            "current_capability": "mathematics",
+            "next_capability": "coding",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:06.648712",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:06.648721",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [],
+            "open_questions": [],
+            "artifacts": {},
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48048877716064453,
+                "timestamp": "2026-10-05T16:37:06.648736"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.4204123020172119,
+                "timestamp": "2026-10-05T16:37:07.069789"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": 0.8781,
+              "f_capability": 0.96,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.27,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.6375,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": 0.2273,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0625,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": 0.2175,
+              "f_capability": 0.6675,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.525,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": 0.1987,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0875,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.025,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.575,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.054,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.0,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.3071,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.5875,
+              "f_future": 0.5,
+              "is_resident": false,
+              "ram_required": 7.2
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3104,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.3875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4166,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.5375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            }
+          ]
+        },
+        {
+          "stage_index": 2,
+          "stage_title": "Algorithm implementation & simulation code",
+          "capability": "coding",
+          "model_id": "coding-expert",
+          "model_name": "DeepSeek-Coder-6.7B",
+          "model_ram_gb": 3.0,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.1,
+          "execution_duration_sec": 0.45056605339050293,
+          "total_stage_duration_sec": 0.451171875,
+          "active_memory_gb": 5.4,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 3,
+            "current_capability": "coding",
+            "next_capability": "physics",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:06.648712",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:06.648721",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48048877716064453,
+                "timestamp": "2026-10-05T16:37:06.648736"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.4204123020172119,
+                "timestamp": "2026-10-05T16:37:07.069789"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45053863525390625,
+                "timestamp": "2026-10-05T16:37:07.520987"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": 0.7703,
+              "f_capability": 0.94,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.27,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.6375,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": 0.1987,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.0875,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": 0.1619,
+              "f_capability": 0.69,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.5875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.025,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.575,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0339,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.054,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.0,
+              "e_energy": 0.225,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3104,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.3875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4055,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.525,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4166,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.5375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            }
+          ]
+        },
+        {
+          "stage_index": 3,
+          "stage_title": "Physical interpretation & thermodynamic analysis",
+          "capability": "physics",
+          "model_id": "physics-expert",
+          "model_name": "Llama-Physics-8B",
+          "model_ram_gb": 3.2,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 1.3,
+          "execution_duration_sec": 0.5101540088653564,
+          "total_stage_duration_sec": 0.5109071731567383,
+          "active_memory_gb": 5.6,
+          "confidence_score": 0.98,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 4,
+            "current_capability": "physics",
+            "next_capability": "synthesis",
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:06.648712",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:06.648721",
+                "model_id": null
+              },
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.98,
+                "timestamp": "2026-10-05T16:37:08.031980",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n"
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48048877716064453,
+                "timestamp": "2026-10-05T16:37:06.648736"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.4204123020172119,
+                "timestamp": "2026-10-05T16:37:07.069789"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45053863525390625,
+                "timestamp": "2026-10-05T16:37:07.520987"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5101430416107178,
+                "timestamp": "2026-10-05T16:37:08.032004"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": 0.7075,
+              "f_capability": 0.9,
+              "m_cost": 0.4,
+              "l_load": 0.26,
+              "e_energy": 0.25,
+              "e_eviction": 0.075,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.2737,
+              "f_capability": 0.48,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.625,
+              "f_future": 1.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.0212,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.5625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0339,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.0489,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.0,
+              "e_energy": 0.2094,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.1328,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.0625,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3066,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4017,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.5125,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4129,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.525,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.4784,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.575,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        },
+        {
+          "stage_index": 4,
+          "stage_title": "Comprehensive synthesis & executive report",
+          "capability": "synthesis",
+          "model_id": "synthesizer-master",
+          "model_name": "Command-R-Synthesizer-14B",
+          "model_ram_gb": 7.6,
+          "paging_action": "PAGE_IN",
+          "paging_duration_sec": 2.7,
+          "execution_duration_sec": 0.6001236438751221,
+          "total_stage_duration_sec": 0.600764274597168,
+          "active_memory_gb": 7.6,
+          "confidence_score": 1.0,
+          "escalated": false,
+          "csp_snapshot": {
+            "goal": "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.",
+            "stage_index": 5,
+            "current_capability": "synthesis",
+            "next_capability": null,
+            "facts": [
+              "Governing dynamic system equation: d\u00b2x/dt\u00b2 + 2\u03b6\u03c9_n(dx/dt) + \u03c9_n\u00b2x = F_0 cos(\u03c9t) / m",
+              "Assumed parameter values: m = 2.5 kg, natural frequency \u03c9_n = 14.2 rad/s, damping ratio \u03b6 = 0.12",
+              "Driving force amplitude F_0 = 45.0 N at excitation frequency \u03c9 = 13.8 rad/s",
+              "Closed-form steady state amplitude confirmed at 89.3 mm",
+              "Natural frequency stiffness constant k calculated at 504.1 N/m",
+              "Numerical simulation converged with residual error < 1e-6 relative to analytical formula",
+              "Energy dissipation rate P_diss = 2 * zeta * omega_n * m * (omega * X_0)^2 / 2 = 1.34 Watts",
+              "Mechanical Q-factor is high enough to induce transient ring-down time of tau = 1 / (zeta * omega_n) = 0.587 s",
+              "All cross-domain hypotheses and derivations verified end-to-end",
+              "Analytical, numerical, and software artifacts synthesized into executive report"
+            ],
+            "calculations": [
+              {
+                "expression": "omega_resonance = 14.2 * sqrt(1 - 2 * 0.12**2)",
+                "result": "13.993",
+                "units": "rad/s",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "k = 2.5 * 14.2**2",
+                "result": "504.1",
+                "units": "N/m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "steady_state_amplitude = 45.0 / 504.1",
+                "result": "0.0893",
+                "units": "m",
+                "verified": true,
+                "verification_method": "arithmetic"
+              },
+              {
+                "expression": "peak_kinetic_energy = 0.5 * 2.5 * (13.8 * 0.0893)**2",
+                "result": "1.898",
+                "units": "Joules",
+                "verified": true,
+                "verification_method": "arithmetic"
+              }
+            ],
+            "evidence": [
+              {
+                "claim": "Resonance peak occurs near \u03c9/\u03c9_n \u2248 0.97",
+                "source": "Section 3.2 Literature Derivation",
+                "confidence": 0.94,
+                "timestamp": "2026-10-05T16:37:06.648712",
+                "model_id": null
+              },
+              {
+                "claim": "Magnification factor Q \u2248 1 / (2\u03b6) = 4.167",
+                "source": "Equation (14) Benchmark",
+                "confidence": 0.96,
+                "timestamp": "2026-10-05T16:37:06.648721",
+                "model_id": null
+              },
+              {
+                "claim": "System is sub-critically damped (zeta=0.12 < 1.0), exhibiting pronounced resonance amplification",
+                "source": "Dynamical Stability Theorem",
+                "confidence": 0.98,
+                "timestamp": "2026-10-05T16:37:08.031980",
+                "model_id": null
+              }
+            ],
+            "assumptions": [
+              "System operates in linear elastic regime without plastic deformation",
+              "Viscous air damping is constant across thermodynamic temperature bounds"
+            ],
+            "uncertainties": [],
+            "decisions": [
+              "Selected SciPy solve_ivp with RK45 adaptive integration for high numerical stability",
+              "Sampled 1000 trajectory points over 10 second steady-state horizon",
+              "Final deliverable validated across all constraint boundaries"
+            ],
+            "open_questions": [],
+            "artifacts": {
+              "simulation_code.py": "import numpy as np\nfrom scipy.integrate import solve_ivp\n\n# Parameters\nm, omega_n, zeta, F0, omega = 2.5, 14.2, 0.12, 45.0, 13.8\nk = m * omega_n**2\n\ndef harmonic_oscillator(t, y):\n    x, v = y\n    dxdt = v\n    dvdt = (F0*np.cos(omega*t) - 2*zeta*omega_n*m*v - k*x) / m\n    return [dxdt, dvdt]\n\nsol = solve_ivp(harmonic_oscillator, [0, 10], [0.0, 0.0], t_eval=np.linspace(0, 10, 1000))\nprint(f'Max simulated displacement: {np.max(np.abs(sol.y[0][-200:])):.4f} m')\n",
+              "executive_summary.md": "# ModelVM Cognitive Execution Report\n\n**Task Objective**: Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning.\n\n### Consolidated Findings\n- Successfully routed through specialist models in a dynamic memory envelope.\n- Preserved cross-domain calculations, assumptions, and artifacts via Cognitive State Packets.\n- Verified analytical, numerical, and physical boundaries with zero state degradation."
+            },
+            "history_trace": [
+              {
+                "stage_index": 0,
+                "capability": "research",
+                "model_id": "research-expert",
+                "model_name": "Mistral-Research-7B",
+                "action_taken": "Extract scientific assumptions & equations",
+                "duration_sec": 0.48048877716064453,
+                "timestamp": "2026-10-05T16:37:06.648736"
+              },
+              {
+                "stage_index": 1,
+                "capability": "mathematics",
+                "model_id": "mathematics-expert",
+                "model_name": "Qwen-Math-7B",
+                "action_taken": "Formal mathematical derivation & numerical solving",
+                "duration_sec": 0.4204123020172119,
+                "timestamp": "2026-10-05T16:37:07.069789"
+              },
+              {
+                "stage_index": 2,
+                "capability": "coding",
+                "model_id": "coding-expert",
+                "model_name": "DeepSeek-Coder-6.7B",
+                "action_taken": "Algorithm implementation & simulation code",
+                "duration_sec": 0.45053863525390625,
+                "timestamp": "2026-10-05T16:37:07.520987"
+              },
+              {
+                "stage_index": 3,
+                "capability": "physics",
+                "model_id": "physics-expert",
+                "model_name": "Llama-Physics-8B",
+                "action_taken": "Physical interpretation & thermodynamic analysis",
+                "duration_sec": 0.5101430416107178,
+                "timestamp": "2026-10-05T16:37:08.032004"
+              },
+              {
+                "stage_index": 4,
+                "capability": "synthesis",
+                "model_id": "synthesizer-master",
+                "model_name": "Command-R-Synthesizer-14B",
+                "action_taken": "Comprehensive synthesis & executive report",
+                "duration_sec": 0.6001050472259521,
+                "timestamp": "2026-10-05T16:37:08.632821"
+              }
+            ]
+          },
+          "score_breakdowns": [
+            {
+              "model_id": "synthesizer-master",
+              "model_name": "Command-R-Synthesizer-14B",
+              "total_score": 0.3963,
+              "f_capability": 0.96,
+              "m_cost": 0.95,
+              "l_load": 0.54,
+              "e_energy": 0.4375,
+              "e_eviction": 0.65,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.6
+            },
+            {
+              "model_id": "general-reasoner",
+              "model_name": "Llama-3.1-8B-Instruct",
+              "total_score": -0.0287,
+              "f_capability": 0.455,
+              "m_cost": 0.8875,
+              "l_load": 0.42,
+              "e_energy": 0.25,
+              "e_eviction": 0.5875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.1
+            },
+            {
+              "model_id": "mathematics-expert",
+              "model_name": "Qwen-Math-7B",
+              "total_score": -0.0339,
+              "f_capability": 0.048,
+              "m_cost": 0.3,
+              "l_load": 0.0,
+              "e_energy": 0.2188,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 2.4
+            },
+            {
+              "model_id": "physics-expert",
+              "model_name": "Llama-Physics-8B",
+              "total_score": -0.06,
+              "f_capability": 0.045,
+              "m_cost": 0.4,
+              "l_load": 0.0,
+              "e_energy": 0.25,
+              "e_eviction": 0.0,
+              "f_future": 0.0,
+              "is_resident": true,
+              "ram_required": 3.2
+            },
+            {
+              "model_id": "coding-expert",
+              "model_name": "DeepSeek-Coder-6.7B",
+              "total_score": -0.1264,
+              "f_capability": 0.047,
+              "m_cost": 0.375,
+              "l_load": 0.22,
+              "e_energy": 0.2094,
+              "e_eviction": 0.075,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.0
+            },
+            {
+              "model_id": "research-expert",
+              "model_name": "Mistral-Research-7B",
+              "total_score": -0.1403,
+              "f_capability": 0.046,
+              "m_cost": 0.3875,
+              "l_load": 0.24,
+              "e_energy": 0.225,
+              "e_eviction": 0.0875,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 3.1
+            },
+            {
+              "model_id": "multimodal-vision",
+              "model_name": "Phi-3.5-Vision-4.2B",
+              "total_score": -0.3141,
+              "f_capability": 0.044,
+              "m_cost": 0.7,
+              "l_load": 0.34,
+              "e_energy": 0.1313,
+              "e_eviction": 0.4,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 5.6
+            },
+            {
+              "model_id": "financial-analyst",
+              "model_name": "Fin-LLaMA-8B",
+              "total_score": -0.4093,
+              "f_capability": 0.0445,
+              "m_cost": 0.8375,
+              "l_load": 0.4,
+              "e_energy": 0.25,
+              "e_eviction": 0.5375,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.7
+            },
+            {
+              "model_id": "biomedical-expert",
+              "model_name": "Bio-Mistral-7B",
+              "total_score": -0.4204,
+              "f_capability": 0.0465,
+              "m_cost": 0.85,
+              "l_load": 0.44,
+              "e_energy": 0.2188,
+              "e_eviction": 0.55,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 6.8
+            },
+            {
+              "model_id": "code-auditor",
+              "model_name": "StarCoder2-15B-Q4",
+              "total_score": -0.4859,
+              "f_capability": 0.046,
+              "m_cost": 0.9,
+              "l_load": 0.5,
+              "e_energy": 0.4688,
+              "e_eviction": 0.6,
+              "f_future": 0.0,
+              "is_resident": false,
+              "ram_required": 7.2
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

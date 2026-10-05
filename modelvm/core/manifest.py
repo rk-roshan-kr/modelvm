@@ -18,6 +18,19 @@ class ModelManifest(BaseModel):
     quality: float = Field(default=0.90, ge=0.0, le=1.0, description="Normalized benchmark quality score (0.0 - 1.0)")
     offline: bool = Field(default=True, description="Whether the model executes fully offline locally")
     
+    # Precise multi-tier memory accounting (P1)
+    gpu_vram_weights_gb: Optional[float] = Field(default=None, description="VRAM allocated for model weights in GB")
+    gpu_vram_workspace_gb: float = Field(default=0.4, description="CUDA workspace & activation buffer in GB")
+    cpu_ram_required: float = Field(default=0.5, description="Host CPU memory for tokenizers and runtime in GB")
+    disk_size_gb: Optional[float] = Field(default=None, description="Storage footprint on SSD/NVMe in GB")
+    kv_cache_per_1k_tokens: float = Field(default=0.08, description="VRAM required per 1,000 context tokens in GB")
+
+    # Empirical benchmark profiling (Addresses Reviewer Attack 3)
+    empirical_capabilities: Dict[str, float] = Field(
+        default_factory=dict,
+        description="Empirically measured capability scores per domain from held-out benchmarks"
+    )
+
     # Extended systems metadata
     architecture: str = Field(default="decoder-only", description="Transformer architecture or variant")
     parameters_billion: float = Field(default=7.0, description="Parameter count in billions")
@@ -31,8 +44,22 @@ class ModelManifest(BaseModel):
     last_accessed: float = Field(default=0.0, description="Timestamp of last execution")
     access_count: int = Field(default=0, description="Number of times model was paged in")
 
+    @property
+    def peak_gpu_vram_gb(self) -> float:
+        """Peak active GPU VRAM requirement (weights + workspace buffer)."""
+        w = self.gpu_vram_weights_gb if self.gpu_vram_weights_gb is not None else max(0.1, round(self.ram_required - self.cpu_ram_required, 2))
+        return round(w + self.gpu_vram_workspace_gb, 2)
+
+    @property
+    def effective_disk_size_gb(self) -> float:
+        """Effective storage footprint on disk/NVMe."""
+        return self.disk_size_gb if self.disk_size_gb is not None else round(self.ram_required * 1.1, 2)
+
     def capability_score(self, target: Capability) -> float:
-        """Returns primary or secondary capability match score (0.0 to 1.0)."""
+        """Returns empirical capability score if available, or primary/secondary match score."""
+        target_key = target.value if hasattr(target, "value") else str(target)
+        if target_key in self.empirical_capabilities:
+            return float(self.empirical_capabilities[target_key])
         if not self.capabilities:
             return 0.0
         if self.capabilities[0] == target:

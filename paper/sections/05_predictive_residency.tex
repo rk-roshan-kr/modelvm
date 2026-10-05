@@ -1,0 +1,213 @@
+\section{Predictive Model Residency \& Working Set Engine}
+\label{sec:predictive_residency}
+
+Treating domain specialists as autonomous computational processes exposes a physical systems bottleneck: modern open-weight language models require gigabytes of memory for parameter weights, runtime scratchpads, and Key-Value caches. When task execution requires a diverse ensemble of specialists, keeping all candidate models simultaneously resident in physical RAM or VRAM is impossible on consumer hardware. In this section, we formulate \textbf{Predictive Model Residency}. We analyze the weight residency problem, define the Predictive Cognitive Working Set ($W(t, k)$), formulate cost-aware eviction with future-demand shielding, derive the time-domain prefetch utility function, and provide a containment analysis establishing graceful degradation under task re-planning.
+
+\subsection{The Weight Residency Problem}
+\label{sec:weight_residency_problem}
+
+Let $\mathcal{M} = \{m_1, m_2, \dots, m_K\}$ denote the catalog of available specialized language models. Each model $m_i \in \mathcal{M}$ is characterized by two distinct capacity requirements: its serialized on-disk storage size $\text{disk\_size}(m_i)$ and its configured parameter RAM requirement $\text{RAM}_{\text{req}}(m_i)$.
+
+We explicitly separate two system-level memory aggregates:
+\begin{align}
+M_{\text{disk,total}} &= \sum_{m_i \in \mathcal{M}} \text{disk\_size}(m_i) = 64.0\,\text{GB} \\
+M_{\text{active,total}} &= \sum_{m_i \in \mathcal{M}} \text{RAM}_{\text{req}}(m_i) = 52.7\,\text{GB}
+\end{align}
+On commodity workstations and edge accelerators, the active hardware memory budget $\mathcal{B}_{\text{RAM}}$ is strictly constrained relative to the total library footprint:
+\begin{equation}
+M_{\text{active,total}} \gg \mathcal{B}_{\text{RAM}}
+\label{eq:memory_bottleneck}
+\end{equation}
+In our experimental testbed, the full 10-model specialist library occupies $64.0\,\text{GB}$ of serialized storage on disk and would require $52.7\,\text{GB}$ of memory to hold simultaneously resident. In contrast, the target execution platform enforces a configured runtime resident envelope of $\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$ (and sweeps down to $4.0\,\text{GB}$ in acute stress evaluations).
+
+\paragraph{Residency vs.\ Selection.}
+Prior research on multi-model routing (e.g., FrugalGPT~\cite{chen2023frugalgpt}, RouteLLM~\cite{ong2024routellm}) treats model selection as an unconstrained API dispatch problem: given prompt $x$, a router evaluates scoring function $f(m, x)$ and queries the highest-scoring endpoint. This formulation presumes that all candidate models are permanently resident in cloud memory or hosted on infinite-capacity clusters. 
+
+On physical hardware, this assumption collapses. ModelVM establishes an essential systems distinction:
+\begin{equation}
+\text{Model Selection} \neq \text{Model Residency}
+\end{equation}
+A cognitive scheduler may determine that specialist $m^*$ is the optimal capability match for stage $t$. However, if $m^*$ is stored on secondary NVMe storage, invoking $m^*$ requires transferring gigabytes of quantized weights across the PCIe bus before a single forward token can be generated.
+
+\paragraph{Residency State and Manifest-Level Invariant.}
+At any execution timestamp $t$, the set of resident models $\mathcal{R}_t \subset \mathcal{M}$ is tracked by the \texttt{ModelPager}:
+\begin{equation}
+\mathcal{R}_t = \{m_i \in \mathcal{M} \mid m_i \text{ is resident in memory at time } t\}
+\end{equation}
+The memory manager enforces the configured residency budget invariant:
+\begin{equation}
+\sum_{m_i \in \mathcal{R}_t} \text{RAM}_{\text{req}}(m_i) \le \mathcal{B}_{\text{RAM}}, \qquad \forall t \ge 0
+\label{eq:pager_invariant}
+\end{equation}
+Available configured headroom is strictly defined as:
+\begin{equation}
+\text{RAM}_{\text{free}}(t) = \max\Big(0.0, \;\mathcal{B}_{\text{RAM}} - \sum_{m_i \in \mathcal{R}_t} \text{RAM}_{\text{req}}(m_i)\Big)
+\end{equation}
+
+\noindent\textbf{Systems Boundary Distinction:}
+We explicitly distinguish the \textit{configured residency budget} $\mathcal{B}_{\text{RAM}}$ from \textit{measured physical hardware memory} ($M_{\text{VRAM}}$ and host RSS). The invariant in Equation~(\ref{eq:pager_invariant}) is enforced at model admission time based on catalog manifests ($\text{RAM}_{\text{req}}$). Actual physical memory consumption includes dynamic runtime scratchpads and Key-Value caches ($M_{\text{workspace}} + M_{\text{KV}}$), which are monitored separately by the physical telemetry layer (Section~\ref{sec:telemetry_mechanics}).
+
+\paragraph{Bus Transfer Latency Profiles.}
+Secondary storage bandwidth is orders of magnitude slower than unified memory buses. Streaming an 8-bit quantized 7B model ($7.0\,\text{GB}$) across a PCIe 4.0 $\times 4$ link or high-speed NVMe drive ($3.5\,\text{GB/s}$ sequential read) incurs a transfer latency of $t_{\text{transfer}} \approx 2.0\,\text{s}$, alongside runtime allocation and tensor binding overheads. If a multi-stage pipeline naively loads and unloads models at every stage, I/O transfer stalls dominate compute time, degrading execution goodput. Memory capacity is a physical ceiling, not a configuration parameter. The systems challenge is to maximize cache hit rates under Invariant~(\ref{eq:pager_invariant}) without inducing thrashing.
+
+\subsection{The Predictive Cognitive Working Set}
+\label{sec:working_set_engine}
+
+Classical operating system memory management relies on Peter Denning's working-set theory~\cite{denning1968working}: thrashing is avoided when the active working sets can be kept resident within available physical memory. Classical operating systems estimate $\mathcal{W}(t, \tau)$ retrospectively by monitoring recent page references over backward-looking window $\tau$, because CPU hardware cannot anticipate future program counter jumps.
+
+In multi-stage language model workflows, the runtime operates under fundamentally different visibility: the \texttt{TaskDecomposer} generates an explicit, structured stage plan $G_{\text{plan}} = (S, E)$ before execution commences. ModelVM exploits this architectural visibility to introduce the \textbf{Predictive Cognitive Working Set} ($W(t, k)$).
+
+\paragraph{Formal Definition.}
+Let $S = [s_0, s_1, \dots, s_{N-1}]$ be the sequence of planned execution stages, with current stage index $t$. Let $k \in \mathbb{N}^+$ denote the lookahead horizon window ($1 \le k \le 10$, with default $k=4$). The upcoming stage slice is:
+\begin{equation}
+S_{\text{future}}(t, k) = [s_{t+1}, s_{t+2}, \dots, s_{\min(t+k, N-1)}]
+\end{equation}
+Each stage $s_{t+j}$ specifies an annotated capability requirement $C(s_{t+j}) \in \mathcal{C}$.
+
+The Predictive Cognitive Working Set $W(t, k)$ is defined as the set of optimal specialist models anticipated across the lookahead horizon:
+\begin{equation}
+W(t, k) = \bigcup_{j=1}^{\min(k, N-1-t)} \left\{ m^*_{t+j} \right\}
+\label{eq:working_set_def}
+\end{equation}
+where each future specialist $m^*_{t+j}$ is selected via the scheduler's ranking policy:
+\begin{equation}
+m^*_{t+j} = \arg\max_{m \in \mathcal{M}} \text{Score}\big(m, C(s_{t+j})\big)
+\label{eq:working_set_ranking}
+\end{equation}
+
+\paragraph{Unified Policy Coupling.}
+We emphasize a key systems property: the \texttt{CognitiveWorkingSetPredictor} is \textbf{not an independent model-selection oracle}. It does not implement a disjoint heuristic that risks diverging from runtime decisions. Instead, as formalized in Equation~(\ref{eq:working_set_ranking}), the predictor queries the \texttt{CognitiveScheduler}'s unified ranking method (\texttt{rank\_models\_for\_capability()}). 
+
+Future model identification uses the scheduler's ranking function evaluated under the current runtime state. This architectural coupling establishes a cohesive execution chain:
+\begin{equation}
+\begin{aligned}
+\text{Task Plan } S &\longrightarrow C_{\text{future}} \\
+&\longrightarrow W(t, k) \longrightarrow \text{Residency Decisions}
+\end{aligned}
+\end{equation}
+
+\paragraph{Distance-Decay Forecasting Heuristic.}
+Downstream pipeline stages are subject to execution uncertainty: earlier stages may trigger branch escalations, encounter unrecoverable errors, or solve sub-goals ahead of schedule. To reflect this temporal discounting, the predictor associates each future step $j \in \{1, \dots, k\}$ with a distance-decay weight:
+\begin{equation}
+w_j = \max\big(0.1, \; 1.0 - 0.2 \cdot (j - 1)\big)
+\label{eq:distance_decay}
+\end{equation}
+Under this indexing, the immediately following stage ($j=1$) carries full forecasting weight ($w_1 = 1.0$), whereas distant stages ($j=4$) receive discounted priority ($w_4 = 0.4$). We explicitly present Equation~(\ref{eq:distance_decay}) as the implementation's forecasting heuristic, rather than an optimal statistical prior.
+
+\subsection{Cost-Aware Eviction \& Imminent Model Shielding}
+\label{sec:cost_aware_eviction}
+
+When a newly scheduled model $M_t$ must be paged in and $\text{RAM}_{\text{free}} < \text{RAM}_{\text{req}}(M_t)$, the pager must evict one or more resident models to resolve deficit $\Delta_{\text{deficit}} = \text{RAM}_{\text{req}}(M_t) - \text{RAM}_{\text{free}}$. The eviction decision must be decoupled from model selection: model selection determines what enters memory, whereas eviction policy determines what leaves.
+
+\paragraph{The Failure of Reactive Eviction (LRU).}
+Conventional caching heuristics, such as Least Recently Used (LRU), make eviction decisions exclusively on historical access timestamps:
+\begin{equation}
+m_{\text{LRU}} = \arg\min_{m \in \mathcal{R}_t \setminus \{M_t\}} t_{\text{last\_accessed}}(m)
+\end{equation}
+In multi-stage specialist workflows, LRU suffers from systematic blindness. Consider a pipeline executing an alternating sequence: $\text{Math} \to \text{Code} \to \text{Math}$. When the coding specialist is loaded, the math model becomes the oldest resident model. Under memory pressure, LRU immediately evicts the math specialist---unaware that the very next stage requires mathematics. When the math stage arrives, the runtime incurs a cold page-in stall. A cache policy cannot protect what it cannot predict.
+
+\paragraph{The Paradigm Shift: Least Costly to Lose.}
+ModelVM replaces reactive recency with cost-aware lookahead:
+\begin{equation}
+\begin{aligned}
+\text{LRU:} &\quad \text{``least recently used''} \\
+&\quad\Big\downarrow \\
+\text{ModelVM:} &\quad \text{``least costly to lose''}
+\end{aligned}
+\end{equation}
+The \texttt{CostAwareEvictionPolicy} evaluates candidate models $m \in \mathcal{R}_t \setminus \text{Protected}$ using an eviction priority score $S_{\text{evict}}(m)$:
+\begin{equation}
+\begin{aligned}
+S_{\text{evict}}(m) = &0.5 \cdot \Delta t_{\text{recency}}(m) + 1.5 \cdot \text{RAM}_{\text{req}}(m) \\
+&- 2.0 \cdot t_{\text{load}}(m) - P_{\text{future}}(m)
+\end{aligned}
+\label{eq:eviction_score_formal}
+\end{equation}
+where:
+\begin{itemize}
+    \item $\Delta t_{\text{recency}}(m) = \max(0.1, t_{\text{now}} - t_{\text{last\_accessed}}(m))$ captures elapsed idle time in seconds.
+    \item $\text{RAM}_{\text{req}}(m)$ reflects the immediate memory yield obtained by evicting model $m$ (in GB).
+    \item $t_{\text{load}}(m)$ is the cold reload latency penalty (in seconds) required to restore $m$ over the bus if needed later.
+    \item $P_{\text{future}}(m)$ is the working-set shielding penalty:
+    \begin{equation}
+    P_{\text{future}}(m) = \begin{cases} 1000.0, & \text{if } m \in W(t, k) \\ 0.0, & \text{otherwise} \end{cases}
+    \label{eq:shielding_penalty}
+    \end{equation}
+\end{itemize}
+
+\paragraph{Mechanics of Eviction Shielding.}
+A higher score $S_{\text{evict}}(m)$ indicates higher priority for eviction. The coefficients in Equation~(\ref{eq:eviction_score_formal}) constitute empirically fixed heuristic scaling factors that place heterogeneous features (recency in seconds, RAM in GB, reload latency in seconds, and future demand penalty) onto a common decision scale. 
+
+The policy prioritizes evicting models that have remained idle for substantial periods, release large memory blocks, and can be reloaded rapidly over the bus. Crucially, the $1000.0$ penalty deduction in Equation~(\ref{eq:shielding_penalty}) establishes a \textbf{strong eviction penalty for predicted future demand}. The policy still retains future-demanded models within the candidate pool; however, the large 1000.0 penalty ensures they are selected only if all non-predicted resident models have been exhausted and a memory deficit remains.
+
+We explicitly clarify: the eviction scoring policy is a \textbf{deterministic runtime heuristic}, not a solution to an NP-hard multi-choice knapsack optimization. Solving exact dynamic programming formulations at every stage would introduce runtime scheduling overhead and assume static task execution without runtime branch variance.
+
+\subsection{Time-Domain Prefetch Utility}
+\label{sec:prefetch_utility}
+
+Eviction shielding prevents premature unloads; prefetching stages weights into spare memory ahead of execution. When free memory headroom exists, the runtime can pre-stage weights for an anticipated upcoming model before its subsequent invocation, eliminating cold-load page-in delays at stage transition boundaries.
+
+However, unconstrained prefetching introduces systems risks: prefetching the wrong model wastes memory capacity and forces premature evictions. ModelVM treats prefetching as an expected-value optimization in the time domain.
+
+\paragraph{Dimensionally Consistent Utility Formulation.}
+The method \texttt{recommend\_prefetch\_model()} evaluates candidate non-resident models $m \in \mathcal{M} \setminus \mathcal{R}_t$ that physically fit within free memory ($\text{RAM}_{\text{req}}(m) \le \text{RAM}_{\text{free}}$):
+\begin{equation}
+\begin{aligned}
+U_{\text{prefetch}}(m) = &P_{\text{future}}(m) \cdot \Delta L_{\text{avoided}}(m) \\
+&- \lambda \cdot M_{\text{cost}}(m) - \mu \cdot E_{\text{cost}}(m)
+\end{aligned}
+\label{eq:prefetch_utility_formal}
+\end{equation}
+where:
+\begin{itemize}
+    \item $P_{\text{future}}(m) = \max(0.1, 1.0 - 0.2 \cdot (j_m - 1))$ is the distance-discounted future-demand weight at future stage distance $j_m \in \{1, \dots, k\}$.
+    \item $\Delta L_{\text{avoided}}(m) = t_{\text{load}}(m)$ represents the cold page-in latency saved by pre-staging weights (in seconds).
+    \item $M_{\text{cost}}(m) = \frac{\text{RAM}_{\text{req}}(m)}{\mathcal{B}_{\text{RAM}}}$ is the normalized memory occupancy ratio.
+    \item $E_{\text{cost}}(m) = \min(1.0, \frac{N_{\text{param}}(m)}{32}) \cdot \alpha_{\text{energy}}(m)$ is the normalized parameter-scaled energy consumption factor.
+    \item $\lambda = 1.0\,\text{s}$ and $\mu = 0.5\,\text{s}$ are scaling coefficients that calibrate memory consumption and energy overhead into latency-equivalent seconds.
+\end{itemize}
+
+\paragraph{Positive Utility Admission Gate.}
+Equation~(\ref{eq:prefetch_utility_formal}) enforces an explicit admission gate:
+\begin{equation}
+\text{Admission Condition:} \qquad U_{\text{prefetch}}(m) > 0.0
+\end{equation}
+A candidate model is eligible for prefetching if and only if its expected latency savings ($P_{\text{future}} \cdot \Delta L_{\text{avoided}}$) strictly exceed the latency-equivalent opportunity cost of locking down memory capacity and expending staging energy. If all candidate models yield $U_{\text{prefetch}} \le 0$, no prefetch is issued.
+
+\paragraph{Configured Headroom Admission Invariant.}
+Prefetching must never starve active inference. Autoregressive token generation dynamically allocates memory for intermediate activation scratchpads and expanding KV caches ($M_{\text{workspace}} + M_{\text{KV}}$). If prefetching consumes all remaining free memory, inference allocations trigger out-of-memory kernel panics.
+
+ModelVM enforces a configured headroom admission invariant:
+\begin{equation}
+\text{RAM}_{\text{free}}(t) - \text{RAM}_{\text{req}}(m) \ge 1.0\,\text{GB}
+\label{eq:headroom_invariant}
+\end{equation}
+Even if $U_{\text{prefetch}}(m) > 0$, the pager will unconditionally reject a prefetch request unless at least 1.0\,GB of unallocated memory buffer remains after staging. This safety margin provides a tested buffer against foreground runtime memory growth (such as dynamic KV-cache expansion) under the evaluated workloads.
+
+\subsection{Predictor Misprediction Analysis}
+\label{sec:misprediction_analysis}
+
+A robust systems architecture must not assume an infallible oracle. In real-world workloads, task execution paths diverge from initial plans due to conditional task branches, unexpected failures, confidence-triggered model escalations, or user interruptions. Formally, a misprediction occurs whenever the projected working set diverges from the true execution demand:
+\begin{equation}
+\widehat{W}(t, k) \neq W^*(t, k)
+\end{equation}
+
+ModelVM is engineered under the principle that \textit{the system must degrade gracefully toward reactive behavior rather than catastrophically fail}. We provide a containment argument for the two principal prediction-error modes.
+
+\paragraph{Type I Error: False Positive (Spurious Residency).}
+A Type I error occurs when model $m_{\text{fp}}$ is predicted ($m_{\text{fp}} \in \widehat{W}(t, k)$), shielded, or prefetched, but is never invoked by downstream stages ($m_{\text{fp}} \notin W^*(t, k)$).
+\begin{itemize}
+    \item \textbf{Systems Impact:} Model $m_{\text{fp}}$ occupies $\text{RAM}_{\text{req}}(m_{\text{fp}})$ of memory without providing execution utility, temporarily reducing free memory headroom $\text{RAM}_{\text{free}}$.
+    \item \textbf{Containment Mechanism:} Spurious residency cannot cause an out-of-memory crash. First, Invariant~(\ref{eq:headroom_invariant}) guarantees that at least 1.0\,GB of safety headroom was preserved during prefetching. Second, as stage execution advances without referencing $m_{\text{fp}}$, its elapsed idle time $\Delta t_{\text{recency}}(m_{\text{fp}})$ increases monotonically. Once $m_{\text{fp}}$ drops outside the sliding lookahead window $k$, its shielding penalty $P_{\text{future}}$ drops from $1000.0$ to $0.0$. At that instant, Equation~(\ref{eq:eviction_score_formal}) assigns $m_{\text{fp}}$ a high eviction score due to accumulated idle time, making it the primary target for eviction when subsequent stages demand space.
+    \item \textbf{Worst-Case Bound:} The maximum latency penalty of a Type I error is bounded by the staging transfer time of the unused model incurred during the prefetch step.
+\end{itemize}
+
+\paragraph{Type II Error: False Negative (Missed Prediction).}
+A Type II error occurs when stage $t$ unexpectedly demands specialist $m_{\text{fn}}$ (e.g., due to an unexpected confidence escalation loop), but $m_{\text{fn}} \notin \widehat{W}(t, k)$.
+\begin{itemize}
+    \item \textbf{Systems Impact:} Model $m_{\text{fn}}$ is not resident in active memory when invoked, triggering a cache miss.
+    \item \textbf{Containment Mechanism:} The runtime immediately falls back to standard demand paging. The pager evaluates resident models via Equation~(\ref{eq:eviction_score_formal}), evicts non-shielded models to satisfy deficit $\Delta_{\text{deficit}}$, and transfers $m_{\text{fn}}$ synchronously from disk.
+    \item \textbf{Worst-Case Bound:} Under the stated residency and execution assumptions, prediction error results in additional demand paging rather than intentional state loss. In the worst-case scenario where 100\% of working-set predictions are wrong ($\widehat{W} \cap W^* = \emptyset$), the predictive advantage disappears and the residency component falls back toward reactive demand paging, while CSP state virtualization and cognitive scheduler mechanisms remain active.
+\end{itemize}
+
+This containment argument demonstrates why ModelVM exhibits empirical robustness under acute memory pressure (0.0\% OOM failure across memory sweeps in EXP-R1) and across diverse workload distributions (low oracle regret in EXP-R3). The working-set engine accelerates execution when predictions are accurate, and safely falls back to deterministic demand paging when predictions fail.

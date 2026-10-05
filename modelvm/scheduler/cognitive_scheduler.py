@@ -148,6 +148,38 @@ class CognitiveScheduler:
             ram_required=model.ram_required,
         )
 
+    def rank_models_for_capability(
+        self,
+        capability: Capability,
+        future_capabilities: Optional[List[Capability]] = None,
+        future_model_ids: Optional[Set[str]] = None,
+        candidate_models: Optional[List[ModelManifest]] = None,
+    ) -> List[Tuple[ModelManifest, SchedulingScoreBreakdown]]:
+        """Single source of truth for model ranking across Scheduler, Working Set, and Pager.
+        
+        Evaluates and ranks all qualifying models according to the 6-term multi-objective score.
+        """
+        all_candidates = candidate_models or self.catalog.all_models()
+        budget = self.pager.memory_budget_gb
+        models = [m for m in all_candidates if m.ram_required <= budget]
+        if not models:
+            models = sorted(all_candidates, key=lambda m: m.ram_required)
+            if not models:
+                return []
+
+        ranked: List[Tuple[ModelManifest, SchedulingScoreBreakdown]] = []
+        for model in models:
+            score_obj = self.compute_score(
+                model=model,
+                target_capability=capability,
+                future_capabilities=future_capabilities,
+                future_model_ids=future_model_ids,
+            )
+            ranked.append((model, score_obj))
+
+        ranked.sort(key=lambda item: item[1].total_score, reverse=True)
+        return ranked
+
     def select_best_model(
         self,
         target_capability: Capability,
@@ -155,31 +187,17 @@ class CognitiveScheduler:
         future_model_ids: Optional[Set[str]] = None,
         candidate_models: Optional[List[ModelManifest]] = None,
     ) -> Tuple[ModelManifest, List[SchedulingScoreBreakdown]]:
-        """Evaluates all candidate models and returns the highest-scoring model and all score breakdowns."""
-        all_candidates = candidate_models or self.catalog.all_models()
-        # Filter candidate models that fit within the memory budget
-        budget = self.pager.memory_budget_gb
-        models = [m for m in all_candidates if m.ram_required <= budget]
-        if not models:
-            models = sorted(all_candidates, key=lambda m: m.ram_required)
-            if not models:
-                raise RuntimeError("No models registered in catalog")
+        """Evaluates all candidate models using the unified ranking policy and returns the highest-scoring model."""
+        ranked = self.rank_models_for_capability(
+            capability=target_capability,
+            future_capabilities=future_capabilities,
+            future_model_ids=future_model_ids,
+            candidate_models=candidate_models,
+        )
 
-        breakdowns: List[SchedulingScoreBreakdown] = []
-        for model in models:
-            score_obj = self.compute_score(
-                model=model,
-                target_capability=target_capability,
-                future_capabilities=future_capabilities,
-                future_model_ids=future_model_ids,
-            )
-            breakdowns.append(score_obj)
+        if not ranked:
+            raise RuntimeError("No candidate models available for capability selection")
 
-        # Sort descending by total score
-        breakdowns.sort(key=lambda s: s.total_score, reverse=True)
-        winner_id = breakdowns[0].model_id
-        winner_model = self.catalog.get(winner_id)
-        if not winner_model:
-            winner_model = models[0]
-
+        winner_model, winner_score = ranked[0]
+        breakdowns = [item[1] for item in ranked]
         return winner_model, breakdowns
