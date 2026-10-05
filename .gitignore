@@ -45,3 +45,6 @@ paper/*_preview*
 paper/*_px.png
 paper/test_*.pdf
 paper/fig9_pareto_clean_verified.png
+
+# Repository dump files
+*dump*
