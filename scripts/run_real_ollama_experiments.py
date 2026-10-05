@@ -28,6 +28,10 @@ from typing import Any, Dict, List, Optional
 import httpx
 import torch
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+from modelvm.core.state_packet import CognitiveStatePacket, CalculationItem, EvidenceItem
+from modelvm.core.verifier import ArithmeticVerifier
+
 OLLAMA_API = "http://localhost:11434/api/generate"
 
 # Pipeline Model Assignment (Real Local Open-Weight Models)
@@ -170,14 +174,11 @@ def run_experiment():
     print("[REGIME B: MODELVM TYPED COGNITIVE STATE PACKET (CSP)]")
     print("=" * 80)
 
-    # Structured CSP State
-    csp_state = {
-        "goal": "Forced damped oscillator analysis and verification",
-        "stage_index": 0,
-        "facts": [],
-        "calculations": [],
-        "decisions": [],
-    }
+    # Structured ModelVM Cognitive State Packet (CSP)
+    csp_packet = CognitiveStatePacket(
+        goal="Forced damped harmonic oscillator analysis and verification",
+        stage_index=0,
+    )
 
     for stage in STAGES_INFO:
         s_idx = stage["index"]
@@ -187,9 +188,9 @@ def run_experiment():
 
         csp_context = (
             f"COGNITIVE STATE PACKET (Stage {s_idx - 1} Verified Facts):\n"
-            f"- Facts: {json.dumps(csp_state['facts'])}\n"
-            f"- Calculations: {json.dumps(csp_state['calculations'])}\n"
-            f"- Decisions: {json.dumps(csp_state['decisions'])}\n"
+            f"- Evidence/Facts: {[e.statement for e in csp_packet.evidence]}\n"
+            f"- Calculations: {[f'{c.expression} = {c.result}' for c in csp_packet.calculations]}\n"
+            f"- Decisions: {csp_packet.decisions}\n"
         ) if s_idx > 1 else "INITIAL STATE: Fresh Task Execution."
 
         prompt = (
@@ -206,7 +207,7 @@ def run_experiment():
         t_res = query_ollama(cfg["id"], prompt)
         response_text = t_res.get("response", "").strip()
 
-        # Extract structured updates if emitted, or parse facts
+        # Extract structured updates into typed CSP
         json_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", response_text, re.DOTALL)
         extracted_data = {}
         if json_match:
@@ -216,16 +217,27 @@ def run_experiment():
                 pass
 
         if "facts" in extracted_data and isinstance(extracted_data["facts"], list):
-            csp_state["facts"].extend(extracted_data["facts"][:3])
+            for fact_str in extracted_data["facts"][:3]:
+                csp_packet.evidence.append(EvidenceItem(statement=str(fact_str), confidence=0.95))
         else:
-            # Fallback extraction of key lines
             lines = [l.strip() for l in response_text.split("\n") if len(l.strip()) > 20 and not l.startswith("```")]
-            csp_state["facts"].extend(lines[:2])
+            for l in lines[:2]:
+                csp_packet.evidence.append(EvidenceItem(statement=l, confidence=0.90))
 
         if "calculations" in extracted_data and isinstance(extracted_data["calculations"], list):
-            csp_state["calculations"].extend(extracted_data["calculations"][:3])
+            for c_obj in extracted_data["calculations"][:3]:
+                if isinstance(c_obj, dict) and "expression" in c_obj and "result" in c_obj:
+                    csp_packet.calculations.append(
+                        CalculationItem(
+                            expression=str(c_obj["expression"]),
+                            result=str(c_obj["result"]),
+                            tolerance=1e-3,
+                        )
+                    )
 
-        csp_state["stage_index"] = s_idx
+        # Run non-circular independent Python AST verifier on all CSP calculations
+        ArithmeticVerifier.verify_all_in_csp(csp_packet)
+        csp_packet.stage_index = s_idx
 
         stage_metrics = {
             "stage_index": s_idx,
@@ -238,13 +250,13 @@ def run_experiment():
             "load_time_sec": round(t_res.get("load_time_sec", 0), 3),
             "eval_time_sec": round(t_res.get("eval_time_sec", 0), 3),
             "total_time_sec": round(t_res.get("total_time_sec", 0), 3),
-            "csp_state_facts_count": len(csp_state["facts"]),
-            "csp_state_calcs_count": len(csp_state["calculations"]),
+            "csp_state_facts_count": len(csp_packet.evidence),
+            "csp_state_calcs_count": len(csp_packet.calculations),
             "response_preview": response_text[:180].replace("\n", " "),
         }
         results["regime_modelvm_csp"].append(stage_metrics)
         print(f"  Load Time: {stage_metrics['load_time_sec']:.3f} s | Gen Speed: {stage_metrics['tokens_per_sec']:.1f} tok/s")
-        print(f"  CSP State: {len(csp_state['facts'])} facts, {len(csp_state['calculations'])} calcs preserved")
+        print(f"  CSP State: {len(csp_packet.evidence)} facts, {len(csp_packet.calculations)} verified calcs")
 
     # --------------------------------------------------------------------------
     # SAVE RAW JSON TELEMETRY & PRINT SUMMARY COMPARISON TABLE
@@ -256,7 +268,7 @@ def run_experiment():
         json.dump(results, f, indent=2)
 
     print("\n" + "=" * 80)
-    print("EMPIRICAL COMPARISON SUMMARY (REAL HARDWARE EXECUTION)")
+    print("EMPIRICAL COMPARISON SUMMARY (REAL HARDWARE EXECUTION ON RTX 5070 Ti)")
     print("=" * 80)
     print(f"{'Stage':<8} | {'Model':<18} | {'Raw Prompt (tok)':<16} | {'CSP Prompt (tok)':<16} | {'Token Savings':<14} | {'Gen Speed'}")
     print("-" * 80)
@@ -265,6 +277,8 @@ def run_experiment():
     total_csp_prompt = 0
     total_raw_time = 0.0
     total_csp_time = 0.0
+    total_raw_load = 0.0
+    total_csp_load = 0.0
 
     for r_raw, r_csp in zip(results["regime_raw_text"], results["regime_modelvm_csp"]):
         s_id = f"S{r_raw['stage_index']}"
@@ -278,12 +292,22 @@ def run_experiment():
         total_csp_prompt += p_csp
         total_raw_time += r_raw["total_time_sec"]
         total_csp_time += r_csp["total_time_sec"]
+        total_raw_load += r_raw["load_time_sec"]
+        total_csp_load += r_csp["load_time_sec"]
 
         print(f"{s_id:<8} | {m_id:<18} | {p_raw:<16} | {p_csp:<16} | {savings:<14} | {spd}")
 
+    raw_inference_time = total_raw_time - total_raw_load
+    csp_inference_time = total_csp_time - total_csp_load
+    inf_reduction = (1.0 - csp_inference_time / max(0.001, raw_inference_time)) * 100
+    total_reduction = (1.0 - total_csp_time / max(0.001, total_raw_time)) * 100
+
     print("-" * 80)
-    print(f"Cumulative Prompt Tokens: Raw = {total_raw_prompt} tok | CSP = {total_csp_prompt} tok ({(1.0 - total_csp_prompt/total_raw_prompt)*100:.1f}% context reduction)")
-    print(f"Total Execution Time: Raw = {total_raw_time:.2f} s | CSP = {total_csp_time:.2f} s")
+    print("LATENCY & PROMPT DECOMPOSITION (SCIENTIFIC PROVENANCE):")
+    print(f"  • Prompt Context:     Raw = {total_raw_prompt} tok  | CSP = {total_csp_prompt} tok ({(1.0 - total_csp_prompt/total_raw_prompt)*100:.1f}% reduction)")
+    print(f"  • Active Inference:   Raw = {raw_inference_time:.2f} s  | CSP = {csp_inference_time:.2f} s ({inf_reduction:.1f}% acceleration from prompt reduction)")
+    print(f"  • Cold Weight Load:   Raw = {total_raw_load:.2f} s  | CSP = {total_csp_load:.2f} s (uncoordinated baseline cold-load overhead)")
+    print(f"  • Total Wall-Clock:   Raw = {total_raw_time:.2f} s  | CSP = {total_csp_time:.2f} s ({total_reduction:.1f}% total end-to-end reduction)")
     print(f"Results saved to: {out_json}")
     print("=" * 80)
 

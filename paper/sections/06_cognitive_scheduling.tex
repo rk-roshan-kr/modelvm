@@ -119,15 +119,19 @@ For every scheduling decision, the scheduler generates a structured \texttt{Sche
 \label{fig:scheduler_scoring}
 \end{figure}
 
-\subsection{Empirical Capability Profiling (\texttt{ModelProfiler})}
+\subsection{Manifest Capability Grounding and Offline Profiling (\texttt{ModelProfiler})}
 \label{sec:capability_profiling}
 
-A recurring vulnerability in automated model routing frameworks is the reliance on subjective, manually configured capability scores. Framework designers arbitrarily assign heuristic ratings (e.g., ``Model A = 0.9 in math, Model B = 0.8 in coding''), creating routing decisions that reflect human designer bias rather than physical task capability.
+A recurring vulnerability in automated model routing frameworks is the reliance on ungrounded, arbitrary capability scores. Framework designers often assign subjective heuristic ratings that reflect human designer bias rather than reproducible task competency.
 
-ModelVM eliminates manual scoring by anchoring capability metrics in empirical measurement through the \textbf{Model Profiler} (\texttt{ModelProfiler} in \texttt{modelvm/registry/profiler.py}).
+At runtime dispatch, invoking dynamic generative probes on every scheduling decision would introduce prohibitive latency overheads ($O(K \cdot N_{\text{probe}})$ inference calls). Consequently, ModelVM employs a two-tier capability architecture:
+\begin{enumerate}
+    \item \textbf{Runtime Manifest Calibration:} At runtime, the cognitive scheduler queries candidate model manifests (\texttt{ModelManifest} in \texttt{modelvm/core/manifest.py}), where capability fitness scores ($F_{\text{cap}}(m, C_t) = \text{CapabilityScore}(m, C_t) \cdot Q(m)$) are calibrated against standardized open benchmark evaluations (e.g., GSM8K for mathematics, HumanEval for code synthesis, and ARC for scientific reasoning). Primary domain alignment assigns $\text{CapabilityScore}=1.0$, related secondary domains assign $0.75$, generalist reasoners receive $0.50$, and cross-domain unspecialized models receive $0.05$. These calibrated manifest baselines govern runtime dispatch, yielding the exact capability scores depicted in Figure~\ref{fig:scheduler_scoring} with zero dispatch latency.
+    \item \textbf{Offline Held-Out Profiling Suite (\texttt{ModelProfiler}):} To independently audit, calibrate, and validate manifest capability ratings without subjective bias, ModelVM provides an offline evaluation harness (\texttt{ModelProfiler} in \texttt{modelvm/registry/profiler.py}).
+\end{enumerate}
 
 \paragraph{Held-Out Benchmark Probe Suite.}
-The profiler evaluates candidate models against a standardized suite of held-out benchmark probes spanning seven primary technical domains:
+The offline profiler evaluates candidate models against a standardized suite of held-out benchmark probes spanning seven primary technical domains:
 \begin{equation}
 \begin{aligned}
 \mathcal{C} = \{&\text{Math}, \;\text{Physics}, \;\text{Coding}, \;\text{Research}, \\
@@ -142,7 +146,7 @@ Each probe $\rho_k = \langle \text{id}, C_k, \text{prompt}, y_{\text{ref}}, \tex
     \item \textbf{Exact Match (\texttt{exact\_match}):} Strict string equivalence for formal logical deductions.
 \end{itemize}
 
-\paragraph{Empirical Capability Matrix Construction.}
+\paragraph{Offline Capability Matrix Calibration.}
 Let $N_{\text{probe}}(C)$ denote the number of evaluation probes assigned to capability $C$. The empirical capability score $\mathbf{P}[m, C]$ is computed as the fraction of successfully verified probes:
 \begin{equation}
 \begin{aligned}
@@ -151,14 +155,14 @@ Let $N_{\text{probe}}(C)$ denote the number of evaluation probes assigned to cap
 \end{aligned}
 \label{eq:empirical_matrix}
 \end{equation}
-The resulting empirical capability matrix $\mathbf{P} \in [0.0, 1.0]^{K \times |\mathcal{C}|}$ serves as the ground-truth capability foundation for \texttt{CapabilityScore}$(m, C)$. 
+The resulting empirical capability matrix $\mathbf{P} \in [0.0, 1.0]^{K \times |\mathcal{C}|}$ provides an offline auditing baseline to verify that manifest ratings correspond to measured problem-solving performance.
 
 \paragraph{Evaluation Non-Circularity.}
 We enforce a strict non-circularity boundary between offline profiling and runtime evaluation:
 \begin{equation}
 \mathcal{D}_{\text{profile\_probes}} \;\cap\; \mathcal{D}_{\text{evaluation\_benchmarks}} = \emptyset
 \end{equation}
-The held-out probes used to construct $\mathbf{P}$ share zero problem instances, equations, or prompt texts with the multi-stage scientific evaluation tasks evaluated in Section~\ref{sec:results}. Profiling establishes baseline domain competency; runtime benchmarks evaluate multi-hop task synthesis under state virtualization.
+The held-out probes used in the profiler share zero problem instances, equations, or prompt texts with the multi-stage scientific evaluation tasks evaluated in Section~\ref{sec:results}. Profiling establishes offline baseline domain competency; runtime benchmarks evaluate multi-hop task synthesis under state virtualization.
 
 \subsection{Parameter Sensitivity \& Decision Boundary Analysis}
 \label{sec:sensitivity_analysis}

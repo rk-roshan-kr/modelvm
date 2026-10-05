@@ -19,11 +19,11 @@ class CognitiveWorkingSetPredictor:
     def __init__(
         self,
         catalog: ModelCatalog,
-        lookahead_window: int = 4,
+        lookahead_window: int = 3,
         scheduler: Optional[Any] = None,
     ):
         self.catalog = catalog
-        # Support 4 to 10 stage lookahead window as promised in research positioning
+        # Canonical operating lookahead horizon k=3
         self.lookahead_window = max(1, min(lookahead_window, 10))
         self.scheduler = scheduler
 

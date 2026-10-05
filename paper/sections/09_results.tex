@@ -540,12 +540,12 @@ To validate that our findings hold when executing open-weight model checkpoints 
 \begin{table}[t]
 \small
 \centering
-\caption{Empirical Physical Hardware Telemetry: Raw Text Transcript Concatenation vs.\ ModelVM Typed CSP on NVIDIA RTX 5070 Ti (Ollama Engine, Real Physical Hardware).}
+\caption{Empirical Physical Hardware Telemetry: Raw Text Transcript Concatenation vs.\ ModelVM Typed CSP on NVIDIA RTX 5070 Ti (Ollama Engine, Real Physical Hardware). Throughput variations reflect model parameter scale (1B vs.\ 7B/8B).}
 \label{tab:real_ollama_telemetry}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{lccccc}
 \toprule
-\textbf{Stage} & \textbf{Executing Model} & \textbf{Raw Prompt} & \textbf{CSP Prompt} & \textbf{Context} & \textbf{Gen Speed} \\
+\textbf{Stage} & \textbf{Executing Model} & \textbf{Raw Prompt} & \textbf{CSP Prompt} & \textbf{Context} & \textbf{Obs.\ Speed} \\
 & & \textbf{(Tokens)} & \textbf{(Tokens)} & \textbf{Reduction} & \textbf{(tok/s)} \\
 \midrule
 $S_1$: Formulation & \texttt{llama3.1:8b} & 103 & 151 & -46.6\% & 143.3 \\
@@ -554,8 +554,10 @@ $S_3$: Simulation  & \texttt{qwen2.5-coder:7b} & 828 & 350 & +57.7\% & 152.8 \\
 $S_4$: Verification& \texttt{llama3.1:8b} & 1,317 & 384 & +70.8\% & 139.1 \\
 $S_5$: Synthesis   & \texttt{llama3.2:1b} & 1,673 & 439 & +73.8\% & 431.7 \\
 \midrule
-\textbf{Total Tokens} & — & \textbf{4,291 tok} & \textbf{1,683 tok} & \textbf{60.8\%} & — \\
-\textbf{Total Time}   & — & \textbf{65.05 s}   & \textbf{14.85 s}   & \textbf{77.2\%} & — \\
+\textbf{Total Tokens}       & — & \textbf{4,291 tok} & \textbf{1,683 tok} & \textbf{60.8\%} & — \\
+\textbf{Active Inference}   & — & \textbf{33.83 s}   & \textbf{14.83 s}   & \textbf{56.2\%} & — \\
+\textbf{Cold Weight Load}   & — & \textbf{31.22 s}   & \textbf{0.02 s}    & —               & — \\
+\textbf{Total Wall Clock}   & — & \textbf{65.05 s}   & \textbf{14.85 s}   & \textbf{77.2\%} & — \\
 \bottomrule
 \end{tabular}%
 }
@@ -565,8 +567,8 @@ $S_5$: Synthesis   & \texttt{llama3.2:1b} & 1,673 & 439 & +73.8\% & 431.7 \\
 As reported in Table~\ref{tab:real_ollama_telemetry}, physical execution confirms three vital findings:
 \begin{enumerate}
     \item \textbf{Context Bloat Elimination:} Under raw transcript concatenation, prompt token size expands monotonically, growing from 103 to 1,673 tokens by Stage 5 (total 4,291 prompt tokens processed). In contrast, typed CSP bounds handoff state strictly to verified mathematical facts and parameter constraints, requiring only 439 tokens at Stage 5 (1,683 tokens total, a \textbf{60.8\% cumulative prompt context reduction}).
-    \item \textbf{Execution Latency Reduction:} In the physical validation workload, the ModelVM configuration completed the identical 5-stage pipeline in \textbf{14.85\,s} compared to 65.05\,s for the uncoordinated raw baseline—a \textbf{77.2\% reduction in end-to-end wall-clock latency}, driven jointly by reduced prompt evaluation overhead and coordinated model weight residency.
-    \item \textbf{High Physical Throughput on Modern Silicon:} On the RTX 5070 Ti, the 7B/8B specialist models achieved peak generation throughputs of $139.1\text{--}152.8$\,tokens/sec, with the lightweight synthesis model reaching $431.7$\,tokens/sec.
+    \item \textbf{Latency Decomposition:} We explicitly disentangle active inference acceleration from model loading overhead. The 60.8\% prompt token reduction directly accelerates active inference from 33.83\,s to 14.83\,s (a \textbf{56.2\% active inference acceleration}). In addition, the uncoordinated baseline incurs 31.22\,s of initial cold-loading stalls across checkpoints, bringing the overall end-to-end wall-clock reduction to \textbf{77.2\%} (65.05\,s down to 14.85\,s). EXP-REAL thus evaluates the physical efficiency of typed CSP state serialization on consumer GPU silicon, while multi-model paging dynamics are evaluated under the controlled memory-bounded catalog benchmarks in Sections~\ref{sec:results_signature}--\ref{sec:results_r4}.
+    \item \textbf{Throughput Across Model Scales:} On the RTX 5070 Ti, the 7B/8B specialist models achieved sustained generation throughputs of $139.1\text{--}152.8$\,tokens/sec, while the lightweight 1B synthesis model reached $431.7$\,tokens/sec, illustrating the throughput advantage of routing terminal synthesis to compact models without implying cross-model runtime acceleration.
 \end{enumerate}
 These physical silicon measurements corroborate our formal simulation results, demonstrating that ModelVM's architectural primitives provide immediate, measurable latency and memory advantages on physical commodity GPU silicon.
 

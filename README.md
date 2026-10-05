@@ -8,7 +8,7 @@
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-3776AB.svg?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
 [![Paper: ACM TOCS](https://img.shields.io/badge/Paper-ACM%20TOCS%20Preprint-B31B1B.svg?style=flat-square&logo=arxiv&logoColor=white)](paper/modelvm_tocs_submission.pdf)
 [![Hardware: RTX 5070 Ti](https://img.shields.io/badge/Hardware-NVIDIA%20RTX%205070%20Ti-76B900.svg?style=flat-square&logo=nvidia&logoColor=white)](#-physical-silicon-validation)
-[![Tests Passing](https://img.shields.io/badge/Tests-Passing%20(18%2F18)-brightgreen.svg?style=flat-square)](#-testing--verification)
+[![Tests Passing](https://img.shields.io/badge/Tests-Passing%20(24%2F24)-brightgreen.svg?style=flat-square)](#-testing--verification)
 [![Memory Bounded](https://img.shields.io/badge/Enforced_RAM-8.0_GB_Envelope-purple.svg?style=flat-square)](#-the-systems-dilemma)
 
 ---
@@ -26,8 +26,8 @@
 Modern domain specialists (e.g., mathematics, coding, scientific literature, physical reasoning) significantly outperform monolithic generalist models within their respective domains. However, **holding an ensemble of heterogeneous specialists simultaneously in physical memory is impossible on consumer workstations and edge hardware**: a standard 10-model specialist library demands **52.7 GB** of memory, while consumer devices typically offer only **8.0–16.0 GB** of RAM/VRAM.
 
 ModelVM decouples cognitive execution from concurrent physical residency:
-1. **Semantic State Virtualization (Cognitive State Packet / CSP)**: Replaces token-level prompt concatenation with a model-neutral, typed semantic intermediate representation, cutting cumulative prompt context by **60.8%** and maintaining bounded semantic drift.
-2. **Predictive Model Residency ($W(t, k)$)**: Employs a forward-looking working-set lookahead engine, cost-aware eviction shielding, and opportunistic non-preemptive prefetching into spare headroom, cutting physical pipeline wall-clock latency by **77.2%** ($65.05\,\text{s} \to 14.85\,\text{s}$).
+1. **Semantic State Virtualization (Cognitive State Packet / CSP)**: Replaces token-level prompt concatenation with a model-neutral, typed semantic intermediate representation, cutting cumulative prompt context by **60.8%** and accelerating active inference by **56.2%** with bounded semantic drift.
+2. **Predictive Model Residency ($W(t, k)$)**: Employs a forward-looking working-set lookahead engine ($k=3$), cost-aware eviction shielding, and opportunistic non-preemptive prefetching into spare headroom, cutting physical pipeline wall-clock latency by **77.2%** ($65.05\,\text{s} \to 14.85\,\text{s}$).
 3. **Multi-Objective Cognitive Scheduling**: Arbitrates model execution via empirical held-out capability profiling, memory deficit penalties, cold-load latency, and future stage reuse.
 4. **Deterministic Memory Safety**: Strictly enforces runtime memory invariant ($\sum \text{RAM}_{\text{req}} \le \mathcal{B}_{\text{RAM}}$), eliminating Out-Of-Memory (OOM) fatal aborts across stress sweeps down to $4.0\,\text{GB}$.
 
@@ -60,7 +60,7 @@ ModelVM Virtual Memory Approach:
 | **Process / Thread** | Specialized Domain Model ($\text{Research}, \text{Math}, \text{Code}, \text{Physics}, \text{Synthesis}$) |
 | **Physical RAM** | Active Accelerator Memory Envelope (Strict Budget, e.g. $\mathcal{B}_{\text{RAM}} = 8.0\,\text{GB}$) |
 | **Secondary Storage (Swap)** | Serialized Open-Weight Catalog on NVMe SSD ($64.0\,\text{GB}$ disk, $52.7\,\text{GB}$ RAM footprint) |
-| **Page-In / Page-Out** | Asynchronous PCIe Model Weight Transfer (`page_in` / `page_out`) |
+| **Page-In / Page-Out** | Staged PCIe Model Weight Transfer (`page_in` / `page_out`) |
 | **Page Cache** | Resident Specialist Weight Cache ($0.0\,\text{s}$ hit latency) |
 | **Working Set $W(t, k)$** | Predictive Cognitive Working Set (lookahead horizon across task DAG stages) |
 | **Process Control Block (PCB)** | **Cognitive State Packet (CSP)** (typed facts, verified calculations, evidence, artifacts) |
@@ -258,10 +258,10 @@ from modelvm.pager.memory_manager import ModelPager
 
 # 1. Initialize catalog and model pager with strict 8.0 GB budget
 catalog = ModelCatalog.get_default_catalog()
-pager = ModelPager(catalog=catalog, memory_budget=8.0)
+pager = ModelPager(catalog=catalog, memory_budget_gb=8.0)
 
-# 2. Instantiate kernel with predictive lookahead horizon (k=2)
-kernel = CognitiveKernel(pager=pager, lookahead_k=2)
+# 2. Instantiate kernel with canonical predictive lookahead horizon (k=3)
+kernel = CognitiveKernel(pager=pager, lookahead_k=3)
 
 # 3. Execute a multi-stage procedural task with typed state handoff
 task_directive = (
@@ -289,7 +289,7 @@ python -m unittest discover -s tests
 
 Expected output:
 ```text
-Ran 18 tests in 0.842s
+Ran 24 tests in 35.317s
 OK
 ```
 
@@ -298,6 +298,7 @@ Key test suites include:
 * `tests/test_state_packet.py`: Validates Pydantic serialization, markdown parsing, and AST verification.
 * `tests/test_benchmark.py`: Validates memory invariant preservation and eviction dynamics.
 * `tests/test_factorial_ablation.py`: Validates $2^3$ ablation metrics and state transitions.
+* `tests/test_cli.py`: Validates interactive CLI, argument parsing, and live telemetry rendering.
 
 ---
 
@@ -336,8 +337,14 @@ modelvm/
 │   ├── web/                    # Glassmorphism cyber-OS interactive web UI
 │   ├── cli.py                  # Rich terminal interactive dashboard
 │   └── main.py                 # Application entrypoint
+├── factorial/                          # Replicated 2^3 factorial package (N=80 raw trials)
+│   ├── raw_trials.csv                  # Replicate-level raw data (10 replicates/cell)
+│   ├── metadata.json                   # Experimental design specification
+│   ├── run_replicates.py               # Replicated trial generator
+│   └── analyze_factorial.py            # Yates algorithm & ANOVA inference engine
 ├── scripts/
 │   ├── run_real_ollama_experiments.py  # Real hardware physical silicon benchmark
+│   ├── run_r4_sweeps.py                # EXP-R4 lookahead & Monte Carlo sensitivity sweeps
 │   └── run_ablation_with_logging.py    # Factorial ablation benchmark suite
 ├── paper/
 │   ├── modelvm_tocs_submission.pdf     # 52-page compiled academic journal paper
@@ -346,7 +353,7 @@ modelvm/
 │   ├── references.bib                  # BibTeX bibliography
 │   └── sections/                       # All 12 modular paper sections (01 to 12)
 ├── docs/                               # Empirical telemetry traces & research gap specs
-├── tests/                              # Unit test suite (18/18 passing)
+├── tests/                              # Unit test suite (24/24 passing)
 ├── LICENSE                             # Formal Apache-2.0 License
 ├── requirements.txt                    # Minimal dependencies
 └── pyproject.toml                      # Build and packaging configuration

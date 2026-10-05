@@ -64,12 +64,20 @@ class CognitiveKernel:
         catalog: Optional[ModelCatalog] = None,
         memory_budget_gb: float = 8.0,
         backend: Optional[ModelBackend] = None,
+        lookahead_k: int = 3,
+        pager: Optional[ModelPager] = None,
     ):
-        self.catalog = catalog or ModelCatalog()
-        self.pager = ModelPager(catalog=self.catalog, memory_budget_gb=memory_budget_gb)
+        if pager is not None:
+            self.pager = pager
+            self.catalog = pager.catalog
+        else:
+            self.catalog = catalog or ModelCatalog()
+            self.pager = ModelPager(catalog=self.catalog, memory_budget_gb=memory_budget_gb)
         self.scheduler = CognitiveScheduler(catalog=self.catalog, pager=self.pager)
         self.decomposer = TaskDecomposer()
-        self.working_set_predictor = CognitiveWorkingSetPredictor(catalog=self.catalog, scheduler=self.scheduler)
+        self.working_set_predictor = CognitiveWorkingSetPredictor(
+            catalog=self.catalog, lookahead_window=lookahead_k, scheduler=self.scheduler
+        )
         self.confidence_controller = ConfidenceController()
         self.backend = backend or SimulationBackend()
 

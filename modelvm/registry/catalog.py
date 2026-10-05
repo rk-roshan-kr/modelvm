@@ -215,6 +215,11 @@ class ModelCatalog:
         if manifests_dir and os.path.isdir(manifests_dir):
             self.load_from_directory(manifests_dir)
 
+    @classmethod
+    def get_default_catalog(cls) -> ModelCatalog:
+        """Factory method returning the default catalog with 10 reference specialists."""
+        return cls()
+
     def load_defaults(self) -> None:
         """Populates the catalog with the 10 reference specialist models (52.7 GB total)."""
         for item in DEFAULT_MODELS:

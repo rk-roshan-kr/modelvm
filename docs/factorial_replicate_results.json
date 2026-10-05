@@ -1,0 +1,513 @@
+{
+  "metadata": {
+    "replicates_per_cell": 10,
+    "total_trials": 90,
+    "factorial_trials_N": 80,
+    "design": "Orthogonal 2^3 Factorial Design with Independent Replicates",
+    "enforced_ram_budget_gb": 8.0,
+    "catalog_size_gb": 52.7
+  },
+  "cell_summaries": {
+    "REF_MONOLITH": {
+      "config_id": "REF_MONOLITH",
+      "name": "Reference Static Monolith",
+      "quality": {
+        "mean": 0.562,
+        "ci_95": [
+          0.5567,
+          0.5674
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 0.4,
+        "ci_95": [
+          0.3909,
+          0.41
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.1,
+        "ci_95": [
+          7.088,
+          7.112
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 34.2,
+        "ci_95": [
+          33.865,
+          34.593
+        ]
+      }
+    },
+    "C0": {
+      "config_id": "C0",
+      "name": "Dynamic Base (000)",
+      "quality": {
+        "mean": 0.562,
+        "ci_95": [
+          0.5569,
+          0.5671
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 0.5,
+        "ci_95": [
+          0.49,
+          0.5107
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 24.8,
+        "ci_95": [
+          24.568,
+          25.05
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 62.4,
+        "ci_95": [
+          61.9189,
+          62.8461
+        ]
+      }
+    },
+    "C1": {
+      "config_id": "C1",
+      "name": "CSP Only (100)",
+      "quality": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 24.4,
+        "ci_95": [
+          24.116,
+          24.655
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 59.8,
+        "ci_95": [
+          59.443,
+          60.2021
+        ]
+      }
+    },
+    "C2": {
+      "config_id": "C2",
+      "name": "WS Only (010)",
+      "quality": {
+        "mean": 0.562,
+        "ci_95": [
+          0.5534,
+          0.571
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 0.5,
+        "ci_95": [
+          0.4872,
+          0.5139
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 16.2,
+        "ci_95": [
+          16.061,
+          16.331
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 53.8,
+        "ci_95": [
+          53.378,
+          54.276
+        ]
+      }
+    },
+    "C3": {
+      "config_id": "C3",
+      "name": "Scheduler Only (001)",
+      "quality": {
+        "mean": 0.562,
+        "ci_95": [
+          0.5563,
+          0.5681
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 0.5,
+        "ci_95": [
+          0.4888,
+          0.5118
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 19.0,
+        "ci_95": [
+          18.7969,
+          19.208
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 56.6,
+        "ci_95": [
+          56.0649,
+          57.069
+        ]
+      }
+    },
+    "C4": {
+      "config_id": "C4",
+      "name": "CSP + WS (110)",
+      "quality": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 15.8,
+        "ci_95": [
+          15.593,
+          16.036
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 51.2,
+        "ci_95": [
+          50.8109,
+          51.5971
+        ]
+      }
+    },
+    "C5": {
+      "config_id": "C5",
+      "name": "CSP + Scheduler (101)",
+      "quality": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 18.6,
+        "ci_95": [
+          18.457,
+          18.738
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 54.0,
+        "ci_95": [
+          53.3919,
+          54.7631
+        ]
+      }
+    },
+    "C6": {
+      "config_id": "C6",
+      "name": "WS + Scheduler (011)",
+      "quality": {
+        "mean": 0.562,
+        "ci_95": [
+          0.5542,
+          0.5702
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 0.5,
+        "ci_95": [
+          0.4902,
+          0.5109
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 10.4,
+        "ci_95": [
+          10.2709,
+          10.539
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 47.0,
+        "ci_95": [
+          46.375,
+          47.7151
+        ]
+      }
+    },
+    "C7": {
+      "config_id": "C7",
+      "name": "Full ModelVM (111)",
+      "quality": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "calculation_accuracy": {
+        "mean": 1.0,
+        "ci_95": [
+          1.0,
+          1.0
+        ]
+      },
+      "peak_ram_gb": {
+        "mean": 7.6,
+        "ci_95": [
+          7.588,
+          7.612
+        ]
+      },
+      "paging_overhead_sec": {
+        "mean": 7.2,
+        "ci_95": [
+          6.952,
+          7.451
+        ]
+      },
+      "total_duration_sec": {
+        "mean": 43.8,
+        "ci_95": [
+          43.1669,
+          44.427
+        ]
+      }
+    }
+  },
+  "yates_effects_quality": {
+    "Mean": 0.781,
+    "A_CSP": 0.438,
+    "B_WS": 0.0,
+    "AB_CSPxWS": 0.0,
+    "C_Sched": -0.0,
+    "AC_CSPxSched": 0.0,
+    "BC_WSxSched": 0.0,
+    "ABC_3Way": 0.0
+  },
+  "yates_effects_paging_latency": {
+    "Mean": 17.0501,
+    "A_CSP": -1.1007,
+    "B_WS": -9.3002,
+    "AB_CSPxWS": -0.7012,
+    "C_Sched": -6.4988,
+    "AC_CSPxSched": -0.6998,
+    "BC_WSxSched": -0.7003,
+    "ABC_3Way": -0.7013
+  },
+  "anova_quality": {
+    "A_CSP": {
+      "label": "Factor A: CSP",
+      "effect": 0.438,
+      "ss": 3.8369,
+      "ms": 3.8369,
+      "f_stat": 54314.28,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "B_WS": {
+      "label": "Factor B: Working Set",
+      "effect": 0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "C_Sched": {
+      "label": "Factor C: Scheduler",
+      "effect": -0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "AB_CSPxWS": {
+      "label": "Interaction A x B",
+      "effect": 0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "AC_CSPxSched": {
+      "label": "Interaction A x C",
+      "effect": 0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "BC_WSxSched": {
+      "label": "Interaction B x C",
+      "effect": 0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    },
+    "ABC_3Way": {
+      "label": "Interaction A x B x C",
+      "effect": 0.0,
+      "ss": 0.0,
+      "ms": 0.0,
+      "f_stat": 0.0,
+      "p_value": 1.0,
+      "significant": false
+    }
+  },
+  "anova_paging_latency": {
+    "A_CSP": {
+      "label": "Factor A: CSP",
+      "effect": -1.1007,
+      "ss": 24.2308,
+      "ms": 24.2308,
+      "f_stat": 194.73,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "B_WS": {
+      "label": "Factor B: Working Set",
+      "effect": -9.3002,
+      "ss": 1729.8744,
+      "ms": 1729.8744,
+      "f_stat": 13902.34,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "C_Sched": {
+      "label": "Factor C: Scheduler",
+      "effect": -6.4988,
+      "ss": 844.688,
+      "ms": 844.688,
+      "f_stat": 6788.44,
+      "p_value": 0.0,
+      "significant": true
+    },
+    "AB_CSPxWS": {
+      "label": "Interaction A x B",
+      "effect": -0.7012,
+      "ss": 9.8336,
+      "ms": 9.8336,
+      "f_stat": 79.03,
+      "p_value": 3.348432642269472e-13,
+      "significant": true
+    },
+    "AC_CSPxSched": {
+      "label": "Interaction A x C",
+      "effect": -0.6998,
+      "ss": 9.7944,
+      "ms": 9.7944,
+      "f_stat": 78.71,
+      "p_value": 3.6126657221302594e-13,
+      "significant": true
+    },
+    "BC_WSxSched": {
+      "label": "Interaction B x C",
+      "effect": -0.7003,
+      "ss": 9.8084,
+      "ms": 9.8084,
+      "f_stat": 78.83,
+      "p_value": 3.516076318987871e-13,
+      "significant": true
+    },
+    "ABC_3Way": {
+      "label": "Interaction A x B x C",
+      "effect": -0.7013,
+      "ss": 9.8364,
+      "ms": 9.8364,
+      "f_stat": 79.05,
+      "p_value": 3.3306690738754696e-13,
+      "significant": true
+    }
+  }
+}

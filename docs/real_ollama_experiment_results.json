@@ -145,5 +145,20 @@
       "csp_state_calcs_count": 1,
       "response_preview": "I can help you synthesize the results from the given problem. Here's the synthesized response:  ```json {   \"facts\": [     \"The governing differential equation for a forced damped "
     }
-  ]
+  ],
+  "summary_decomposition": {
+    "cumulative_raw_prompt_tokens": 4291,
+    "cumulative_csp_prompt_tokens": 1683,
+    "prompt_context_reduction_percent": 60.8,
+    "raw_active_inference_sec": 33.83,
+    "csp_active_inference_sec": 14.83,
+    "active_inference_reduction_percent": 56.2,
+    "raw_cold_weight_load_sec": 31.22,
+    "csp_cold_weight_load_sec": 0.02,
+    "total_raw_wall_clock_sec": 65.05,
+    "total_csp_wall_clock_sec": 14.85,
+    "total_wall_clock_reduction_percent": 77.2,
+    "hardware_target": "NVIDIA GeForce RTX 5070 Ti (16 GB GDDR7)",
+    "execution_engine": "Ollama v0.34.3 C++/CUDA inference daemon"
+  }
 }

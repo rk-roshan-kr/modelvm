@@ -154,7 +154,7 @@ Raw conversational text concatenation exhibits unbounded token growth, scaling l
 \subsection{Model Pager \& Memory Manager}
 \label{sec:pager_mechanics}
 
-The \textbf{Model Pager} (\texttt{ModelPager}) implements virtual memory management for open-weight neural network weights. Hardware memory bounds are hard constraints, not polite suggestions. If an orchestration runtime attempts to allocate a 7-billion parameter model into a physical memory buffer that is already saturated, the operating system issues an unrecoverable SIGKILL. ModelVM enforces strict, deterministic residency bounds.
+The \textbf{Model Pager} (\texttt{ModelPager}) implements virtual memory management for open-weight neural network weights. Hardware memory bounds are hard constraints, not polite suggestions. If an orchestration runtime attempts to allocate a 7-billion parameter model into a physical memory buffer that is already saturated, the operating system triggers process termination or allocator failure under memory exhaustion. ModelVM enforces strict, deterministic residency bounds.
 
 \paragraph{Residency Tracking \& Memory Invariants.}
 The pager maintains the resident model set as a dictionary mapping model identifiers to metadata manifests: $\mathcal{R}_t = \{m_i \mapsto \text{Manifest}(m_i)\}$. Active memory occupancy is defined as:

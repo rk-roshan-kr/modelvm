@@ -52,7 +52,7 @@ Live Silicon Validation & Real checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.
 We evaluate ModelVM across two complementary regimes hosted on this physical machine:
 \begin{enumerate}
     \item \textbf{Controlled Catalog Evaluation (Sections~\ref{sec:results_signature}--\ref{sec:results_r4}):} Evaluates the full 10-model, 52.7\,GB catalog under an enforced runtime memory budget ($\mathcal{B}_{\text{RAM}} = 8.0$\,GB, swept from $4.0$\,GB to $16.0$\,GB). The ModelVM memory manager enforces strict page-in and eviction invariants, tracking instantaneous RSS and device memory via OS counters and \texttt{psutil}, with cold-load transfer durations recorded using high-resolution monotonic nanosecond timers.
-    \item \textbf{Live Physical Silicon Validation (EXP-REAL, Section~\ref{sec:results_real}):} Real open-weight model checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}) are physically instantiated and executed on the RTX 5070 Ti through the local Ollama C++/CUDA daemon, directly measuring prompt token reduction, physical evaluation speeds, and wall-clock latency on the silicon.
+    \item \textbf{Live Physical Silicon Validation (EXP-REAL, Section~\ref{sec:results_real}):} Real open-weight model checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}) are physically instantiated and executed on the RTX 5070 Ti through the local Ollama C++/CUDA daemon, isolating the active inference acceleration and prompt token compression achieved by typed CSP state serialization under physical hardware execution.
 \end{enumerate}
 
 \paragraph{Hierarchical Memory Accounting}

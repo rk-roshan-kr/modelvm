@@ -1,0 +1,191 @@
+{
+  "experiment": "EXP-R4: Lookahead Horizon and Sensitivity Evaluation",
+  "description": "Empirical parameter sweeps reproducing Section 9.4 in ACM TOCS submission",
+  "lookahead_horizon_sweep": [
+    {
+      "k": 1,
+      "t_paging_sec": 21.6,
+      "cache_hit_rate": 0.2,
+      "reloads": 4.0,
+      "status": "Reactive Demand Baseline"
+    },
+    {
+      "k": 2,
+      "t_paging_sec": 12.4,
+      "cache_hit_rate": 0.4,
+      "reloads": 2.0,
+      "status": "Partial Forecast"
+    },
+    {
+      "k": 3,
+      "t_paging_sec": 7.2,
+      "cache_hit_rate": 0.6,
+      "reloads": 1.0,
+      "status": "Canonical Operational Point"
+    },
+    {
+      "k": 4,
+      "t_paging_sec": 6.9,
+      "cache_hit_rate": 0.6,
+      "reloads": 1.0,
+      "status": "Diminishing Returns"
+    },
+    {
+      "k": 6,
+      "t_paging_sec": 6.8,
+      "cache_hit_rate": 0.6,
+      "reloads": 1.0,
+      "status": "Diminishing Returns"
+    }
+  ],
+  "scheduler_sensitivity_sweep": {
+    "total_trials": 500,
+    "perturbation_range": "+/- 30%",
+    "stability_threshold_regret": "<= 8.5%",
+    "stable_trials_count": 494,
+    "stability_percentage": 98.8,
+    "oom_failures": 0,
+    "trial_sample": [
+      {
+        "trial_id": 1,
+        "weights": {
+          "alpha": 0.1849,
+          "beta": 0.3176,
+          "gamma": 0.1139,
+          "delta": 0.3178,
+          "eta": 0.2778
+        },
+        "regret_vs_oracle": 0.0665,
+        "regret_percent": 6.65,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 2,
+        "weights": {
+          "alpha": 0.225,
+          "beta": 0.1781,
+          "gamma": 0.1282,
+          "delta": 0.3598,
+          "eta": 0.2896
+        },
+        "regret_vs_oracle": 0.0731,
+        "regret_percent": 7.31,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 3,
+        "weights": {
+          "alpha": 0.1618,
+          "beta": 0.2025,
+          "gamma": 0.0883,
+          "delta": 0.3045,
+          "eta": 0.3357
+        },
+        "regret_vs_oracle": 0.0713,
+        "regret_percent": 7.13,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 4,
+        "weights": {
+          "alpha": 0.1567,
+          "beta": 0.2188,
+          "gamma": 0.092,
+          "delta": 0.2921,
+          "eta": 0.4099
+        },
+        "regret_vs_oracle": 0.0503,
+        "regret_percent": 5.03,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 5,
+        "weights": {
+          "alpha": 0.164,
+          "beta": 0.2521,
+          "gamma": 0.1055,
+          "delta": 0.2184,
+          "eta": 0.3726
+        },
+        "regret_vs_oracle": 0.0586,
+        "regret_percent": 5.86,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 6,
+        "weights": {
+          "alpha": 0.1517,
+          "beta": 0.2776,
+          "gamma": 0.0964,
+          "delta": 0.232,
+          "eta": 0.349
+        },
+        "regret_vs_oracle": 0.0725,
+        "regret_percent": 7.25,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 7,
+        "weights": {
+          "alpha": 0.1441,
+          "beta": 0.3114,
+          "gamma": 0.0855,
+          "delta": 0.3293,
+          "eta": 0.3105
+        },
+        "regret_vs_oracle": 0.089,
+        "regret_percent": 8.9,
+        "stable": false,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 8,
+        "weights": {
+          "alpha": 0.1622,
+          "beta": 0.3204,
+          "gamma": 0.1165,
+          "delta": 0.3791,
+          "eta": 0.4329
+        },
+        "regret_vs_oracle": 0.0747,
+        "regret_percent": 7.47,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 9,
+        "weights": {
+          "alpha": 0.2117,
+          "beta": 0.3133,
+          "gamma": 0.0753,
+          "delta": 0.2453,
+          "eta": 0.2545
+        },
+        "regret_vs_oracle": 0.0549,
+        "regret_percent": 5.49,
+        "stable": true,
+        "oom_failure": false
+      },
+      {
+        "trial_id": 10,
+        "weights": {
+          "alpha": 0.1726,
+          "beta": 0.2993,
+          "gamma": 0.0914,
+          "delta": 0.2606,
+          "eta": 0.359
+        },
+        "regret_vs_oracle": 0.0498,
+        "regret_percent": 4.98,
+        "stable": true,
+        "oom_failure": false
+      }
+    ]
+  }
+}

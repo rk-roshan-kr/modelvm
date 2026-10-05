@@ -1,0 +1,24 @@
+{
+  "title": "ModelVM Replicated 2^3 Factorial Experiment Dataset",
+  "description": "Raw replicate measurements across 8 orthogonal treatment cells and static monolith",
+  "design": "2^3 Full Factorial Design with n=10 Replicates per Cell",
+  "total_trials": 90,
+  "factorial_trials_N": 80,
+  "reference_monolith_trials": 10,
+  "replicates_per_cell": 10,
+  "random_seed": 42,
+  "factors": {
+    "Factor_A": "Semantic State Virtualization (CSP)",
+    "Factor_B": "Predictive Cognitive Working Set W(t, k)",
+    "Factor_C": "Resource-Aware Cognitive Scheduler"
+  },
+  "response_variables": [
+    "quality_score (Q in [0, 1])",
+    "calculation_accuracy (R_calcs in [0, 1])",
+    "paging_overhead_sec (t_paging, seconds)",
+    "total_duration_sec (L, seconds)",
+    "peak_ram_gb (M_RAM, GB)"
+  ],
+  "hardware_budget_gb": 8.0,
+  "catalog_size_gb": 52.7
+}

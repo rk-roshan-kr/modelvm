@@ -25,9 +25,10 @@ class ModelPager:
         catalog: ModelCatalog,
         memory_budget_gb: float = 8.0,
         policy: Optional[EvictionPolicy] = None,
+        memory_budget: Optional[float] = None,
     ):
         self.catalog = catalog
-        self.memory_budget_gb = memory_budget_gb
+        self.memory_budget_gb = memory_budget if memory_budget is not None else memory_budget_gb
         self.policy: EvictionPolicy = policy or CostAwareEvictionPolicy()
         self.telemetry = HardwareTelemetry()
         
