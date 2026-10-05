@@ -87,6 +87,6 @@ To resolve these twin challenges of state preservation and resource-constrained 
 \paragraph{Goal 4: State Transition Efficiency (G4).}
 \textit{The runtime must minimize I/O bus transfer latency and memory thrashing, approaching the goodput of prescient offline schedulers.}
 \begin{itemize}
-    \item \textbf{Requirement:} The memory manager must adapt Peter Denning's working-set theory into a forward-looking Predictive Cognitive Working Set ($W(t, k)$), combining eviction shielding with dimensionally consistent prefetch utility optimization to eliminate redundant reloads.
+    \item \textbf{Requirement:} The memory manager must adapt Peter Denning's working-set theory into a forward-looking Predictive Cognitive Working Set ($W(t, k)$), combining eviction shielding with dimensionally consistent prefetch utility optimization to reduce redundant reloads.
     \item \textbf{Metric:} Cold-load paging reduction $\ge 60\%$ relative to reactive LRU caching ($t_{\text{paging}} \le 8.0\,\text{s}$ vs.\ $21.60\,\text{s}$, achieving a $66.7\%$ reduction; and $71.0\%$ reduction vs.\ naive dynamic baseline $B_2$ of $24.80\,\text{s}$), with scheduler regret bounded within $< 10\%$ against an offline prescient oracle.
 \end{itemize}

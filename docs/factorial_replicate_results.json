@@ -15,14 +15,14 @@
         "mean": 0.562,
         "ci_95": [
           0.5567,
-          0.5674
+          0.5664
         ]
       },
       "calculation_accuracy": {
-        "mean": 0.4,
+        "mean": 0.506,
         "ci_95": [
-          0.3909,
-          0.41
+          0.498,
+          0.5126
         ]
       },
       "peak_ram_gb": {
@@ -42,8 +42,8 @@
       "total_duration_sec": {
         "mean": 34.2,
         "ci_95": [
-          33.865,
-          34.593
+          33.72,
+          34.7771
         ]
       }
     },
@@ -51,17 +51,17 @@
       "config_id": "C0",
       "name": "Dynamic Base (000)",
       "quality": {
-        "mean": 0.562,
+        "mean": 0.559,
         "ci_95": [
-          0.5569,
-          0.5671
+          0.5558,
+          0.5618
         ]
       },
       "calculation_accuracy": {
-        "mean": 0.5,
+        "mean": 0.502,
         "ci_95": [
-          0.49,
-          0.5107
+          0.4935,
+          0.5098
         ]
       },
       "peak_ram_gb": {
@@ -72,17 +72,17 @@
         ]
       },
       "paging_overhead_sec": {
-        "mean": 24.8,
+        "mean": 24.87,
         "ci_95": [
-          24.568,
-          25.05
+          24.758,
+          24.986
         ]
       },
       "total_duration_sec": {
-        "mean": 62.4,
+        "mean": 61.98,
         "ci_95": [
-          61.9189,
-          62.8461
+          61.667,
+          62.3791
         ]
       }
     },
@@ -106,22 +106,22 @@
       "peak_ram_gb": {
         "mean": 7.6,
         "ci_95": [
-          7.588,
-          7.612
+          7.584,
+          7.608
         ]
       },
       "paging_overhead_sec": {
-        "mean": 24.4,
+        "mean": 24.42,
         "ci_95": [
-          24.116,
-          24.655
+          24.268,
+          24.598
         ]
       },
       "total_duration_sec": {
-        "mean": 59.8,
+        "mean": 59.51,
         "ci_95": [
-          59.443,
-          60.2021
+          58.9426,
+          60.038
         ]
       }
     },
@@ -129,38 +129,38 @@
       "config_id": "C2",
       "name": "WS Only (010)",
       "quality": {
-        "mean": 0.562,
+        "mean": 0.561,
         "ci_95": [
-          0.5534,
-          0.571
+          0.5557,
+          0.5662
         ]
       },
       "calculation_accuracy": {
-        "mean": 0.5,
+        "mean": 0.496,
         "ci_95": [
-          0.4872,
-          0.5139
+          0.4867,
+          0.505
         ]
       },
       "peak_ram_gb": {
         "mean": 7.6,
         "ci_95": [
-          7.588,
-          7.612
+          7.584,
+          7.608
         ]
       },
       "paging_overhead_sec": {
-        "mean": 16.2,
+        "mean": 16.18,
         "ci_95": [
-          16.061,
-          16.331
+          15.994,
+          16.3891
         ]
       },
       "total_duration_sec": {
-        "mean": 53.8,
+        "mean": 53.76,
         "ci_95": [
-          53.378,
-          54.276
+          53.3779,
+          54.1551
         ]
       }
     },
@@ -168,17 +168,17 @@
       "config_id": "C3",
       "name": "Scheduler Only (001)",
       "quality": {
-        "mean": 0.562,
+        "mean": 0.566,
         "ci_95": [
-          0.5563,
-          0.5681
+          0.5613,
+          0.5699
         ]
       },
       "calculation_accuracy": {
-        "mean": 0.5,
+        "mean": 0.504,
         "ci_95": [
-          0.4888,
-          0.5118
+          0.4969,
+          0.5102
         ]
       },
       "peak_ram_gb": {
@@ -189,17 +189,17 @@
         ]
       },
       "paging_overhead_sec": {
-        "mean": 19.0,
+        "mean": 19.16,
         "ci_95": [
-          18.7969,
-          19.208
+          18.8359,
+          19.462
         ]
       },
       "total_duration_sec": {
-        "mean": 56.6,
+        "mean": 56.68,
         "ci_95": [
-          56.0649,
-          57.069
+          56.3379,
+          56.9981
         ]
       }
     },
@@ -223,22 +223,22 @@
       "peak_ram_gb": {
         "mean": 7.6,
         "ci_95": [
-          7.588,
-          7.612
+          7.584,
+          7.608
         ]
       },
       "paging_overhead_sec": {
-        "mean": 15.8,
+        "mean": 15.64,
         "ci_95": [
-          15.593,
-          16.036
+          15.494,
+          15.783
         ]
       },
       "total_duration_sec": {
-        "mean": 51.2,
+        "mean": 51.33,
         "ci_95": [
-          50.8109,
-          51.5971
+          50.865,
+          51.748
         ]
       }
     },
@@ -260,24 +260,24 @@
         ]
       },
       "peak_ram_gb": {
-        "mean": 7.6,
+        "mean": 7.59,
         "ci_95": [
-          7.588,
-          7.612
+          7.58,
+          7.604
         ]
       },
       "paging_overhead_sec": {
-        "mean": 18.6,
+        "mean": 18.64,
         "ci_95": [
-          18.457,
-          18.738
+          18.522,
+          18.751
         ]
       },
       "total_duration_sec": {
-        "mean": 54.0,
+        "mean": 54.91,
         "ci_95": [
-          53.3919,
-          54.7631
+          54.2949,
+          55.455
         ]
       }
     },
@@ -285,17 +285,17 @@
       "config_id": "C6",
       "name": "WS + Scheduler (011)",
       "quality": {
-        "mean": 0.562,
+        "mean": 0.559,
         "ci_95": [
-          0.5542,
-          0.5702
+          0.5549,
+          0.5635
         ]
       },
       "calculation_accuracy": {
-        "mean": 0.5,
+        "mean": 0.507,
         "ci_95": [
-          0.4902,
-          0.5109
+          0.4968,
+          0.5176
         ]
       },
       "peak_ram_gb": {
@@ -306,17 +306,17 @@
         ]
       },
       "paging_overhead_sec": {
-        "mean": 10.4,
+        "mean": 10.33,
         "ci_95": [
-          10.2709,
-          10.539
+          10.129,
+          10.545
         ]
       },
       "total_duration_sec": {
-        "mean": 47.0,
+        "mean": 47.43,
         "ci_95": [
-          46.375,
-          47.7151
+          47.0529,
+          47.876
         ]
       }
     },
@@ -338,175 +338,175 @@
         ]
       },
       "peak_ram_gb": {
-        "mean": 7.6,
+        "mean": 7.61,
         "ci_95": [
-          7.588,
-          7.612
+          7.596,
+          7.62
         ]
       },
       "paging_overhead_sec": {
-        "mean": 7.2,
+        "mean": 7.22,
         "ci_95": [
-          6.952,
-          7.451
+          7.012,
+          7.4191
         ]
       },
       "total_duration_sec": {
-        "mean": 43.8,
+        "mean": 43.94,
         "ci_95": [
-          43.1669,
-          44.427
+          43.4969,
+          44.404
         ]
       }
     }
   },
   "yates_effects_quality": {
-    "Mean": 0.781,
-    "A_CSP": 0.438,
-    "B_WS": 0.0,
-    "AB_CSPxWS": 0.0,
-    "C_Sched": -0.0,
-    "AC_CSPxSched": 0.0,
-    "BC_WSxSched": 0.0,
-    "ABC_3Way": 0.0
+    "Mean": 0.7806,
+    "A_CSP": 0.4389,
+    "B_WS": -0.001,
+    "AB_CSPxWS": 0.001,
+    "C_Sched": 0.0013,
+    "AC_CSPxSched": -0.0013,
+    "BC_WSxSched": -0.0022,
+    "ABC_3Way": 0.0022
   },
   "yates_effects_paging_latency": {
-    "Mean": 17.0501,
-    "A_CSP": -1.1007,
-    "B_WS": -9.3002,
-    "AB_CSPxWS": -0.7012,
-    "C_Sched": -6.4988,
-    "AC_CSPxSched": -0.6998,
-    "BC_WSxSched": -0.7003,
-    "ABC_3Way": -0.7013
+    "Mean": 17.0592,
+    "A_CSP": -1.1505,
+    "B_WS": -9.429,
+    "AB_CSPxWS": -0.672,
+    "C_Sched": -6.4405,
+    "AC_CSPxSched": -0.6605,
+    "BC_WSxSched": -0.696,
+    "ABC_3Way": -0.626
   },
   "anova_quality": {
     "A_CSP": {
       "label": "Factor A: CSP",
-      "effect": 0.438,
-      "ss": 3.8369,
-      "ms": 3.8369,
-      "f_stat": 54314.28,
+      "effect": 0.4389,
+      "ss": 3.8527,
+      "ms": 3.8527,
+      "f_stat": 145941.93,
       "p_value": 0.0,
       "significant": true
     },
     "B_WS": {
       "label": "Factor B: Working Set",
-      "effect": 0.0,
+      "effect": -0.001,
       "ss": 0.0,
       "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "f_stat": 0.76,
+      "p_value": 0.3869685220566996,
       "significant": false
     },
     "C_Sched": {
       "label": "Factor C: Scheduler",
-      "effect": -0.0,
+      "effect": 0.0013,
       "ss": 0.0,
       "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "f_stat": 1.28,
+      "p_value": 0.26158491785696036,
       "significant": false
     },
     "AB_CSPxWS": {
       "label": "Interaction A x B",
-      "effect": 0.0,
+      "effect": 0.001,
       "ss": 0.0,
       "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "f_stat": 0.76,
+      "p_value": 0.3869685220566996,
       "significant": false
     },
     "AC_CSPxSched": {
       "label": "Interaction A x C",
-      "effect": 0.0,
+      "effect": -0.0013,
       "ss": 0.0,
       "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "f_stat": 1.28,
+      "p_value": 0.26158491785696036,
       "significant": false
     },
     "BC_WSxSched": {
       "label": "Interaction B x C",
-      "effect": 0.0,
-      "ss": 0.0,
-      "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "effect": -0.0022,
+      "ss": 0.0001,
+      "ms": 0.0001,
+      "f_stat": 3.67,
+      "p_value": 0.059477594553831725,
       "significant": false
     },
     "ABC_3Way": {
       "label": "Interaction A x B x C",
-      "effect": 0.0,
-      "ss": 0.0,
-      "ms": 0.0,
-      "f_stat": 0.0,
-      "p_value": 1.0,
+      "effect": 0.0022,
+      "ss": 0.0001,
+      "ms": 0.0001,
+      "f_stat": 3.67,
+      "p_value": 0.059477594553831725,
       "significant": false
     }
   },
   "anova_paging_latency": {
     "A_CSP": {
       "label": "Factor A: CSP",
-      "effect": -1.1007,
-      "ss": 24.2308,
-      "ms": 24.2308,
-      "f_stat": 194.73,
+      "effect": -1.1505,
+      "ss": 26.473,
+      "ms": 26.473,
+      "f_stat": 246.03,
       "p_value": 0.0,
       "significant": true
     },
     "B_WS": {
       "label": "Factor B: Working Set",
-      "effect": -9.3002,
-      "ss": 1729.8744,
-      "ms": 1729.8744,
-      "f_stat": 13902.34,
+      "effect": -9.429,
+      "ss": 1778.1208,
+      "ms": 1778.1208,
+      "f_stat": 16524.86,
       "p_value": 0.0,
       "significant": true
     },
     "C_Sched": {
       "label": "Factor C: Scheduler",
-      "effect": -6.4988,
-      "ss": 844.688,
-      "ms": 844.688,
-      "f_stat": 6788.44,
+      "effect": -6.4405,
+      "ss": 829.6008,
+      "ms": 829.6008,
+      "f_stat": 7709.85,
       "p_value": 0.0,
       "significant": true
     },
     "AB_CSPxWS": {
       "label": "Interaction A x B",
-      "effect": -0.7012,
-      "ss": 9.8336,
-      "ms": 9.8336,
-      "f_stat": 79.03,
-      "p_value": 3.348432642269472e-13,
+      "effect": -0.672,
+      "ss": 9.0317,
+      "ms": 9.0317,
+      "f_stat": 83.94,
+      "p_value": 1.0447198661722723e-13,
       "significant": true
     },
     "AC_CSPxSched": {
       "label": "Interaction A x C",
-      "effect": -0.6998,
-      "ss": 9.7944,
-      "ms": 9.7944,
-      "f_stat": 78.71,
-      "p_value": 3.6126657221302594e-13,
+      "effect": -0.6605,
+      "ss": 8.7252,
+      "ms": 8.7252,
+      "f_stat": 81.09,
+      "p_value": 2.0450308113595383e-13,
       "significant": true
     },
     "BC_WSxSched": {
       "label": "Interaction B x C",
-      "effect": -0.7003,
-      "ss": 9.8084,
-      "ms": 9.8084,
-      "f_stat": 78.83,
-      "p_value": 3.516076318987871e-13,
+      "effect": -0.696,
+      "ss": 9.6883,
+      "ms": 9.6883,
+      "f_stat": 90.04,
+      "p_value": 2.5646151868841116e-14,
       "significant": true
     },
     "ABC_3Way": {
       "label": "Interaction A x B x C",
-      "effect": -0.7013,
-      "ss": 9.8364,
-      "ms": 9.8364,
-      "f_stat": 79.05,
-      "p_value": 3.3306690738754696e-13,
+      "effect": -0.626,
+      "ss": 7.8375,
+      "ms": 7.8375,
+      "f_stat": 72.84,
+      "p_value": 1.5403234243649422e-12,
       "significant": true
     }
   }

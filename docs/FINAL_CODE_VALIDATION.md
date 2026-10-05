@@ -1,10 +1,16 @@
-# Final Code Validation: Research Claims vs. Implementation vs. Empirical Results
+# [HISTORICAL / SUPERSEDED] Code Validation: Research Claims vs. Implementation
 
-## Executive Summary
+> [!WARNING]
+> **SUPERSEDED ARTIFACT (Historical Milestone Documentation):**  
+> This document records an earlier milestone validation report and is retained strictly for repository provenance.
+> For current, canonical architectural definitions and empirical telemetry, refer directly to:
+> - **Canonical Lookahead Depth:** $k=3$ (Pareto optimum established in Section 9.4 / `CognitiveWorkingSetPredictor.lookahead_window = 3`).
+> - **Evidence Merging:** Pragmatic weighted confidence aggregation heuristic with source tracking (`merge_update` in `modelvm/core/state_packet.py`).
+> - **Formal Telemetry Artifacts:** `docs/factorial_replicate_results.json` and `docs/r4_lookahead_sensitivity_results.json`.
 
-**STATUS: ✅ READY FOR PAPER SUBMISSION**
+## Executive Summary (Milestone Archive)
 
-All 5 critical issues have been fixed. Code now **exactly matches** research claims, and empirical results **validate** every major architectural assertion. No critical gaps remain.
+**STATUS: ARCHIVED HISTORICAL VALIDATION REPORT**
 
 ---
 

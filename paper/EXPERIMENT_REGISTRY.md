@@ -36,9 +36,9 @@ This registry establishes the binding scientific contract between **Section 8 (M
 * **CSP Handoff Control:** State packet $\mathcal{S}_{t-1}$ is serialized into structured, typed schema format within the prompt prefix. Token count of the serialization is recorded independently to evaluate compression efficiency.
 
 ### 3.2 Hierarchical Memory Tracking (Protocol for EXP-H2, EXP-R1, EXP-H4)
-* **Tier 1 (Disk / Storage):** Serialized GGUF/Safetensors on NVMe SSD ($52.7$\,GB catalog).
-* **Tier 2 (Host CPU RAM):** Measured process RSS via `/proc/[pid]/statm` and OS counters (CPU buffers, tokenizers, runtime).
-* **Tier 3 (Accelerator GPU VRAM):** Measured allocated VRAM via NVML ($M_{\text{VRAM}} = M_{\text{weights}} + M_{\text{workspace}} + M_{\text{KV}}$).
+* **Tier 1 (Disk / Storage):** Serialized GGUF/Safetensors on NVMe SSD ($64.0$\,GB on disk; aggregate configured RAM requirement $52.7$\,GB across catalog).
+* **Tier 2 (Host CPU RAM):** Measured process RSS via `psutil` memory info (`psutil.Process().memory_info().rss`, physical platform Windows 11 / x86_64) and OS counters (CPU buffers, tokenizers, runtime).
+* **Tier 3 (Accelerator GPU VRAM):** Measured allocated VRAM via NVML / PyTorch CUDA telemetry ($M_{\text{VRAM}} = M_{\text{weights}} + M_{\text{workspace}} + M_{\text{KV}}$).
 * **Budget Invariant:** The runtime guarantees that $\sum_{m \in \mathcal{M}_{\text{resident}}} \text{RAM}(m) \le \mathcal{B}_{\text{RAM}}$ is enforced at all times.
 
 ### 3.3 Baseline Specification Continuum

@@ -52,7 +52,7 @@ Table~\ref{tab:csp_overhead} quantifies the wall-clock computational latency of 
 \end{table}
 
 \paragraph{Operational Trade-off.}
-The empirical measurements demonstrate that total CSP processing latency scales linearly with state complexity, requiring $2.60$\,ms for standard multi-stage scientific derivations ($20$ entities). In long-form generation stages where model inference consumes $2.0\text{--}8.0$\,s, this overhead represents less than $0.05\%$ of total execution time. 
+The empirical measurements demonstrate that total CSP processing latency scales linearly with state complexity, requiring $2.60$\,ms for standard multi-stage scientific derivations ($20$ entities). For $2.0\text{--}8.0$\,s inference stages, this overhead corresponds to approximately $0.03\%\text{--}0.13\%$ of stage execution time. 
 
 However, in micro-invocation regimes—such as high-frequency tool calling where each stage generates fewer than $15$ tokens ($< 150$\,ms inference time)—the $2.60$\,ms serialization budget becomes an observable fraction ($\approx 1.7\%$) of end-to-end latency. Thus, ModelVM is optimized for substantive multi-specialist cognitive reasoning stages rather than microsecond-level function dispatch.
 

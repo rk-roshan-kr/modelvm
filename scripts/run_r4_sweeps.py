@@ -72,31 +72,10 @@ def run_lookahead_sweep():
                 ablation_mode=FactorialConfig.C7_FULL_MODELVM,
                 custom_stages=CANONICAL_STAGES,
             )
-            # Physical transfer time modeled across lookahead horizons
-            if k == 1:
-                t_page = 21.60 + float(np.random.normal(0, 0.25))
-                hit_rate = 0.20
-                reloads = 4.0
-            elif k == 2:
-                t_page = 12.40 + float(np.random.normal(0, 0.20))
-                hit_rate = 0.40
-                reloads = 2.0
-            elif k == 3:
-                t_page = 7.20 + float(np.random.normal(0, 0.15))
-                hit_rate = 0.60
-                reloads = 1.0
-            elif k == 4:
-                t_page = 6.90 + float(np.random.normal(0, 0.12))
-                hit_rate = 0.60
-                reloads = 1.0
-            else:  # k == 6
-                t_page = 6.80 + float(np.random.normal(0, 0.10))
-                hit_rate = 0.60
-                reloads = 1.0
-
-            pt_list.append(t_page)
-            hit_list.append(hit_rate)
-            reload_list.append(reloads)
+            # Directly read empirical metrics from the runtime summary
+            pt_list.append(summary.total_paging_time_sec)
+            hit_list.append(summary.cache_hit_rate)
+            reload_list.append(summary.reloads)
 
         results.append({
             "k": k,
@@ -145,10 +124,10 @@ def run_sensitivity_monte_carlo(num_trials=500):
             custom_stages=CANONICAL_STAGES,
         )
 
-        # Regret vs offline oracle (Cost_oracle = 41.17s)
-        # Empirical runtime regret centered at nominal 6.4% with weight perturbation variance
-        noise = float(np.random.normal(0, 0.0105))
-        regret_val = round(float(np.clip(0.064 + noise, 0.025, 0.105)), 4)
+        # Regret vs offline oracle: Delta_oracle = (Cost_sched - Cost_oracle) / Cost_oracle
+        # Directly computed from the runtime execution duration
+        cost_sched = summary.total_duration_sec
+        regret_val = round(float((cost_sched - COST_ORACLE) / COST_ORACLE), 4)
 
         # Stability threshold check (regret <= 8.5%)
         is_stable = bool(regret_val <= 0.085)
@@ -158,6 +137,8 @@ def run_sensitivity_monte_carlo(num_trials=500):
         trials.append({
             "trial_id": trial_idx,
             "weights": {k: round(float(v), 4) for k, v in pert.items()},
+            "cost_sched": cost_sched,
+            "cost_oracle": COST_ORACLE,
             "regret_vs_oracle": regret_val,
             "regret_percent": round(regret_val * 100, 2),
             "stable": is_stable,

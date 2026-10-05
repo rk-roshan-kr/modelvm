@@ -85,6 +85,8 @@ class CognitiveWorkingSetPredictor:
         Calculates expected latency savings in seconds vs memory & energy costs,
         ensuring all terms have consistent dimensional units (seconds).
         """
+        if self.lookahead_window <= 1:
+            return None
         future_stages = planned_stages[current_stage_index + 1 : current_stage_index + 1 + self.lookahead_window]
         budget = max(1.0, memory_budget_gb)
         prefetch_utilities: Dict[str, float] = {}

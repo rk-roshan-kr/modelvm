@@ -4,35 +4,35 @@
   "lookahead_horizon_sweep": [
     {
       "k": 1,
-      "t_paging_sec": 21.71,
+      "t_paging_sec": 21.5,
       "cache_hit_rate": 0.2,
       "reloads": 4.0,
       "status": "Reactive Demand Baseline"
     },
     {
       "k": 2,
-      "t_paging_sec": 12.24,
+      "t_paging_sec": 12.4,
       "cache_hit_rate": 0.4,
       "reloads": 2.0,
       "status": "Partial Forecast"
     },
     {
       "k": 3,
-      "t_paging_sec": 7.17,
+      "t_paging_sec": 7.22,
       "cache_hit_rate": 0.6,
       "reloads": 1.0,
       "status": "Canonical Operational Point"
     },
     {
       "k": 4,
-      "t_paging_sec": 6.86,
+      "t_paging_sec": 7.0,
       "cache_hit_rate": 0.6,
       "reloads": 1.0,
       "status": "Diminishing Returns"
     },
     {
       "k": 6,
-      "t_paging_sec": 6.77,
+      "t_paging_sec": 6.73,
       "cache_hit_rate": 0.6,
       "reloads": 1.0,
       "status": "Diminishing Returns"
@@ -42,147 +42,167 @@
     "total_trials": 500,
     "perturbation_range": "+/- 30%",
     "stability_threshold_regret": "<= 8.5%",
-    "stable_trials_count": 490,
-    "stability_percentage": 98.0,
+    "stable_trials_count": 492,
+    "stability_percentage": 98.4,
     "oom_failures": 0,
     "trial_sample": [
       {
         "trial_id": 1,
         "weights": {
-          "alpha": 0.1569,
-          "beta": 0.2953,
-          "gamma": 0.0745,
-          "delta": 0.3876,
-          "eta": 0.4072
+          "alpha": 0.1849,
+          "beta": 0.3176,
+          "gamma": 0.1139,
+          "delta": 0.3178,
+          "eta": 0.2778
         },
-        "regret_vs_oracle": 0.0701,
-        "regret_percent": 7.01,
+        "cost_sched": 44.21,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0738,
+        "regret_percent": 7.38,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 2,
         "weights": {
-          "alpha": 0.2275,
-          "beta": 0.2907,
-          "gamma": 0.0744,
-          "delta": 0.2745,
-          "eta": 0.2693
+          "alpha": 0.1587,
+          "beta": 0.1837,
+          "gamma": 0.122,
+          "delta": 0.3182,
+          "eta": 0.3937
         },
-        "regret_vs_oracle": 0.0733,
-        "regret_percent": 7.33,
+        "cost_sched": 44.05,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.07,
+        "regret_percent": 7.0,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 3,
         "weights": {
-          "alpha": 0.2436,
-          "beta": 0.2685,
-          "gamma": 0.0899,
-          "delta": 0.2214,
-          "eta": 0.3103
+          "alpha": 0.1425,
+          "beta": 0.3205,
+          "gamma": 0.1199,
+          "delta": 0.2482,
+          "eta": 0.2832
         },
-        "regret_vs_oracle": 0.0764,
-        "regret_percent": 7.64,
+        "cost_sched": 44.1,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0712,
+        "regret_percent": 7.12,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 4,
         "weights": {
-          "alpha": 0.2165,
-          "beta": 0.3081,
-          "gamma": 0.0983,
-          "delta": 0.2315,
-          "eta": 0.3948
+          "alpha": 0.162,
+          "beta": 0.2206,
+          "gamma": 0.1015,
+          "delta": 0.2878,
+          "eta": 0.3062
         },
-        "regret_vs_oracle": 0.0546,
-        "regret_percent": 5.46,
+        "cost_sched": 44.01,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.069,
+        "regret_percent": 6.9,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 5,
         "weights": {
-          "alpha": 0.2313,
-          "beta": 0.2592,
-          "gamma": 0.1163,
-          "delta": 0.2989,
-          "eta": 0.3548
+          "alpha": 0.2134,
+          "beta": 0.1959,
+          "gamma": 0.0875,
+          "delta": 0.2759,
+          "eta": 0.3408
         },
-        "regret_vs_oracle": 0.0598,
-        "regret_percent": 5.98,
+        "cost_sched": 44.1,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0712,
+        "regret_percent": 7.12,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 6,
         "weights": {
-          "alpha": 0.1529,
-          "beta": 0.1797,
-          "gamma": 0.1082,
-          "delta": 0.2666,
-          "eta": 0.3518
+          "alpha": 0.2342,
+          "beta": 0.205,
+          "gamma": 0.1009,
+          "delta": 0.3166,
+          "eta": 0.2548
         },
-        "regret_vs_oracle": 0.0634,
-        "regret_percent": 6.34,
+        "cost_sched": 43.6,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.059,
+        "regret_percent": 5.9,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 7,
         "weights": {
-          "alpha": 0.2489,
-          "beta": 0.2124,
-          "gamma": 0.0946,
-          "delta": 0.346,
-          "eta": 0.293
+          "alpha": 0.2129,
+          "beta": 0.2006,
+          "gamma": 0.0739,
+          "delta": 0.3808,
+          "eta": 0.4478
         },
-        "regret_vs_oracle": 0.0618,
-        "regret_percent": 6.18,
+        "cost_sched": 43.65,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0602,
+        "regret_percent": 6.02,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 8,
         "weights": {
-          "alpha": 0.1593,
-          "beta": 0.3145,
-          "gamma": 0.1185,
-          "delta": 0.324,
-          "eta": 0.428
+          "alpha": 0.237,
+          "beta": 0.2207,
+          "gamma": 0.0759,
+          "delta": 0.3332,
+          "eta": 0.3374
         },
-        "regret_vs_oracle": 0.0595,
-        "regret_percent": 5.95,
+        "cost_sched": 43.85,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0651,
+        "regret_percent": 6.51,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 9,
         "weights": {
-          "alpha": 0.2364,
-          "beta": 0.203,
-          "gamma": 0.1236,
-          "delta": 0.3071,
-          "eta": 0.4146
+          "alpha": 0.1546,
+          "beta": 0.2493,
+          "gamma": 0.0721,
+          "delta": 0.3737,
+          "eta": 0.2993
         },
-        "regret_vs_oracle": 0.0608,
-        "regret_percent": 6.08,
+        "cost_sched": 44.09,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.0709,
+        "regret_percent": 7.09,
         "stable": true,
         "oom_failure": false
       },
       {
         "trial_id": 10,
         "weights": {
-          "alpha": 0.1532,
-          "beta": 0.2092,
-          "gamma": 0.0956,
-          "delta": 0.3572,
-          "eta": 0.4258
+          "alpha": 0.2195,
+          "beta": 0.2218,
+          "gamma": 0.1012,
+          "delta": 0.3084,
+          "eta": 0.2838
         },
-        "regret_vs_oracle": 0.0711,
-        "regret_percent": 7.11,
+        "cost_sched": 43.35,
+        "cost_oracle": 41.17,
+        "regret_vs_oracle": 0.053,
+        "regret_percent": 5.3,
         "stable": true,
         "oom_failure": false
       }

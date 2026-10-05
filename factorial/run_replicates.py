@@ -32,16 +32,16 @@ SEED = 42
 np.random.seed(SEED)
 
 CONFIG_CELLS = [
-    # config_id, enum_val, name, A_csp, B_ws, C_sched, target_Q, target_page, target_dur, target_calc, target_ram
-    ("REF_MONOLITH", FactorialConfig.REF_STATIC_MONOLITH, "Reference Static Monolith", 0, 0, 0, 0.562,  0.00, 34.20, 0.400, 7.10),
-    ("C0", FactorialConfig.C0_PAGING_BASE, "Dynamic Base (000)",                   0, 0, 0, 0.562, 24.80, 62.40, 0.500, 7.60),
-    ("C1", FactorialConfig.C1_CSP, "CSP Only (100)",                               1, 0, 0, 1.000, 24.40, 59.80, 1.000, 7.60),
-    ("C2", FactorialConfig.C2_WS, "WS Only (010)",                                 0, 1, 0, 0.562, 16.20, 53.80, 0.500, 7.60),
-    ("C3", FactorialConfig.C3_SCHEDULER, "Scheduler Only (001)",                  0, 0, 1, 0.562, 19.00, 56.60, 0.500, 7.60),
-    ("C4", FactorialConfig.C4_CSP_WS, "CSP + WS (110)",                            1, 1, 0, 1.000, 15.80, 51.20, 1.000, 7.60),
-    ("C5", FactorialConfig.C5_CSP_SCHEDULER, "CSP + Scheduler (101)",             1, 0, 1, 1.000, 18.60, 54.00, 1.000, 7.60),
-    ("C6", FactorialConfig.C6_WS_SCHEDULER, "WS + Scheduler (011)",              0, 1, 1, 0.562, 10.40, 47.00, 0.500, 7.60),
-    ("C7", FactorialConfig.C7_FULL_MODELVM, "Full ModelVM (111)",                 1, 1, 1, 1.000,  7.20, 43.80, 1.000, 7.60),
+    # config_id, enum_val, name, factor_A_csp, factor_B_ws, factor_C_sched
+    ("REF_MONOLITH", FactorialConfig.REF_STATIC_MONOLITH, "Reference Static Monolith", 0, 0, 0),
+    ("C0", FactorialConfig.C0_PAGING_BASE, "Dynamic Base (000)",                   0, 0, 0),
+    ("C1", FactorialConfig.C1_CSP, "CSP Only (100)",                               1, 0, 0),
+    ("C2", FactorialConfig.C2_WS, "WS Only (010)",                                 0, 1, 0),
+    ("C3", FactorialConfig.C3_SCHEDULER, "Scheduler Only (001)",                  0, 0, 1),
+    ("C4", FactorialConfig.C4_CSP_WS, "CSP + WS (110)",                            1, 1, 0),
+    ("C5", FactorialConfig.C5_CSP_SCHEDULER, "CSP + Scheduler (101)",             1, 0, 1),
+    ("C6", FactorialConfig.C6_WS_SCHEDULER, "WS + Scheduler (011)",              0, 1, 1),
+    ("C7", FactorialConfig.C7_FULL_MODELVM, "Full ModelVM (111)",                 1, 1, 1),
 ]
 
 N_REPLICATES = 10
@@ -71,26 +71,7 @@ def execute_trials():
 
     print(f"Executing {len(CONFIG_CELLS)} configurations x {N_REPLICATES} replicates ({len(CONFIG_CELLS) * N_REPLICATES} total runs) on CognitiveKernel...")
 
-    for cfg_id, cfg_enum, name, A, B, C, m_q, m_page, m_dur, m_calc, m_ram in CONFIG_CELLS:
-        # Generate zero-mean empirical measurement jitter vectors for realistic replicate distributions
-        if m_page > 0:
-            raw_j_page = np.random.normal(0, 0.35, N_REPLICATES)
-            j_page = raw_j_page - np.mean(raw_j_page)
-        else:
-            j_page = np.zeros(N_REPLICATES)
-
-        raw_j_dur = np.random.normal(0, 0.85, N_REPLICATES)
-        j_dur = raw_j_dur - np.mean(raw_j_dur)
-
-        if m_q == 1.0:
-            q_vals = [1.000 for _ in range(N_REPLICATES)]
-            calc_vals = [1.000 for _ in range(N_REPLICATES)]
-        else:
-            raw_q = np.random.normal(0, 0.012, N_REPLICATES)
-            q_vals = [round(float(np.clip(m_q + q, 0.0, 1.0)), 4) for q in (raw_q - np.mean(raw_q))]
-            raw_c = np.random.normal(0, 0.020, N_REPLICATES)
-            calc_vals = [round(float(np.clip(m_calc + c, 0.0, 1.0)), 4) for c in (raw_c - np.mean(raw_c))]
-
+    for cfg_id, cfg_enum, name, A, B, C in CONFIG_CELLS:
         for r in range(N_REPLICATES):
             # 1. Instantiate fresh CognitiveKernel for each trial
             kernel = CognitiveKernel(
@@ -105,15 +86,11 @@ def execute_trials():
                 custom_stages=BENCHMARK_STAGES,
             )
 
-            # 3. Evaluate multi-dimensional decoupled metrics
+            # 3. Evaluate multi-dimensional decoupled metrics directly from execution summary
             metrics = Evaluator.evaluate(summary, baseline_all_resident_gb=summary.total_library_size_gb)
 
             # 4. Measure physical hardware and timing telemetry
             snap = telemetry.take_snapshot()
-
-            page_val = round(float(max(0.0, m_page + j_page[r])), 2)
-            dur_val = round(float(max(5.0, m_dur + j_dur[r])), 2)
-            ram_val = round(float(m_ram + (0.02 if r % 2 == 0 else -0.02)), 2)
 
             trials.append({
                 "trial_id": trial_id,
@@ -123,11 +100,11 @@ def execute_trials():
                 "factor_A_csp": A,
                 "factor_B_ws": B,
                 "factor_C_sched": C,
-                "quality_score": q_vals[r],
-                "calculation_accuracy": calc_vals[r],
-                "paging_overhead_sec": page_val,
-                "total_duration_sec": dur_val,
-                "peak_ram_gb": ram_val,
+                "quality_score": round(float(metrics.capability_coverage_score), 4),
+                "calculation_accuracy": round(float(metrics.calculation_correctness_ratio), 4),
+                "paging_overhead_sec": round(float(summary.total_paging_time_sec), 3),
+                "total_duration_sec": round(float(summary.total_duration_sec), 3),
+                "peak_ram_gb": round(float(summary.peak_resident_memory_gb), 2),
             })
             trial_id += 1
 

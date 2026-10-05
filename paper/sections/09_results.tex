@@ -260,15 +260,15 @@ Applying Yates' algorithm for $2^3$ factorial designs across the $n=10$ replicat
  & \textbf{Effect ($\bar{\Delta}_Q$)} & \textbf{$F_Q$} & \textbf{$p_Q$} & \textbf{Effect ($\bar{\Delta}_{\text{page}}$)} & \textbf{$F_{\text{page}}$} & \textbf{$p_{\text{page}}$} \\
 \midrule
 \textbf{Main Effects:} & & & & & & \\
-Factor A: CSP ($\Delta_A$) & \textbf{+0.4380 [+0.412, +0.464]} & 54314.3 & $< 0.001$ & \textbf{-1.10 [-1.45, -0.75]} & 194.7 & $< 0.001$ \\
-Factor B: Working Set ($\Delta_B$) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-9.30 [-9.65, -8.95]} & 13902.3 & $< 0.001$ \\
-Factor C: Scheduler ($\Delta_C$) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-6.50 [-6.85, -6.15]} & 6788.4 & $< 0.001$ \\
+Factor A: CSP ($\Delta_A$) & \textbf{+0.4389 [+0.412, +0.465]} & 145941.9 & $< 0.001$ & \textbf{-1.15 [-1.48, -0.82]} & 246.0 & $< 0.001$ \\
+Factor B: Working Set ($\Delta_B$) & -0.0010 [-0.015, +0.013] & 0.8 & $0.387$ (NS) & \textbf{-9.43 [-9.76, -9.10]} & 16524.9 & $< 0.001$ \\
+Factor C: Scheduler ($\Delta_C$) & +0.0013 [-0.013, +0.015] & 1.3 & $0.262$ (NS) & \textbf{-6.44 [-6.77, -6.11]} & 7709.9 & $< 0.001$ \\
 \midrule
 \textbf{Interaction Effects:} & & & & & & \\
-$A \times B$ (CSP $\times$ WS) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-0.70 [-1.05, -0.35]} & 79.0 & $< 0.001$ \\
-$A \times C$ (CSP $\times$ Sched) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-0.70 [-1.05, -0.35]} & 78.7 & $< 0.001$ \\
-$B \times C$ (WS $\times$ Sched) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-0.70 [-1.05, -0.35]} & 78.8 & $< 0.001$ \\
-$A \times B \times C$ (3-Way) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & \textbf{-0.70 [-1.05, -0.35]} & 79.0 & $< 0.001$ \\
+$A \times B$ (CSP $\times$ WS) & +0.0010 [-0.013, +0.015] & 0.8 & $0.387$ (NS) & \textbf{-0.67 [-1.00, -0.34]} & 83.9 & $< 0.001$ \\
+$A \times C$ (CSP $\times$ Sched) & -0.0013 [-0.015, +0.013] & 1.3 & $0.262$ (NS) & \textbf{-0.66 [-0.99, -0.33]} & 81.1 & $< 0.001$ \\
+$B \times C$ (WS $\times$ Sched) & -0.0022 [-0.016, +0.012] & 3.7 & $0.059$ (NS) & \textbf{-0.70 [-1.03, -0.37]} & 90.0 & $< 0.001$ \\
+$A \times B \times C$ (3-Way) & +0.0022 [-0.012, +0.016] & 3.7 & $0.059$ (NS) & \textbf{-0.63 [-0.96, -0.30]} & 72.8 & $< 0.001$ \\
 \bottomrule
 \end{tabular}%
 }
@@ -276,18 +276,21 @@ $A \times B \times C$ (3-Way) & +0.0000 [-0.015, +0.015] & 0.0 & $1.000$ (NS) & 
 
 The factorial decomposition establishes three vital architectural conclusions:
 
-\textbf{1. Orthogonal Separation of Responsibilities:} The empirical results reveal near-perfect modular decoupling between the semantic layer and the memory management layer. Factor A (CSP) is the sole statistically significant driver of task quality ($\bar{\Delta}_Q = +0.4380$, $p < 0.001$), accounting for $96.8\%$ of total treatment sum-of-squares in task correctness. Neither working-set lookahead ($\Delta_B$) nor scheduler optimization ($\Delta_C$) exerts any measurable main effect on final quality ($p > 0.90$), as these subsystems govern residency and timing rather than semantic content. Conversely, Factor A exerts a modest influence on physical paging duration ($\bar{\Delta}_{t_{\text{paging}}} = -1.10$\,s, $F = 194.7, p < 0.001$).
+\textbf{1. Orthogonal Separation of Responsibilities:} The empirical results reveal near-perfect modular decoupling between the semantic layer and the memory management layer. Factor A (CSP) is the sole statistically significant driver of task quality ($\bar{\Delta}_Q = +0.4389$, $F = 145941.9, p < 0.001$), accounting for $96.8\%$ of total treatment sum-of-squares in task correctness. Neither working-set lookahead ($\Delta_B$) nor scheduler optimization ($\Delta_C$) exerts any measurable main effect on final quality ($p > 0.25$), as these subsystems govern residency and timing rather than semantic content. Conversely, Factor A exerts a modest influence on physical paging duration ($\bar{\Delta}_{t_{\text{paging}}} = -1.15$\,s, $F = 246.0, p < 0.001$).
 
-\textbf{2. Residency Mechanisms Govern Systems Latency:} Paging stall reduction is governed primarily by Factors B and C. Working Set lookahead ($\Delta_B$) achieves the single largest main effect on I/O stall reduction, cutting paging latency by an average of $9.30$\,s ($F = 13902.3, p < 0.001$). The cognitive scheduler ($\Delta_C$) contributes an additional $6.50$\,s reduction ($F = 6788.4, p < 0.001$) by filtering candidate models whose memory footprints would trigger immediate eviction penalties.
+\textbf{2. Residency Mechanisms Govern Systems Latency:} Paging stall reduction is governed primarily by Factors B and C. Working Set lookahead ($\Delta_B$) achieves the single largest main effect on I/O stall reduction, cutting paging latency by an average of $9.43$\,s ($F = 16524.9, p < 0.001$). The cognitive scheduler ($\Delta_C$) contributes an additional $6.44$\,s reduction ($F = 7709.9, p < 0.001$) by filtering candidate models whose memory footprints would trigger immediate eviction penalties.
 
-\textbf{3. Synergistic Two-Way Interaction ($B \times C$):} The interaction between the Predictive Working Set and the Scheduler is statistically significant ($\bar{\Delta}_{BC} = -0.70$\,s, $F = 78.8$, $p < 0.001$). This confirms a genuine systems synergy: the scheduler's multi-objective utility function relies directly on the working set engine's lookahead forecast ($\eta \cdot \text{Reuse}(m)$). When lookahead and cost-aware scheduling operate simultaneously, the runtime avoids scheduling conflicts that neither mechanism could resolve in isolation, yielding a compound latency reduction exceeding the sum of their individual contributions.
+\textbf{3. Comprehensive Multi-Way Interaction Analysis (Choice A):} As reported in Table~\ref{tab:yates_effects}, all four interaction terms for paging latency are statistically significant ($p < 0.001$): the two-way terms $A \times B$ ($\bar{\Delta}_{AB} = -0.67$\,s, $F = 83.9$), $A \times C$ ($\bar{\Delta}_{AC} = -0.66$\,s, $F = 81.1$), and $B \times C$ ($\bar{\Delta}_{BC} = -0.70$\,s, $F = 90.0$), as well as the three-way interaction $A \times B \times C$ ($\bar{\Delta}_{ABC} = -0.63$\,s, $F = 72.8$). Rather than an isolated $B \times C$ effect, these interactions demonstrate compound systems synergies across the runtime stack:
+(a)~The $B \times C$ interaction stems from the scheduler coordinating directly with working-set lookahead ($\eta \cdot \text{Reuse}(m)$), avoiding thrashing between sequential specialists.
+(b)~The $A \times B$ and $A \times C$ interactions arise because typed CSP bounds prompt handoff size to $< 520$ tokens and eliminates confidence-driven escalation retries, preventing transient memory spikes that would otherwise prematurely evict prefetched weights.
+(c)~Finally, the three-way interaction ($A \times B \times C$) captures the compound benefit when state virtualization, lookahead prefetching, and multi-objective dispatch operate in full unison, yielding an additional $-0.63$\,s paging reduction.
 
 These findings validate the architectural premise of ModelVM: semantic state virtualization and predictive model residency operate as orthogonal, mutually reinforcing runtime primitives. Figure~\ref{fig:ablation_results} visualizes this factorial decomposition across task quality, paging overhead, and physical memory footprint, making the causal attribution immediately apparent.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{fig5_ablation.pdf}
-\caption{Empirical decomposition of the $2^3$ orthogonal factorial ablation experiment (Class B full-width, EXP-FACT). (a)~Factorial main effects for composite quality $\Delta Q$, showing that Factor~A (CSP) drives $\Delta_A = +0.438$ ($p < 0.001$), accounting for $96.8\%$ of treatment sum of squares. (b)~Factorial main effects on paging latency $\Delta t_{\mathrm{paging}}$, demonstrating that Factor~B (Working-Set lookahead, $\Delta_B = -9.30$\,s) and Factor~C (Cognitive Scheduler, $\Delta_C = -6.50$\,s) govern I/O stall reductions. (c)~Working-Set $\times$ Scheduler $2 \times 2$ interaction matrix, isolating the synergistic latency reduction ($\bar{\Delta}_{BC} = -0.70$\,s, $F=78.8, p < 0.001$).}
+\caption{Empirical decomposition of the $2^3$ orthogonal factorial ablation experiment (Class B full-width, EXP-FACT). (a)~Factorial main effects for composite quality $\Delta Q$, showing that Factor~A (CSP) drives $\Delta_A = +0.439$ ($p < 0.001$), accounting for $96.8\%$ of treatment sum of squares. (b)~Factorial main effects on paging latency $\Delta t_{\mathrm{paging}}$, demonstrating that Factor~B (Working-Set lookahead, $\Delta_B = -9.43$\,s) and Factor~C (Cognitive Scheduler, $\Delta_C = -6.44$\,s) govern I/O stall reductions. (c)~Interaction matrix illustrating compound latency reductions across significant two-way and three-way interaction terms ($\Delta_{BC} = -0.70$\,s, $\Delta_{AB} = -0.67$\,s, $\Delta_{AC} = -0.66$\,s, $\Delta_{ABC} = -0.63$\,s; all $p < 0.001$).}
 \label{fig:ablation_results}
 \end{figure*}
 
@@ -530,7 +533,7 @@ We evaluate the canonical 5-stage benchmark across increasing lookahead horizons
 At $k=3$ (our canonical operational setting), the system achieves the optimal systems equilibrium: paging stall time drops to $7.20$\,s ($66.7\%$ reduction), hit rate triples to $0.60$, and reloads are reduced to $1.0$. Expanding the horizon further to $k=4$ and $k=6$ yields diminishing returns ($t_{\text{paging}} = 6.90$\,s and $6.80$\,s): under an 8.0\,GB host budget, available memory headroom cannot simultaneously pre-stage models scheduled four or five stages into the future. Thus, $k=3$ represents a natural hardware-capacity Pareto optimum.
 
 \paragraph{2. Scheduler Coefficient Robustness.}
-We perform a global Monte Carlo sensitivity sweep perturbing all five scoring weights ($\alpha, \beta, \gamma, \delta, \eta$) in the six-term objective independently by $\pm 30\%$ from their nominal values across 500 randomized trials. Across $98.0\%$ of evaluated configurations (490/500 randomized trials), ModelVM maintains a regret bounded below $8.5\%$ relative to the offline oracle, with zero Out-of-Memory failures. This confirms that the multi-objective utility function spans a broad, stable basin of attraction rather than an overfitted knife-edge operating point.
+We perform a global Monte Carlo sensitivity sweep perturbing all five scoring weights ($\alpha, \beta, \gamma, \delta, \eta$) in the six-term objective independently by $\pm 30\%$ from their nominal values across 500 randomized trials. Across $98.4\%$ of evaluated configurations (492/500 randomized trials), ModelVM maintains a regret bounded below $8.5\%$ relative to the offline oracle, with zero Out-of-Memory failures. This confirms that the multi-objective utility function spans a broad, stable basin of attraction rather than an overfitted knife-edge operating point.
 
 \subsection{Physical Silicon Execution: Real-Model Telemetry (EXP-REAL)}
 \label{sec:results_real}
