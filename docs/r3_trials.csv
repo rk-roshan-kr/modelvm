@@ -1,0 +1,161 @@
+workload_id,workload_title,policy,trial_id,goodput_stages_per_sec,quality_score,paging_time_sec,execution_time_sec,total_duration_sec,reloads_count,cost_oracle_sec,regret_vs_oracle_pct,sequence
+W_A,Research-Heavy,Capability-Greedy,1,0.14,0.94,9.094,24.589,33.683,1,21.13,59.41,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,2,0.138,0.94,9.209,24.743,33.952,1,21.13,60.68,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,3,0.139,0.94,9.112,24.729,33.841,1,21.13,60.16,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,4,0.141,0.94,8.983,24.457,33.44,1,21.13,58.26,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,5,0.139,0.94,9.184,24.623,33.807,1,21.13,60.0,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,6,0.138,0.94,9.123,24.859,33.982,1,21.13,60.82,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,7,0.138,0.94,9.322,24.656,33.978,1,21.13,60.8,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,8,0.138,0.94,9.149,24.811,33.96,1,21.13,60.72,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,9,0.139,0.94,9.166,24.527,33.693,1,21.13,59.46,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Capability-Greedy,10,0.14,0.94,9.247,24.385,33.632,1,21.13,59.17,synthesizer-master -> synthesizer-master -> code-auditor -> synthesizer-master -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,1,0.215,0.916,2.563,18.781,21.344,0,21.13,1.01,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,2,0.216,0.916,2.476,18.764,21.24,0,21.13,0.52,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,3,0.216,0.916,2.526,18.703,21.229,0,21.13,0.47,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,4,0.216,0.916,2.458,18.725,21.183,0,21.13,0.25,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,5,0.218,0.916,2.426,18.608,21.034,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,6,0.215,0.916,2.494,18.82,21.314,0,21.13,0.87,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,7,0.215,0.916,2.605,18.725,21.33,0,21.13,0.95,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,8,0.217,0.916,2.45,18.702,21.152,0,21.13,0.1,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,9,0.217,0.916,2.432,18.692,21.124,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Memory-Aware Greedy,10,0.215,0.916,2.523,18.77,21.293,0,21.13,0.77,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,1,0.214,0.916,2.559,18.884,21.443,0,21.13,1.48,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,2,0.218,0.916,2.515,18.541,21.056,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,3,0.218,0.916,2.558,18.488,21.046,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,4,0.216,0.916,2.437,18.741,21.178,0,21.13,0.23,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,5,0.217,0.916,2.587,18.528,21.115,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,6,0.216,0.916,2.581,18.595,21.176,0,21.13,0.22,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,7,0.216,0.916,2.556,18.627,21.183,0,21.13,0.25,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,8,0.217,0.916,2.364,18.741,21.105,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,9,0.215,0.916,2.578,18.749,21.327,0,21.13,0.93,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,ModelVM Scheduler,10,0.218,0.916,2.396,18.618,21.014,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,1,0.218,0.916,2.52,18.536,21.056,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,2,0.216,0.916,2.587,18.644,21.231,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,3,0.213,0.916,2.745,18.776,21.521,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,4,0.22,0.916,2.338,18.465,20.803,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,5,0.219,0.916,2.405,18.54,20.945,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,6,0.215,0.916,2.51,18.774,21.284,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,7,0.219,0.916,2.462,18.431,20.893,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,8,0.217,0.916,2.513,18.586,21.099,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,9,0.214,0.916,2.463,18.924,21.387,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_A,Research-Heavy,Offline Oracle,10,0.217,0.916,2.478,18.627,21.105,0,21.13,0.0,research-expert -> research-expert -> research-expert -> research-expert -> physics-expert
+W_B,Compute-Heavy,Capability-Greedy,1,0.233,0.944,3.224,17.011,20.235,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,2,0.23,0.944,3.323,17.171,20.494,0,20.32,0.86,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,3,0.233,0.944,3.256,17.018,20.274,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,4,0.232,0.944,3.365,16.978,20.343,0,20.32,0.11,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,5,0.232,0.944,3.276,17.088,20.364,0,20.32,0.22,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,6,0.231,0.944,3.352,17.078,20.43,0,20.32,0.54,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,7,0.233,0.944,3.288,16.934,20.222,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,8,0.232,0.944,3.37,16.934,20.304,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,9,0.233,0.944,3.355,16.891,20.246,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Capability-Greedy,10,0.23,0.944,3.296,17.207,20.503,0,20.32,0.9,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,1,0.232,0.944,3.321,17.044,20.365,0,20.32,0.22,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,2,0.235,0.944,3.271,16.843,20.114,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,3,0.233,0.944,3.241,16.995,20.236,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,4,0.232,0.944,3.289,17.071,20.36,0,20.32,0.2,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,5,0.233,0.944,3.284,17.005,20.289,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,6,0.229,0.944,3.368,17.284,20.652,0,20.32,1.63,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,7,0.237,0.944,3.125,16.803,19.928,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,8,0.234,0.944,3.272,16.918,20.19,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,9,0.232,0.944,3.28,17.067,20.347,0,20.32,0.13,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Memory-Aware Greedy,10,0.231,0.944,3.346,17.044,20.39,0,20.32,0.34,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,1,0.249,0.944,2.214,16.767,18.981,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,2,0.245,0.944,2.294,16.956,19.25,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,3,0.247,0.944,2.185,16.921,19.106,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,4,0.247,0.944,2.181,16.963,19.144,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,5,0.243,0.944,2.206,17.235,19.441,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,6,0.247,0.944,2.121,16.99,19.111,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,7,0.248,0.944,2.175,16.872,19.047,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,8,0.244,0.944,2.268,17.055,19.323,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,9,0.245,0.944,2.161,17.072,19.233,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,ModelVM Scheduler,10,0.245,0.944,2.194,17.097,19.291,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,1,0.229,0.944,3.287,17.306,20.593,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,2,0.234,0.944,3.271,16.933,20.204,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,3,0.235,0.944,3.268,16.844,20.112,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,4,0.231,0.944,3.279,17.116,20.395,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,5,0.233,0.944,3.342,16.891,20.233,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,6,0.232,0.944,3.407,16.973,20.38,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,7,0.232,0.944,3.434,16.873,20.307,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,8,0.234,0.944,3.231,16.934,20.165,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,9,0.234,0.944,3.231,16.97,20.201,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_B,Compute-Heavy,Offline Oracle,10,0.234,0.944,3.271,16.938,20.209,0,20.32,0.0,mathematics-expert -> coding-expert -> mathematics-expert -> physics-expert -> mathematics-expert
+W_C,Coding-Heavy,Capability-Greedy,1,0.168,0.94,7.528,20.414,27.942,1,19.78,41.26,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,2,0.169,0.94,7.487,20.358,27.845,1,19.78,40.77,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,3,0.168,0.94,7.291,20.721,28.012,1,19.78,41.62,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,4,0.169,0.94,7.38,20.368,27.748,1,19.78,40.28,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,5,0.17,0.94,7.414,20.16,27.574,1,19.78,39.4,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,6,0.169,0.94,7.385,20.376,27.761,1,19.78,40.35,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,7,0.17,0.94,7.366,20.355,27.721,1,19.78,40.15,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,8,0.173,0.94,7.044,20.113,27.157,1,19.78,37.3,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,9,0.169,0.94,7.471,20.419,27.89,1,19.78,41.0,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Capability-Greedy,10,0.168,0.94,7.317,20.585,27.902,1,19.78,41.06,coding-expert -> coding-expert -> synthesizer-master -> coding-expert -> code-auditor
+W_C,Coding-Heavy,Memory-Aware Greedy,1,0.233,0.936,2.336,17.749,20.085,0,19.78,1.54,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,2,0.236,0.936,2.213,17.634,19.847,0,19.78,0.34,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,3,0.239,0.936,2.254,17.364,19.618,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,4,0.236,0.936,2.209,17.626,19.835,0,19.78,0.28,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,5,0.236,0.936,2.368,17.49,19.858,0,19.78,0.39,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,6,0.238,0.936,2.311,17.379,19.69,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,7,0.238,0.936,2.273,17.369,19.642,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,8,0.236,0.936,2.401,17.452,19.853,0,19.78,0.37,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,9,0.236,0.936,2.39,17.406,19.796,0,19.78,0.08,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Memory-Aware Greedy,10,0.237,0.936,2.286,17.495,19.781,0,19.78,0.01,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,1,0.252,0.936,1.14,17.451,18.591,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,2,0.255,0.936,1.146,17.214,18.36,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,3,0.255,0.936,1.078,17.262,18.34,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,4,0.252,0.936,1.109,17.492,18.601,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,5,0.254,0.936,1.098,17.361,18.459,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,6,0.254,0.936,1.095,17.324,18.419,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,7,0.256,0.936,1.058,17.203,18.261,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,8,0.253,0.936,1.119,17.364,18.483,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,9,0.253,0.936,1.076,17.438,18.514,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,ModelVM Scheduler,10,0.252,0.936,1.123,17.43,18.553,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,1,0.237,0.936,2.244,17.511,19.755,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,2,0.236,0.936,2.268,17.571,19.839,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,3,0.235,0.936,2.43,17.522,19.952,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,4,0.234,0.936,2.381,17.627,20.008,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,5,0.235,0.936,2.237,17.64,19.877,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,6,0.237,0.936,2.287,17.452,19.739,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,7,0.236,0.936,2.41,17.401,19.811,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,8,0.238,0.936,2.299,17.386,19.685,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,9,0.242,0.936,2.205,17.123,19.328,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_C,Coding-Heavy,Offline Oracle,10,0.239,0.936,2.188,17.41,19.598,0,19.78,0.0,coding-expert -> coding-expert -> research-expert -> coding-expert -> coding-expert
+W_D,Mixed Balanced,Capability-Greedy,1,0.161,0.936,8.298,20.749,29.047,0,21.98,32.15,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,2,0.16,0.936,8.751,20.5,29.251,0,21.98,33.08,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,3,0.162,0.936,8.398,20.546,28.944,0,21.98,31.68,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,4,0.162,0.936,8.409,20.453,28.862,0,21.98,31.31,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,5,0.159,0.936,8.56,20.9,29.46,0,21.98,34.03,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,6,0.159,0.936,8.698,20.696,29.394,0,21.98,33.73,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,7,0.16,0.936,8.57,20.722,29.292,0,21.98,33.27,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,8,0.16,0.936,8.574,20.742,29.316,0,21.98,33.38,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,9,0.16,0.936,8.607,20.658,29.265,0,21.98,33.14,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Capability-Greedy,10,0.158,0.936,8.705,20.865,29.57,0,21.98,34.53,synthesizer-master -> mathematics-expert -> coding-expert -> physics-expert -> code-auditor
+W_D,Mixed Balanced,Memory-Aware Greedy,1,0.208,0.932,4.567,17.818,22.385,0,21.98,1.84,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,2,0.21,0.932,4.376,17.824,22.2,0,21.98,1.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,3,0.212,0.932,4.499,17.52,22.019,0,21.98,0.18,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,4,0.209,0.932,4.494,17.84,22.334,0,21.98,1.61,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,5,0.211,0.932,4.361,17.744,22.105,0,21.98,0.57,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,6,0.212,0.932,4.362,17.614,21.976,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,7,0.21,0.932,4.441,17.787,22.228,0,21.98,1.13,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,8,0.21,0.932,4.438,17.767,22.205,0,21.98,1.02,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,9,0.213,0.932,4.41,17.443,21.853,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,Memory-Aware Greedy,10,0.211,0.932,4.571,17.541,22.112,0,21.98,0.6,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> coding-expert
+W_D,Mixed Balanced,ModelVM Scheduler,1,0.222,0.936,3.735,17.377,21.112,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,2,0.222,0.936,3.587,17.464,21.051,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,3,0.222,0.936,3.512,17.557,21.069,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,4,0.223,0.936,3.559,17.416,20.975,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,5,0.224,0.936,3.518,17.395,20.913,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,6,0.22,0.936,3.615,17.636,21.251,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,7,0.221,0.936,3.698,17.482,21.18,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,8,0.223,0.936,3.574,17.437,21.011,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,9,0.223,0.936,3.569,17.45,21.019,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,ModelVM Scheduler,10,0.222,0.936,3.629,17.47,21.099,0,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,1,0.205,0.936,5.478,17.375,22.853,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,2,0.208,0.936,5.272,17.242,22.514,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,3,0.206,0.936,5.322,17.413,22.735,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,4,0.202,0.936,5.61,17.605,23.215,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,5,0.206,0.936,5.341,17.369,22.71,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,6,0.203,0.936,5.401,17.71,23.111,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,7,0.204,0.936,5.341,17.614,22.955,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,8,0.205,0.936,5.453,17.35,22.803,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,9,0.203,0.936,5.429,17.607,23.036,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert
+W_D,Mixed Balanced,Offline Oracle,10,0.207,0.936,5.382,17.228,22.61,1,21.98,0.0,research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert

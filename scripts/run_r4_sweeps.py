@@ -46,53 +46,7 @@ TASK_GOAL = "Analyze this scientific paper, reproduce its numerical result, writ
 
 
 import csv
-import itertools
-
-def compute_offline_prescient_oracle(stages, catalog, memory_budget_gb=8.0, base_tokens=115.0):
-    """Computes globally optimal offline prescient schedule:
-    arg min_{feasible model sequence, optimal Belady MIN eviction} total cost.
-    """
-    candidates_per_stage = []
-    for s in stages:
-        cands = [m for m in catalog.all_models() if m.capability_score(s.capability) >= 0.7]
-        candidates_per_stage.append(cands)
-
-    def eval_sequence_cost(seq):
-        resident = {}  # model_id -> (ram, load_time)
-        total_paging = 0.0
-        total_exec = 0.0
-        for t, model in enumerate(seq):
-            total_exec += round(model.latency * base_tokens, 3)
-            if model.id not in resident:
-                while sum(m[0] for m in resident.values()) + model.ram_required > memory_budget_gb:
-                    furthest_next = -1
-                    evict_candidate = None
-                    for res_id in resident:
-                        try:
-                            next_idx = next(i for i, fm in enumerate(seq[t + 1:]) if fm.id == res_id)
-                        except StopIteration:
-                            next_idx = 999999
-                        if next_idx > furthest_next:
-                            furthest_next = next_idx
-                            evict_candidate = res_id
-                    del resident[evict_candidate]
-                resident[model.id] = (model.ram_required, model.load_time)
-                total_paging += model.load_time
-        return round(total_exec + total_paging, 3)
-
-    best_cost = float("inf")
-    best_seq = None
-    for seq in itertools.product(*candidates_per_stage):
-        c = eval_sequence_cost(seq)
-        if c < best_cost:
-            best_cost = c
-            best_seq = seq
-
-    return {
-        "cost_oracle": best_cost,
-        "optimal_sequence": [m.id for m in best_seq],
-        "eval_fn": eval_sequence_cost,
-    }
+from modelvm.scheduler.offline_oracle import solve_exact_dp_oracle, evaluate_sequence_cost
 
 
 def run_lookahead_sweep():
@@ -151,9 +105,8 @@ def run_sensitivity_monte_carlo(num_trials=500, docs_dir=None):
         lookahead_k=3,
         backend=SimulationBackend(sleep_multiplier=0.0),
     )
-    oracle_info = compute_offline_prescient_oracle(CANONICAL_STAGES, kernel.catalog, memory_budget_gb=8.0)
-    cost_oracle = oracle_info["cost_oracle"]
-    eval_fn = oracle_info["eval_fn"]
+    oracle_res = solve_exact_dp_oracle(CANONICAL_STAGES, kernel.catalog, memory_budget_gb=8.0)
+    cost_oracle = oracle_res.cost_oracle
 
     trials = []
     stable_count = 0
@@ -175,9 +128,9 @@ def run_sensitivity_monte_carlo(num_trials=500, docs_dir=None):
                 ablation_mode=FactorialConfig.C7_FULL_MODELVM,
                 custom_stages=CANONICAL_STAGES,
             )
-            seq = [kernel.catalog.get(r.model_id) for r in summary.stage_results]
-            cost_sched = eval_fn(seq)
             routing_seq = [r.model_id for r in summary.stage_results]
+            eval_res = evaluate_sequence_cost(CANONICAL_STAGES, routing_seq, kernel.catalog, memory_budget_gb=8.0)
+            cost_sched = eval_res["cost"]
             if summary.peak_resident_memory_gb > 8.0:
                 oom_failure = True
                 oom_count += 1
@@ -234,7 +187,7 @@ def run_sensitivity_monte_carlo(num_trials=500, docs_dir=None):
         "stability_percentage": stability_pct,
         "oom_failures": oom_count,
         "cost_oracle": cost_oracle,
-        "optimal_oracle_sequence": oracle_info["optimal_sequence"],
+        "optimal_oracle_sequence": oracle_res.optimal_sequence,
         "trial_sample": trials[:10],
     }
 

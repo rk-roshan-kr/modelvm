@@ -1,0 +1,654 @@
+{
+  "W_A": {
+    "workload_key": "W_A",
+    "title": "Research-Heavy",
+    "description": "Literature -> Literature -> Synthesis -> Literature -> Physics",
+    "oracle_cost_sec": 21.13,
+    "oracle_optimal_sequence": [
+      "research-expert",
+      "research-expert",
+      "research-expert",
+      "research-expert",
+      "physics-expert"
+    ],
+    "policies": {
+      "Capability-Greedy": {
+        "goodput": {
+          "mean": 0.139,
+          "ci95": [
+            0.138,
+            0.14
+          ]
+        },
+        "quality": {
+          "mean": 0.94,
+          "ci95": [
+            0.94,
+            0.94
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 9.16,
+          "ci95": [
+            9.104,
+            9.211
+          ]
+        },
+        "reloads": {
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 59.9,
+          "ci95": [
+            59.442,
+            60.443
+          ]
+        }
+      },
+      "Memory-Aware Greedy": {
+        "goodput": {
+          "mean": 0.216,
+          "ci95": [
+            0.215,
+            0.217
+          ]
+        },
+        "quality": {
+          "mean": 0.916,
+          "ci95": [
+            0.916,
+            0.916
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.5,
+          "ci95": [
+            2.461,
+            2.531
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.5,
+          "ci95": [
+            0.268,
+            0.726
+          ]
+        }
+      },
+      "ModelVM Scheduler": {
+        "goodput": {
+          "mean": 0.216,
+          "ci95": [
+            0.216,
+            0.217
+          ]
+        },
+        "quality": {
+          "mean": 0.916,
+          "ci95": [
+            0.916,
+            0.916
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.51,
+          "ci95": [
+            2.464,
+            2.558
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.3,
+          "ci95": [
+            0.066,
+            0.653
+          ]
+        }
+      },
+      "Offline Oracle": {
+        "goodput": {
+          "mean": 0.217,
+          "ci95": [
+            0.215,
+            0.218
+          ]
+        },
+        "quality": {
+          "mean": 0.916,
+          "ci95": [
+            0.916,
+            0.916
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.5,
+          "ci95": [
+            2.441,
+            2.567
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "W_B": {
+    "workload_key": "W_B",
+    "title": "Compute-Heavy",
+    "description": "Math -> Coding -> Math -> Physics -> Math",
+    "oracle_cost_sec": 20.32,
+    "oracle_optimal_sequence": [
+      "mathematics-expert",
+      "coding-expert",
+      "mathematics-expert",
+      "physics-expert",
+      "mathematics-expert"
+    ],
+    "policies": {
+      "Capability-Greedy": {
+        "goodput": {
+          "mean": 0.232,
+          "ci95": [
+            0.231,
+            0.233
+          ]
+        },
+        "quality": {
+          "mean": 0.944,
+          "ci95": [
+            0.944,
+            0.944
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 3.31,
+          "ci95": [
+            3.28,
+            3.34
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.3,
+          "ci95": [
+            0.066,
+            0.496
+          ]
+        }
+      },
+      "Memory-Aware Greedy": {
+        "goodput": {
+          "mean": 0.233,
+          "ci95": [
+            0.232,
+            0.234
+          ]
+        },
+        "quality": {
+          "mean": 0.944,
+          "ci95": [
+            0.944,
+            0.944
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 3.28,
+          "ci95": [
+            3.238,
+            3.314
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.3,
+          "ci95": [
+            0.042,
+            0.585
+          ]
+        }
+      },
+      "ModelVM Scheduler": {
+        "goodput": {
+          "mean": 0.246,
+          "ci95": [
+            0.245,
+            0.247
+          ]
+        },
+        "quality": {
+          "mean": 0.944,
+          "ci95": [
+            0.944,
+            0.944
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.2,
+          "ci95": [
+            2.17,
+            2.229
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "Offline Oracle": {
+        "goodput": {
+          "mean": 0.233,
+          "ci95": [
+            0.232,
+            0.234
+          ]
+        },
+        "quality": {
+          "mean": 0.944,
+          "ci95": [
+            0.944,
+            0.944
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 3.3,
+          "ci95": [
+            3.263,
+            3.346
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "W_C": {
+    "workload_key": "W_C",
+    "title": "Coding-Heavy",
+    "description": "Coding -> Coding -> Research -> Coding -> Synthesis",
+    "oracle_cost_sec": 19.78,
+    "oracle_optimal_sequence": [
+      "coding-expert",
+      "coding-expert",
+      "research-expert",
+      "coding-expert",
+      "coding-expert"
+    ],
+    "policies": {
+      "Capability-Greedy": {
+        "goodput": {
+          "mean": 0.169,
+          "ci95": [
+            0.169,
+            0.17
+          ]
+        },
+        "quality": {
+          "mean": 0.94,
+          "ci95": [
+            0.94,
+            0.94
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 7.37,
+          "ci95": [
+            7.278,
+            7.437
+          ]
+        },
+        "reloads": {
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 40.3,
+          "ci95": [
+            39.52,
+            40.953
+          ]
+        }
+      },
+      "Memory-Aware Greedy": {
+        "goodput": {
+          "mean": 0.237,
+          "ci95": [
+            0.235,
+            0.237
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.3,
+          "ci95": [
+            2.265,
+            2.345
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.3,
+          "ci95": [
+            0.083,
+            0.608
+          ]
+        }
+      },
+      "ModelVM Scheduler": {
+        "goodput": {
+          "mean": 0.254,
+          "ci95": [
+            0.253,
+            0.254
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 1.1,
+          "ci95": [
+            1.087,
+            1.121
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "Offline Oracle": {
+        "goodput": {
+          "mean": 0.237,
+          "ci95": [
+            0.236,
+            0.238
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 2.29,
+          "ci95": [
+            2.246,
+            2.346
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  },
+  "W_D": {
+    "workload_key": "W_D",
+    "title": "Mixed Balanced",
+    "description": "Research -> Math -> Coding -> Physics -> Synthesis",
+    "oracle_cost_sec": 21.98,
+    "oracle_optimal_sequence": [
+      "research-expert",
+      "mathematics-expert",
+      "coding-expert",
+      "physics-expert",
+      "mathematics-expert"
+    ],
+    "policies": {
+      "Capability-Greedy": {
+        "goodput": {
+          "mean": 0.16,
+          "ci95": [
+            0.159,
+            0.161
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 8.56,
+          "ci95": [
+            8.469,
+            8.638
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 33.0,
+          "ci95": [
+            32.417,
+            33.621
+          ]
+        }
+      },
+      "Memory-Aware Greedy": {
+        "goodput": {
+          "mean": 0.211,
+          "ci95": [
+            0.21,
+            0.211
+          ]
+        },
+        "quality": {
+          "mean": 0.932,
+          "ci95": [
+            0.932,
+            0.932
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 4.45,
+          "ci95": [
+            4.404,
+            4.499
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.8,
+          "ci95": [
+            0.411,
+            1.178
+          ]
+        }
+      },
+      "ModelVM Scheduler": {
+        "goodput": {
+          "mean": 0.222,
+          "ci95": [
+            0.222,
+            0.223
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 3.6,
+          "ci95": [
+            3.561,
+            3.646
+          ]
+        },
+        "reloads": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "Offline Oracle": {
+        "goodput": {
+          "mean": 0.205,
+          "ci95": [
+            0.204,
+            0.206
+          ]
+        },
+        "quality": {
+          "mean": 0.936,
+          "ci95": [
+            0.936,
+            0.936
+          ]
+        },
+        "paging_time_sec": {
+          "mean": 5.4,
+          "ci95": [
+            5.347,
+            5.464
+          ]
+        },
+        "reloads": {
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "regret_vs_oracle_pct": {
+          "mean": 0.0,
+          "ci95": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  }
+}

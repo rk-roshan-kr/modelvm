@@ -1,8 +1,7 @@
-"""Supplementary Material Generator: Executes Full Ablation Study with Verbose Logging.
+"""Legacy Auxiliary Runner: Historical ablation study runner preserved for archival reproducibility.
 
-Generates:
-1. docs/ablation_benchmark_results.json - Raw JSON execution trace and metrics
-2. docs/appendix_ablation_results.md - Formatted appendix document for research paper submission
+For the canonical 2^3 factorial experimental pipeline, see factorial/run_replicates.py and factorial/analyze_factorial.py.
+Outputs archive to docs/archive/.
 """
 
 import json

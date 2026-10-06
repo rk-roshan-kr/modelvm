@@ -167,7 +167,7 @@ Beyond baseline comparisons, we decompose ModelVM through an orthogonal $2^3$ fa
     \item \textbf{Factor B (Working Set):} Disabled (Reactive LRU) vs.\ Enabled (Predictive $W(t, k)$).
     \item \textbf{Factor C (Scheduler):} Disabled (Greedy Match) vs.\ Enabled (Multi-Objective).
 \end{itemize}
-This design permits systematic estimation of main effects ($\Delta_{\text{CSP}}, \Delta_{\text{WS}}, \Delta_{\text{Sched}}$) and all two-way and three-way interaction terms without confounding among the factorial factors. Replicated trial variance is preserved by computing effect estimates across independent experimental runs.
+This design permits systematic estimation of main effects ($\Delta_{\text{CSP}}, \Delta_{\text{WS}}, \Delta_{\text{Sched}}$) and all two-way and three-way interaction terms without confounding among the factorial factors. Replicated trial variance is preserved by computing effect estimates across independent experimental runs. While the baseline continuum ($B_0 \to B_5$) evaluates end-to-end multi-turn execution with cumulative prompt context growth, the factorial ablation employs standardized single-turn stage token budgets ($115\text{--}145$ tokens) to compute exact Yates effects and ANOVA components independently of context-accumulation overhead.
 
 \subsection{Evaluation Metrics Framework}
 \label{sec:metrics}

@@ -93,9 +93,9 @@ TABLE_13_RETENTION = {
 # Table 14 (EXP-R3 Scheduler Generalization Across Workloads)
 TABLE_14_GENERALIZATION = {
     "workloads": ["W_A\n(Research)", "W_B\n(Compute)", "W_C\n(Coding)", "W_D\n(Mixed)"],
-    "Capability_Greedy": [34.5, 54.2, 41.0, 48.2],  # % Regret vs Oracle
-    "Memory_Aware": [12.4, 31.8, 18.2, 28.6],       # % Regret vs Oracle
-    "ModelVM": [3.1, 7.8, 4.6, 6.4],                # % Regret vs Oracle
+    "Capability_Greedy": [59.9, 0.3, 40.3, 33.0],  # % Regret vs Oracle
+    "Memory_Aware": [0.5, 0.3, 0.3, 0.8],           # % Regret vs Oracle
+    "ModelVM": [0.3, 0.0, 0.0, 0.0],                # % Regret vs Oracle
     "Offline_Oracle": [0.0, 0.0, 0.0, 0.0],         # Reference line
 }
 
@@ -1124,7 +1124,7 @@ def fig10_generalization():
 
     # Summary callout in lower left whitespace
     ax.text(0.02, 0.35,
-            r"ModelVM regret $\leq 7.8\%$" + "\n" + r"across all workloads",
+            r"ModelVM regret $\leq 0.3\%$" + "\n" + r"across all workloads",
             transform=ax.transAxes, fontsize=5.6, color=DARK,
             bbox=dict(fc="white", ec="#CFD8DC", lw=0.5, pad=2.0))
 
