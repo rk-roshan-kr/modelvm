@@ -42,7 +42,9 @@ class ModelPager:
         self.total_evictions: int = 0
         self.cache_hits: int = 0
         self.cache_misses: int = 0
+        self.total_reloads: int = 0
         self.total_paging_time_sec: float = 0.0
+        self._loaded_models_history: Set[str] = set()
         
         self.event_log: List[PagingEvent] = []
         self._listeners: List[Callable[[PagingEvent], None]] = []
@@ -115,6 +117,11 @@ class ModelPager:
 
         # Cache Miss
         self.cache_misses += 1
+        if model_id in self._loaded_models_history:
+            self.total_reloads += 1
+        else:
+            self._loaded_models_history.add(model_id)
+
         protected = set(protected_ids or set())
         protected.add(model_id)
 
@@ -271,7 +278,9 @@ class ModelPager:
         self.total_evictions = 0
         self.cache_hits = 0
         self.cache_misses = 0
+        self.total_reloads = 0
         self.total_paging_time_sec = 0.0
+        self._loaded_models_history.clear()
         self.event_log.clear()
         self.telemetry.reset()
 

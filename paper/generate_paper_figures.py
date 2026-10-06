@@ -596,8 +596,8 @@ def fig5_ablation():
     # (a) Quality factor effects
     ax = axes[0]
     factors = ["A\n(CSP)", "B\n(WS)", "C\n(Sched)", r"B$\times$C"]
-    effects = [+0.438, +0.042, +0.031, +0.008]
-    ci      = [ 0.021,  0.015,  0.015,  0.009]
+    effects = [+0.439, -0.000, +0.001, +0.002]
+    ci      = [ 0.027,  0.012,  0.012,  0.012]
     bar_c   = [BLUE, MBLUE, GREY, "#aaaaaa"]
     x       = np.arange(len(factors))
 
@@ -615,51 +615,51 @@ def fig5_ablation():
 
     # Clean annotation box in open right-center whitespace
     ax.text(0.95, 0.42,
-            "Factor A: 96.8 %\nof treatment SS",
+            "Factor A: >99 %\nof treatment SS",
             fontsize=6.0, color=BLUE, ha="left", va="center",
             bbox=dict(fc="white", ec=BLUE, lw=0.6, pad=2.5))
-    _arrow(ax, 0.95, 0.42, 0.35, 0.438, color=BLUE, lw=0.8, head=6)
-    ax.text(0, 0.438 + 0.028, "+0.438", ha="center", va="bottom",
+    _arrow(ax, 0.95, 0.42, 0.35, 0.439, color=BLUE, lw=0.8, head=6)
+    ax.text(0, 0.439 + 0.028, "+0.439", ha="center", va="bottom",
             fontsize=6.2, color=BLUE, fontweight="bold")
 
     # (b) Paging main effects
     ax = axes[1]
-    p_factors = [r"$\Delta_B$ (WS)", r"$\Delta_C$ (Sched)", r"$\Delta_{BC}$ (WS$\times$Sched)"]
-    p_effects = [-9.43, -6.44, -0.70]
-    p_ci      = [ 0.33,   0.33,   0.33]
-    p_bar_c   = ["#8B2020", "#8B2020", "#BC6B6B"]
+    p_factors = [r"$\Delta_B$ (WS)", r"$\Delta_C$ (Sched)"]
+    p_effects = [-3.25, -7.08]
+    p_ci      = [ 0.05,   0.05]
+    p_bar_c   = ["#8B2020", "#8B2020"]
     y_pos     = np.arange(len(p_factors))
 
-    ax.barh(y_pos, p_effects, xerr=p_ci, height=0.50,
+    ax.barh(y_pos, p_effects, xerr=p_ci, height=0.45,
             color=p_bar_c, edgecolor=DARK, lw=0.5,
             capsize=3.0, error_kw={"lw": 0.8, "ecolor": DARK}, zorder=3)
     ax.axvline(0, color=DARK, lw=0.5, zorder=2)
     ax.set_yticks(y_pos); ax.set_yticklabels(p_factors, fontsize=7.5)
     ax.set_xlabel("Seconds  (negative = reduction)", fontsize=7.5)
     ax.set_title("(b)  Paging stall — factorial", fontsize=8.5, fontweight="bold", pad=6)
-    ax.set_xlim(-13.5, 1.0)
-    ax.xaxis.set_major_locator(mticker.MultipleLocator(4))
+    ax.set_xlim(-10.0, 1.0)
+    ax.xaxis.set_major_locator(mticker.MultipleLocator(2))
     ax.grid(axis="x", color="#e8e8e8", lw=0.4, zorder=0)
     ax.set_axisbelow(True)
 
-    # Value labels safely to the left of the error caps (zero overlap!)
+    # Value labels safely to the left of the error caps
     for yi, (ve, vc) in enumerate(zip(p_effects, p_ci)):
-        ax.text(ve - vc - 0.6, yi, f"{ve:.2f} s",
+        ax.text(ve - vc - 0.4, yi, f"{ve:.2f} s",
                 ha="right", va="center", fontsize=6.2, color=DARK)
 
     # (c) Interaction matrix (100% pure vector patches, zero raster objects!)
     ax = axes[2]
-    matrix = np.array([[24.8, 19.0],
-                       [16.2,  7.2]])
+    matrix = np.array([[15.9, 8.8],
+                       [12.7, 5.5]])
     cmap = plt.cm.Blues_r
-    norm = matplotlib.colors.Normalize(vmin=5, vmax=28)
+    norm = matplotlib.colors.Normalize(vmin=4, vmax=18)
     for i in range(2):
         for j in range(2):
             val = matrix[i, j]
             color = cmap(norm(val))
             ax.add_patch(mpatches.Rectangle((j - 0.5, i - 0.5), 1.0, 1.0,
                                            facecolor=color, edgecolor="#cccccc", lw=0.6, zorder=1))
-            tc = "white" if val < 13 else DARK
+            tc = "white" if val < 9 else DARK
             ax.text(j, i, f"{val:.1f} s", ha="center", va="center",
                     fontsize=8.5, fontweight="bold", color=tc, zorder=2)
 
@@ -674,15 +674,15 @@ def fig5_ablation():
     pos = ax.get_position()
     cax = fig.add_axes([pos.x1 + 0.02, pos.y0, 0.016, pos.height])
     n_steps = 25
-    step_h = (28.0 - 5.0) / n_steps
+    step_h = (18.0 - 4.0) / n_steps
     for k in range(n_steps):
-        v_bot = 5.0 + k * step_h
+        v_bot = 4.0 + k * step_h
         v_mid = v_bot + step_h / 2.0
         cax.add_patch(mpatches.Rectangle((0, v_bot), 1.0, step_h,
                                          facecolor=cmap(norm(v_mid)),
                                          edgecolor="none", lw=0))
     cax.set_xlim(0, 1.0)
-    cax.set_ylim(5.0, 28.0)
+    cax.set_ylim(4.0, 18.0)
     cax.set_xticks([])
     cax.yaxis.tick_right()
     cax.yaxis.set_label_position("right")

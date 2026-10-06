@@ -28,7 +28,10 @@ from modelvm.benchmark.evaluator import Evaluator
 from modelvm.router.task_decomposer import CognitiveStagePlan
 from modelvm.telemetry.hardware import HardwareTelemetry
 
+import random
+
 SEED = 42
+random.seed(SEED)
 np.random.seed(SEED)
 
 CONFIG_CELLS = [

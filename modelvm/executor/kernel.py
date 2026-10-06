@@ -417,37 +417,6 @@ class CognitiveKernel:
             total_duration = round(total_exec + total_paging, 3)
 
         peak_memory = self.pager.peak_memory_gb
-
-        # Calibrate modeled factorial ablation metrics when executing explicit FactorialConfig
-        if isinstance(config_id, FactorialConfig):
-            factorial_baselines = {
-                FactorialConfig.REF_STATIC_MONOLITH: (0.00, 34.20, 7.10),
-                FactorialConfig.C0_PAGING_BASE:      (24.80, 62.40, 7.60),
-                FactorialConfig.C1_CSP:              (24.40, 59.80, 7.60),
-                FactorialConfig.C2_WS:               (16.20, 53.80, 7.60),
-                FactorialConfig.C3_SCHEDULER:        (19.00, 56.60, 7.60),
-                FactorialConfig.C4_CSP_WS:           (15.80, 51.20, 7.60),
-                FactorialConfig.C5_CSP_SCHEDULER:    (18.60, 54.00, 7.60),
-                FactorialConfig.C6_WS_SCHEDULER:     (10.40, 47.00, 7.60),
-                FactorialConfig.C7_FULL_MODELVM:     (7.20, 43.80, 7.60),
-            }
-            if config_id in factorial_baselines:
-                base_page, base_dur, base_ram = factorial_baselines[config_id]
-                # Adjust paging and duration when lookahead horizon k is explicitly varied in parameter sweeps
-                k_val = getattr(self.working_set_predictor, "lookahead_window", 3)
-                if config_id == FactorialConfig.C7_FULL_MODELVM and k_val != 3:
-                    k_map = {1: (21.60, 58.70), 2: (12.40, 49.20), 4: (6.90, 43.50), 6: (6.80, 43.40)}
-                    if k_val in k_map:
-                        base_page, base_dur = k_map[k_val]
-                import random
-                page_jitter = random.gauss(0, 0.35) if base_page > 0 else 0.0
-                dur_jitter = random.gauss(0, 0.42)
-                ram_jitter = random.choice([-0.02, 0.02])
-                total_paging = round(max(0.0, base_page + page_jitter), 2)
-                total_duration = round(max(5.0, base_dur + dur_jitter), 2)
-                peak_memory = round(base_ram + ram_jitter, 2)
-                total_exec = round(max(0.0, total_duration - total_paging), 2)
-
         total_library_size = self.catalog.total_library_size_gb()
 
         # Compute PDR Section 12 Headline Metrics
@@ -465,19 +434,7 @@ class CognitiveKernel:
             if (self.pager.cache_hits + self.pager.cache_misses) > 0
             else 0.0
         )
-        k_val = getattr(self.working_set_predictor, "lookahead_window", 3)
-        if config_id == FactorialConfig.C7_FULL_MODELVM:
-            if k_val == 1:
-                hit_rate = 0.20
-                reloads = 4.0
-            elif k_val == 2:
-                hit_rate = 0.40
-                reloads = 2.0
-            else:
-                hit_rate = 0.60
-                reloads = 1.0
-        else:
-            reloads = 1.0 if use_ws else 4.0
+        reloads = float(self.pager.total_reloads)
 
         return TaskExecutionSummary(
             task_goal=goal,

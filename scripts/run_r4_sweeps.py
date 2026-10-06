@@ -27,11 +27,12 @@ from modelvm.executor.backends import SimulationBackend
 from modelvm.executor.kernel import CognitiveKernel
 from modelvm.router.task_decomposer import CognitiveStagePlan
 
+import random
+
 # Deterministic seed for reproducible Monte Carlo sensitivity sweep
 SEED = 42
+random.seed(SEED)
 np.random.seed(SEED)
-
-COST_ORACLE = 41.17
 
 CANONICAL_STAGES = [
     CognitiveStagePlan(stage_index=0, title="Literature Extraction", description="Extract scientific equations and parameters", capability=Capability.RESEARCH),
@@ -42,6 +43,21 @@ CANONICAL_STAGES = [
 ]
 
 TASK_GOAL = "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning."
+
+
+def execute_offline_oracle(stages, goal=TASK_GOAL, memory_budget_gb=8.0):
+    """Executes offline prescient oracle scheduler with full advance sequence knowledge."""
+    kernel = CognitiveKernel(
+        memory_budget_gb=memory_budget_gb,
+        lookahead_k=len(stages),
+        backend=SimulationBackend(sleep_multiplier=0.0),
+    )
+    summary = kernel.execute_task(
+        goal=goal,
+        ablation_mode=FactorialConfig.C7_FULL_MODELVM,
+        custom_stages=stages,
+    )
+    return summary
 
 
 def run_lookahead_sweep():
@@ -57,8 +73,6 @@ def run_lookahead_sweep():
         6: "Diminishing Returns",
     }
 
-    # Reference canonical paging overhead scaling from the manuscript
-    # k=1: 21.60s (reactive), k=2: 12.40s, k=3: 7.20s (canonical), k=4: 6.90s, k=6: 6.80s
     for k in horizons:
         pt_list, hit_list, reload_list = [], [], []
         for rep in range(10):
@@ -118,19 +132,31 @@ def run_sensitivity_monte_carlo(num_trials=500):
         kernel.scheduler.delta = pert["delta"]
         kernel.scheduler.eta = pert["eta"]
 
-        summary = kernel.execute_task(
-            goal=TASK_GOAL,
-            ablation_mode=FactorialConfig.C7_FULL_MODELVM,
-            custom_stages=CANONICAL_STAGES,
-        )
+        oom_failure = False
+        try:
+            summary = kernel.execute_task(
+                goal=TASK_GOAL,
+                ablation_mode=FactorialConfig.C7_FULL_MODELVM,
+                custom_stages=CANONICAL_STAGES,
+            )
+            cost_sched = summary.total_duration_sec
+            if summary.peak_resident_memory_gb > 8.0:
+                oom_failure = True
+                oom_count += 1
+        except MemoryError:
+            oom_failure = True
+            oom_count += 1
+            cost_sched = 999.0
+
+        # Execute offline oracle scheduler for baseline comparison
+        oracle_summary = execute_offline_oracle(CANONICAL_STAGES, goal=TASK_GOAL, memory_budget_gb=8.0)
+        cost_oracle = oracle_summary.total_duration_sec
 
         # Regret vs offline oracle: Delta_oracle = (Cost_sched - Cost_oracle) / Cost_oracle
-        # Directly computed from the runtime execution duration
-        cost_sched = summary.total_duration_sec
-        regret_val = round(float((cost_sched - COST_ORACLE) / COST_ORACLE), 4)
+        regret_val = round(float((cost_sched - cost_oracle) / max(0.1, cost_oracle)), 4)
 
-        # Stability threshold check (regret <= 8.5%)
-        is_stable = bool(regret_val <= 0.085)
+        # Stability threshold check (regret <= 8.5% and no OOM)
+        is_stable = bool(regret_val <= 0.085 and not oom_failure)
         if is_stable:
             stable_count += 1
 
@@ -138,11 +164,11 @@ def run_sensitivity_monte_carlo(num_trials=500):
             "trial_id": trial_idx,
             "weights": {k: round(float(v), 4) for k, v in pert.items()},
             "cost_sched": cost_sched,
-            "cost_oracle": COST_ORACLE,
+            "cost_oracle": cost_oracle,
             "regret_vs_oracle": regret_val,
             "regret_percent": round(regret_val * 100, 2),
             "stable": is_stable,
-            "oom_failure": False,
+            "oom_failure": oom_failure,
         })
 
     stability_pct = round((stable_count / num_trials) * 100, 1)

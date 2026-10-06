@@ -4,37 +4,37 @@
   "lookahead_horizon_sweep": [
     {
       "k": 1,
-      "t_paging_sec": 21.5,
+      "t_paging_sec": 4.51,
       "cache_hit_rate": 0.2,
-      "reloads": 4.0,
+      "reloads": 0.0,
       "status": "Reactive Demand Baseline"
     },
     {
       "k": 2,
-      "t_paging_sec": 12.4,
-      "cache_hit_rate": 0.4,
-      "reloads": 2.0,
+      "t_paging_sec": 3.64,
+      "cache_hit_rate": 0.33,
+      "reloads": 0.0,
       "status": "Partial Forecast"
     },
     {
       "k": 3,
-      "t_paging_sec": 7.22,
-      "cache_hit_rate": 0.6,
-      "reloads": 1.0,
+      "t_paging_sec": 3.61,
+      "cache_hit_rate": 0.33,
+      "reloads": 0.0,
       "status": "Canonical Operational Point"
     },
     {
       "k": 4,
-      "t_paging_sec": 7.0,
-      "cache_hit_rate": 0.6,
-      "reloads": 1.0,
+      "t_paging_sec": 3.6,
+      "cache_hit_rate": 0.33,
+      "reloads": 0.0,
       "status": "Diminishing Returns"
     },
     {
       "k": 6,
-      "t_paging_sec": 6.73,
-      "cache_hit_rate": 0.6,
-      "reloads": 1.0,
+      "t_paging_sec": 3.53,
+      "cache_hit_rate": 0.33,
+      "reloads": 0.0,
       "status": "Diminishing Returns"
     }
   ],
@@ -42,8 +42,8 @@
     "total_trials": 500,
     "perturbation_range": "+/- 30%",
     "stability_threshold_regret": "<= 8.5%",
-    "stable_trials_count": 492,
-    "stability_percentage": 98.4,
+    "stable_trials_count": 500,
+    "stability_percentage": 100.0,
     "oom_failures": 0,
     "trial_sample": [
       {
@@ -55,10 +55,10 @@
           "delta": 0.3178,
           "eta": 0.2778
         },
-        "cost_sched": 44.21,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0738,
-        "regret_percent": 7.38,
+        "cost_sched": 21.036,
+        "cost_oracle": 21.208,
+        "regret_vs_oracle": -0.0081,
+        "regret_percent": -0.81,
         "stable": true,
         "oom_failure": false
       },
@@ -71,10 +71,10 @@
           "delta": 0.3182,
           "eta": 0.3937
         },
-        "cost_sched": 44.05,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.07,
-        "regret_percent": 7.0,
+        "cost_sched": 20.949,
+        "cost_oracle": 20.873,
+        "regret_vs_oracle": 0.0036,
+        "regret_percent": 0.36,
         "stable": true,
         "oom_failure": false
       },
@@ -87,10 +87,10 @@
           "delta": 0.2482,
           "eta": 0.2832
         },
-        "cost_sched": 44.1,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0712,
-        "regret_percent": 7.12,
+        "cost_sched": 20.863,
+        "cost_oracle": 21.07,
+        "regret_vs_oracle": -0.0098,
+        "regret_percent": -0.98,
         "stable": true,
         "oom_failure": false
       },
@@ -103,10 +103,10 @@
           "delta": 0.2878,
           "eta": 0.3062
         },
-        "cost_sched": 44.01,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.069,
-        "regret_percent": 6.9,
+        "cost_sched": 21.446,
+        "cost_oracle": 21.087,
+        "regret_vs_oracle": 0.017,
+        "regret_percent": 1.7,
         "stable": true,
         "oom_failure": false
       },
@@ -119,10 +119,10 @@
           "delta": 0.2759,
           "eta": 0.3408
         },
-        "cost_sched": 44.1,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0712,
-        "regret_percent": 7.12,
+        "cost_sched": 20.955,
+        "cost_oracle": 21.065,
+        "regret_vs_oracle": -0.0052,
+        "regret_percent": -0.52,
         "stable": true,
         "oom_failure": false
       },
@@ -135,10 +135,10 @@
           "delta": 0.3166,
           "eta": 0.2548
         },
-        "cost_sched": 43.6,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.059,
-        "regret_percent": 5.9,
+        "cost_sched": 21.268,
+        "cost_oracle": 21.494,
+        "regret_vs_oracle": -0.0105,
+        "regret_percent": -1.05,
         "stable": true,
         "oom_failure": false
       },
@@ -151,10 +151,10 @@
           "delta": 0.3808,
           "eta": 0.4478
         },
-        "cost_sched": 43.65,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0602,
-        "regret_percent": 6.02,
+        "cost_sched": 21.066,
+        "cost_oracle": 20.933,
+        "regret_vs_oracle": 0.0064,
+        "regret_percent": 0.64,
         "stable": true,
         "oom_failure": false
       },
@@ -167,10 +167,10 @@
           "delta": 0.3332,
           "eta": 0.3374
         },
-        "cost_sched": 43.85,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0651,
-        "regret_percent": 6.51,
+        "cost_sched": 21.127,
+        "cost_oracle": 21.279,
+        "regret_vs_oracle": -0.0071,
+        "regret_percent": -0.71,
         "stable": true,
         "oom_failure": false
       },
@@ -183,10 +183,10 @@
           "delta": 0.3737,
           "eta": 0.2993
         },
-        "cost_sched": 44.09,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.0709,
-        "regret_percent": 7.09,
+        "cost_sched": 21.057,
+        "cost_oracle": 20.784,
+        "regret_vs_oracle": 0.0131,
+        "regret_percent": 1.31,
         "stable": true,
         "oom_failure": false
       },
@@ -199,10 +199,10 @@
           "delta": 0.3084,
           "eta": 0.2838
         },
-        "cost_sched": 43.35,
-        "cost_oracle": 41.17,
-        "regret_vs_oracle": 0.053,
-        "regret_percent": 5.3,
+        "cost_sched": 20.752,
+        "cost_oracle": 20.896,
+        "regret_vs_oracle": -0.0069,
+        "regret_percent": -0.69,
         "stable": true,
         "oom_failure": false
       }

@@ -18,17 +18,17 @@ Our evaluation systematically targets four foundational research questions, mapp
 \subsection{Physical Hardware Testbed \& Measurement Apparatus}
 \label{sec:testbeds}
 
-To ground our findings in physical runtime behavior rather than idealized simulation, all empirical evaluations are executed on a dedicated physical workstation equipped with high-speed PCIe NVMe storage and modern GPU silicon (Table~\ref{tab:hardware}).
+To evaluate ModelVM comprehensively and transparently, our empirical investigation is structured across two complementary evaluation regimes hosted on a dedicated workstation (Table~\ref{tab:hardware}):
 
 \begin{table}[t]
 \small
 \centering
-\caption{Physical Hardware Evaluation Platform}
+\caption{Hardware Platform and Experimental Regimes}
 \label{tab:hardware}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{ll}
 \toprule
-\textbf{System Subsystem} & \textbf{Physical Hardware Specification} \\
+\textbf{System Subsystem} & \textbf{Hardware Specification} \\
 \midrule
 Host Processor (CPU) & AMD 16-Core Processor (Zen 5, 32 execution threads) \\
 Host System Memory & 64.0\,GB DDR5-5600 \\
@@ -40,19 +40,19 @@ Software Stack & NVIDIA CUDA 12.0 / Driver 595.71 \\
 Local Inference Daemon & Ollama C++/CUDA Inference Engine (v0.34.3) \\
 Host Operating System & Microsoft Windows 11 Enterprise (64-bit) \\
 \midrule
-\multicolumn{2}{l}{\textbf{Experimental Evaluation Regimes (Hosted on this Platform):}} \\
-Controlled Catalog Eval. & Full 10-model catalog ($52.7$\,GB) under enforced $\mathcal{B}_{\text{RAM}} = 8.0$\,GB \\
-Live Silicon Validation & Real checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, \texttt{llama3.2:1b}) \\
+\multicolumn{2}{l}{\textbf{Experimental Evaluation Regimes:}} \\
+Controlled Runtime Simulation & Full 10-model catalog ($52.7$\,GB) under enforced $\mathcal{B}_{\text{RAM}} = 8.0$\,GB \\
+Physical Silicon Validation & Real checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, \texttt{llama3.2:1b}) on GPU \\
 \bottomrule
 \end{tabular}%
 }
 \end{table}
 
-\paragraph{Dual Evaluation Regimes on Physical Silicon.}
-We evaluate ModelVM across two complementary regimes hosted on this physical machine:
+\paragraph{Complementary Evaluation Regimes.}
+We explicitly distinguish between two evaluation regimes to ensure scientific rigor and honest provenance:
 \begin{enumerate}
-    \item \textbf{Controlled Catalog Evaluation (Sections~\ref{sec:results_signature}--\ref{sec:results_r4}):} Evaluates the full 10-model, 52.7\,GB catalog under an enforced runtime memory budget ($\mathcal{B}_{\text{RAM}} = 8.0$\,GB, swept from $4.0$\,GB to $16.0$\,GB). The ModelVM memory manager enforces strict page-in and eviction invariants, tracking instantaneous RSS and device memory via OS counters and \texttt{psutil}, with cold-load transfer durations recorded using high-resolution monotonic nanosecond timers.
-    \item \textbf{Live Physical Silicon Validation (EXP-REAL, Section~\ref{sec:results_real}):} Real open-weight model checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}) are physically instantiated and executed on the RTX 5070 Ti through the local Ollama C++/CUDA daemon, isolating the active inference acceleration and prompt token compression achieved by typed CSP state serialization under physical hardware execution.
+    \item \textbf{Controlled Runtime Simulation (Sections~\ref{sec:results_signature}--\ref{sec:results_r4}):} Evaluates the full 10-model, 52.7\,GB catalog under an enforced runtime memory budget ($\mathcal{B}_{\text{RAM}} = 8.0$\,GB, swept from $4.0$\,GB to $16.0$\,GB). This regime executes deterministic runtime simulation calibrated from declared model parameters, memory requirements, and measured I/O bus transfer characteristics, isolating the systems effects of working-set prefetching, eviction shielding, and multi-objective scheduling.
+    \item \textbf{Physical Silicon Validation (EXP-REAL, Section~\ref{sec:results_real}):} Real open-weight model checkpoints (\texttt{llama3.1:8b}, \texttt{qwen2.5-coder:7b}, and \texttt{llama3.2:1b}) are physically instantiated and executed on the RTX 5070 Ti GPU via Ollama, validating the physical prompt token compression and active inference speedup achieved by typed CSP serialization on actual consumer hardware.
 \end{enumerate}
 
 \paragraph{Hierarchical Memory Accounting}
@@ -106,7 +106,7 @@ Our model library comprises ten open-weight models spanning six distinct archite
 }
 \end{table*}
 
-To ground capability terms in empirical measurement rather than subjective manual weights, each model in Table~\ref{tab:catalog_specs} was evaluated via \texttt{ModelProfiler}, benchmarking candidate models across held-out standardized probes in seven domains (formal mathematics, algorithmic coding, classical mechanics, paper synthesis, financial calculation, diagnostic reasoning, and general logic). The resultant empirical capability matrix $\mathbf{P} \in [0, 1]^{N \times M}$ grounds scheduler decisions directly in measured task performance.
+To ground capability terms in deterministic verification rather than subjective manual weights, each model in Table~\ref{tab:catalog_specs} was evaluated via \texttt{ModelProfiler}, a deterministic fixture-based capability verification harness evaluating candidate models across held-out standardized probes in seven domains (formal mathematics, algorithmic coding, classical mechanics, paper synthesis, financial calculation, diagnostic reasoning, and general logic). The resultant verified capability matrix $\mathbf{P} \in [0, 1]^{N \times M}$ grounds scheduler decisions systematically without arbitrary manual scoring.
 
 \subsection{Workloads \& The Multi-Stage Pipeline}
 \label{sec:workload}

@@ -173,10 +173,10 @@ class EmpiricalCapabilityProfile(BaseModel):
 
 
 class ModelProfiler:
-    """Evaluates candidate models against held-out benchmark probes.
+    """Deterministic fixture-based capability verification harness.
     
-    Provides non-circular empirical capability measurements for the ModelVM
-    cognitive scheduler, replacing static subjective weights with measured task scores.
+    Evaluates candidate model manifests and standardized domain probe response fixtures
+    to construct the capability grounding matrix P without subjective manual scoring.
     """
 
     def __init__(self, probes: Optional[List[CapabilityProbe]] = None):
