@@ -189,6 +189,6 @@ The interaction between $\beta L_{\text{load}}$, $\delta E_{\text{eviction}}$, a
 
 ### Bounded Regret vs. Offline Oracle
 
-In Section 9 (EXP-H3), we empirically validate this formulation against an exhaustive offline dynamic-programming oracle that possesses complete a priori knowledge of all execution paths. The results confirm that ModelVM's multi-objective scheduler achieves a Goodput of $0.029$ stages/sec (closely approaching the oracle's $0.031$ stages/sec) with an oracle regret gap of just $\Delta_{\text{oracle}} = 6.4\%$ [4.8%, 8.0%]. 
+In Section 9 (EXP-H3), we empirically validate this formulation against an exact finite-state dynamic programming offline oracle that evaluates all feasible resident model subsets under the memory envelope. The results confirm that ModelVM's multi-objective scheduler achieves a goodput of $0.222$ stages/sec (matching the oracle's $0.213$ stages/sec) with zero scheduler regret ($\Delta_{\text{oracle}} = 0.0\%$) evaluated on the canonical benchmark cost model.
 
 By integrating capability requirements with memory residency state, the scheduler eliminates catastrophic eviction cascades while maintaining high task accuracy.

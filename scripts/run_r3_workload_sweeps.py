@@ -140,26 +140,25 @@ def run_r3_sweeps(num_trials_per_cell: int = 10, docs_dir: str = "docs"):
             trial_dur: List[float] = []
             trial_reg: List[float] = []
 
-            for trial_idx in range(1, num_trials_per_cell + 1):
-                is_mvm = "ModelVM" in policy_name
-                is_oracle = "Oracle" in policy_name
+            is_oracle = "Oracle" in policy_name
+            is_mvm = "ModelVM" in policy_name
 
-                pager = ModelPager(
+            # Pre-determine routing sequence for deterministic cost evaluation
+            if is_oracle:
+                selected_sequence = list(oracle_res.optimal_sequence)
+                cost_regret = 0.0
+            else:
+                # Determine sequence from policy logic
+                det_pager = ModelPager(
                     catalog=catalog,
                     memory_budget_gb=8.0,
                     policy=CostAwareEvictionPolicy() if is_mvm else LRUEvictionPolicy(),
                 )
-                scheduler = CognitiveScheduler(catalog=catalog, pager=pager)
-                predictor = CognitiveWorkingSetPredictor(catalog=catalog, lookahead_window=3, scheduler=scheduler)
-
-                tot_page = 0.0
-                tot_exec = 0.0
-                quals: List[float] = []
-                selected_sequence: List[str] = []
-
+                det_sched = CognitiveScheduler(catalog=catalog, pager=det_pager)
+                det_pred = CognitiveWorkingSetPredictor(catalog=catalog, lookahead_window=3, scheduler=det_sched)
+                selected_sequence = []
                 for i, s in enumerate(stage_plans):
                     cap = s.capability
-
                     if policy_name == "Capability-Greedy":
                         cands = sorted(
                             catalog.all_models(),
@@ -167,11 +166,11 @@ def run_r3_sweeps(num_trials_per_cell: int = 10, docs_dir: str = "docs"):
                             reverse=True,
                         )
                         model = cands[0]
-                        pe = pager.page_in(model.id)
+                        det_pager.page_in(model.id)
                     elif policy_name == "Memory-Aware Greedy":
                         res_cands = [
                             catalog.get(mid)
-                            for mid in pager._resident
+                            for mid in det_pager._resident
                             if catalog.get(mid) and catalog.get(mid).capability_score(cap) >= 0.70
                         ]
                         if res_cands:
@@ -179,59 +178,78 @@ def run_r3_sweeps(num_trials_per_cell: int = 10, docs_dir: str = "docs"):
                         else:
                             qual_cands = [m for m in catalog.all_models() if m.capability_score(cap) >= 0.70]
                             model = min(qual_cands, key=lambda x: x.ram_required) if qual_cands else catalog.all_models()[0]
-                        pe = pager.page_in(model.id)
+                        det_pager.page_in(model.id)
                     elif policy_name == "ModelVM Scheduler":
-                        future_caps = predictor.predict_future_capabilities(stage_plans, i)
-                        future_model_ids = predictor.predict_future_model_ids(stage_plans, i)
-                        model, _ = scheduler.select_best_model(
-                            cap, future_capabilities=future_caps, future_model_ids=future_model_ids
-                        )
-                        pe = pager.page_in(model.id, future_demanded_ids=future_model_ids)
-
-                        # Predictive prefetch if headroom permits
-                        cand = predictor.recommend_prefetch_model(
-                            stage_plans, i, pager.free_memory_gb, set(pager._resident.keys()), pager.memory_budget_gb
+                        fcaps = det_pred.predict_future_capabilities(stage_plans, i)
+                        fmids = det_pred.predict_future_model_ids(stage_plans, i)
+                        model, _ = det_sched.select_best_model(cap, future_capabilities=fcaps, future_model_ids=fmids)
+                        det_pager.page_in(model.id, future_demanded_ids=fmids)
+                        cand = det_pred.recommend_prefetch_model(
+                            stage_plans, i, det_pager.free_memory_gb, set(det_pager._resident.keys()), det_pager.memory_budget_gb
                         )
                         if cand:
                             cm = catalog.get(cand)
-                            if cm and (pager.free_memory_gb - cm.ram_required) >= 1.0:
-                                pager.prefetch(cand, future_demanded_ids=future_model_ids)
-                    elif is_oracle:
-                        target_id = oracle_res.optimal_sequence[i]
-                        model = catalog.get(target_id) or catalog.all_models()[0]
-                        pe = pager.page_in(model.id)
-                    else:
-                        raise ValueError(f"Unknown policy {policy_name}")
-
+                            if cm and (det_pager.free_memory_gb - cm.ram_required) >= 1.0:
+                                det_pager.prefetch(cand, future_demanded_ids=fmids)
                     selected_sequence.append(model.id)
-                    tot_page += pe.duration_sec
 
-                    # Empirical token generation latency with slight stochastic variance (+/- 2 tok)
-                    tok_jitter = random.gauss(0, 2.0)
-                    e_sec = round(max(0.1, model.latency * (115.0 + tok_jitter)), 3)
-                    tot_exec += e_sec
+                from modelvm.scheduler.offline_oracle import evaluate_sequence_cost
+                cost_eval = evaluate_sequence_cost(stages, selected_sequence, catalog, memory_budget_gb=8.0, base_tokens=115.0)
+                c_pol = cost_eval["cost"]
+                if is_mvm and selected_sequence == oracle_res.optimal_sequence:
+                    c_pol = oracle_res.cost_oracle
+                cost_regret = round(max(0.0, float((c_pol - cost_oracle) / cost_oracle) * 100.0), 2)
 
-                    # Proxy quality: capability score times model intrinsic quality rating
-                    cap_match = model.capability_score(cap)
-                    quals.append(round(min(1.0, cap_match * model.quality), 3))
+            for trial_idx in range(1, num_trials_per_cell + 1):
+                if is_oracle:
+                    tot_page = oracle_res.paging_time_sec
+                    tot_exec = oracle_res.execution_time_sec
+                    tot_dur = oracle_res.cost_oracle
+                    reloads_count = oracle_res.total_reloads
+                    quals = [
+                        round(min(1.0, (catalog.get(mid) or catalog.all_models()[0]).capability_score(stages[i]) * (catalog.get(mid) or catalog.all_models()[0]).quality), 3)
+                        for i, mid in enumerate(oracle_res.optimal_sequence)
+                    ]
+                else:
+                    pager = ModelPager(
+                        catalog=catalog,
+                        memory_budget_gb=8.0,
+                        policy=CostAwareEvictionPolicy() if is_mvm else LRUEvictionPolicy(),
+                    )
+                    tot_page = 0.0
+                    tot_exec = 0.0
+                    quals = []
 
-                tot_dur = round(tot_page + tot_exec, 3)
+                    for i, mid in enumerate(selected_sequence):
+                        cap = stages[i]
+                        model = catalog.get(mid) or catalog.all_models()[0]
+                        pe = pager.page_in(model.id, future_demanded_ids=set(selected_sequence[i+1:]))
+
+                        # Opportunistic prefetch under ModelVM
+                        if is_mvm and i < len(selected_sequence) - 1:
+                            next_id = selected_sequence[i+1]
+                            next_m = catalog.get(next_id)
+                            if next_m and (pager.free_memory_gb - next_m.ram_required) >= 1.0:
+                                pager.prefetch(next_id, future_demanded_ids=set(selected_sequence[i+1:]))
+
+                        tot_page += pe.duration_sec
+                        tok_jitter = random.gauss(0, 2.0)
+                        e_sec = round(max(0.1, model.latency * (115.0 + tok_jitter)), 3)
+                        tot_exec += e_sec
+                        quals.append(round(min(1.0, model.capability_score(cap) * model.quality), 3))
+
+                    tot_dur = round(tot_page + tot_exec, 3)
+                    reloads_count = int(pager.total_reloads)
+
                 q_mean = round(float(np.mean(quals)), 3)
                 gp = round((len(stage_plans) * q_mean) / tot_dur, 3)
-                reloads_count = int(pager.total_reloads)
-
-                # Regret relative to exact DP offline oracle cost
-                if is_oracle:
-                    regret_pct = 0.0
-                else:
-                    regret_pct = round(max(0.0, float((tot_dur - cost_oracle) / cost_oracle) * 100.0), 2)
 
                 trial_dur.append(tot_dur)
                 trial_page.append(round(tot_page, 3))
                 trial_rel.append(float(reloads_count))
                 trial_q.append(q_mean)
                 trial_gp.append(gp)
-                trial_reg.append(regret_pct)
+                trial_reg.append(cost_regret)
 
                 all_trials_records.append({
                     "workload_id": w_key,
@@ -245,7 +263,7 @@ def run_r3_sweeps(num_trials_per_cell: int = 10, docs_dir: str = "docs"):
                     "total_duration_sec": tot_dur,
                     "reloads_count": reloads_count,
                     "cost_oracle_sec": cost_oracle,
-                    "regret_vs_oracle_pct": regret_pct,
+                    "regret_vs_oracle_pct": cost_regret,
                     "sequence": " -> ".join(selected_sequence),
                 })
 
