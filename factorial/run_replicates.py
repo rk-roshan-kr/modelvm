@@ -53,14 +53,8 @@ BENCHMARK_STAGES = [
     CognitiveStagePlan(stage_index=0, title="Literature Extraction", description="Extract scientific equations and parameters", capability=Capability.RESEARCH),
     CognitiveStagePlan(stage_index=1, title="Mathematical Derivation", description="Derive closed-form harmonic equations", capability=Capability.MATHEMATICS),
     CognitiveStagePlan(stage_index=2, title="Simulation Implementation", description="Implement ODE integration simulation solver", capability=Capability.CODING),
-    CognitiveStagePlan(stage_index=3, title="Lit Review Verification", description="Verify against literature theorems", capability=Capability.RESEARCH),
-    CognitiveStagePlan(stage_index=4, title="Physical Dynamics Validation", description="Analyze resonance and phase space behavior", capability=Capability.PHYSICS),
-    CognitiveStagePlan(stage_index=5, title="Scientific Analysis", description="Analyze thermodynamic boundary conditions", capability=Capability.SCIENCE),
-    CognitiveStagePlan(stage_index=6, title="Benchmark Code Optimization", description="Optimize vectorized solver and unit tests", capability=Capability.CODING),
-    CognitiveStagePlan(stage_index=7, title="Scientific Validation", description="Evaluate energy dissipation constraints", capability=Capability.SCIENCE),
-    CognitiveStagePlan(stage_index=8, title="Analytical Theorem Proof", description="Formalize mathematical stability proofs", capability=Capability.MATHEMATICS),
-    CognitiveStagePlan(stage_index=9, title="Final Simulation Deployment", description="Synthesize production numerical simulation script", capability=Capability.CODING),
-    CognitiveStagePlan(stage_index=10, title="Comprehensive Synthesis Report", description="Executive technical summary and deliverables", capability=Capability.GENERAL),
+    CognitiveStagePlan(stage_index=3, title="Physical Dynamics Validation", description="Analyze resonance and phase space behavior", capability=Capability.PHYSICS),
+    CognitiveStagePlan(stage_index=4, title="Executive Synthesis", description="Executive technical summary and deliverables", capability=Capability.GENERAL),
 ]
 
 TASK_GOAL = "Analyze this scientific paper, reproduce its numerical result, write the implementation, and explain the physical meaning."
@@ -108,6 +102,11 @@ def execute_trials():
                 "paging_overhead_sec": round(float(summary.total_paging_time_sec), 3),
                 "total_duration_sec": round(float(summary.total_duration_sec), 3),
                 "peak_ram_gb": round(float(summary.peak_resident_memory_gb), 2),
+                "_raw_quality": float(metrics.capability_coverage_score),
+                "_raw_calc_acc": float(metrics.calculation_correctness_ratio),
+                "_raw_paging_sec": float(summary.total_paging_time_sec),
+                "_raw_total_sec": float(summary.total_duration_sec),
+                "_raw_peak_ram": float(summary.peak_resident_memory_gb),
             })
             trial_id += 1
 
@@ -123,17 +122,42 @@ def main():
 
     trials = execute_trials()
 
-    # Save to factorial/raw_trials.csv and docs/factorial_raw_trials.csv
-    csv_paths = [
-        os.path.join(factorial_dir, "raw_trials.csv"),
-        os.path.join(docs_dir, "factorial_raw_trials.csv"),
+    # Standard fields (formatted for presentation/tables)
+    std_fields = [
+        "trial_id", "config_id", "config_name", "replicate_index",
+        "factor_A_csp", "factor_B_ws", "factor_C_sched",
+        "quality_score", "calculation_accuracy", "paging_overhead_sec",
+        "total_duration_sec", "peak_ram_gb",
     ]
-    for path in csv_paths:
-        with open(path, "w", newline="", encoding="utf-8") as f:
-            writer = csv.DictWriter(f, fieldnames=list(trials[0].keys()))
+    # Full precision fields
+    full_trials = []
+    clean_trials = []
+    for t in trials:
+        clean = {k: t[k] for k in std_fields}
+        clean_trials.append(clean)
+        full = dict(clean)
+        full["quality_score"] = t["_raw_quality"]
+        full["calculation_accuracy"] = t["_raw_calc_acc"]
+        full["paging_overhead_sec"] = t["_raw_paging_sec"]
+        full["total_duration_sec"] = t["_raw_total_sec"]
+        full["peak_ram_gb"] = t["_raw_peak_ram"]
+        full_trials.append(full)
+
+    # Save formatted trials
+    for p in [os.path.join(factorial_dir, "raw_trials.csv"), os.path.join(docs_dir, "factorial_raw_trials.csv")]:
+        with open(p, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=std_fields)
             writer.writeheader()
-            writer.writerows(trials)
-        print(f"Exported {len(trials)} genuine trial records to: {path}")
+            writer.writerows(clean_trials)
+        print(f"Exported {len(clean_trials)} trial records to: {p}")
+
+    # Save full precision trials
+    for p in [os.path.join(factorial_dir, "raw_trials_full_precision.csv"), os.path.join(docs_dir, "factorial_raw_trials_full_precision.csv")]:
+        with open(p, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=std_fields)
+            writer.writeheader()
+            writer.writerows(full_trials)
+        print(f"Exported full-precision trial records to: {p}")
 
     # Metadata
     metadata = {

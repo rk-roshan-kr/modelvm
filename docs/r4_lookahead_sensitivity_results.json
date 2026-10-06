@@ -7,7 +7,7 @@
       "t_paging_sec": 4.51,
       "cache_hit_rate": 0.2,
       "reloads": 0.0,
-      "status": "Reactive Demand Baseline"
+      "status": "Zero-Lookahead ModelVM Configuration"
     },
     {
       "k": 2,
@@ -45,166 +45,164 @@
     "stable_trials_count": 500,
     "stability_percentage": 100.0,
     "oom_failures": 0,
+    "cost_oracle": 21.98,
+    "optimal_oracle_sequence": [
+      "research-expert",
+      "mathematics-expert",
+      "coding-expert",
+      "physics-expert",
+      "mathematics-expert"
+    ],
     "trial_sample": [
       {
         "trial_id": 1,
-        "weights": {
-          "alpha": 0.1849,
-          "beta": 0.3176,
-          "gamma": 0.1139,
-          "delta": 0.3178,
-          "eta": 0.2778
-        },
-        "cost_sched": 21.036,
-        "cost_oracle": 21.208,
-        "regret_vs_oracle": -0.0081,
-        "regret_percent": -0.81,
+        "alpha": 0.1849,
+        "beta": 0.3176,
+        "gamma": 0.1139,
+        "delta": 0.3178,
+        "eta": 0.2778,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 2,
-        "weights": {
-          "alpha": 0.1587,
-          "beta": 0.1837,
-          "gamma": 0.122,
-          "delta": 0.3182,
-          "eta": 0.3937
-        },
-        "cost_sched": 20.949,
-        "cost_oracle": 20.873,
-        "regret_vs_oracle": 0.0036,
-        "regret_percent": 0.36,
+        "alpha": 0.1587,
+        "beta": 0.1837,
+        "gamma": 0.122,
+        "delta": 0.3182,
+        "eta": 0.3937,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 3,
-        "weights": {
-          "alpha": 0.1425,
-          "beta": 0.3205,
-          "gamma": 0.1199,
-          "delta": 0.2482,
-          "eta": 0.2832
-        },
-        "cost_sched": 20.863,
-        "cost_oracle": 21.07,
-        "regret_vs_oracle": -0.0098,
-        "regret_percent": -0.98,
+        "alpha": 0.1425,
+        "beta": 0.3205,
+        "gamma": 0.1199,
+        "delta": 0.2482,
+        "eta": 0.2832,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 4,
-        "weights": {
-          "alpha": 0.162,
-          "beta": 0.2206,
-          "gamma": 0.1015,
-          "delta": 0.2878,
-          "eta": 0.3062
-        },
-        "cost_sched": 21.446,
-        "cost_oracle": 21.087,
-        "regret_vs_oracle": 0.017,
-        "regret_percent": 1.7,
+        "alpha": 0.162,
+        "beta": 0.2206,
+        "gamma": 0.1015,
+        "delta": 0.2878,
+        "eta": 0.3062,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 5,
-        "weights": {
-          "alpha": 0.2134,
-          "beta": 0.1959,
-          "gamma": 0.0875,
-          "delta": 0.2759,
-          "eta": 0.3408
-        },
-        "cost_sched": 20.955,
-        "cost_oracle": 21.065,
-        "regret_vs_oracle": -0.0052,
-        "regret_percent": -0.52,
+        "alpha": 0.2134,
+        "beta": 0.1959,
+        "gamma": 0.0875,
+        "delta": 0.2759,
+        "eta": 0.3408,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 6,
-        "weights": {
-          "alpha": 0.2342,
-          "beta": 0.205,
-          "gamma": 0.1009,
-          "delta": 0.3166,
-          "eta": 0.2548
-        },
-        "cost_sched": 21.268,
-        "cost_oracle": 21.494,
-        "regret_vs_oracle": -0.0105,
-        "regret_percent": -1.05,
+        "alpha": 0.2342,
+        "beta": 0.205,
+        "gamma": 0.1009,
+        "delta": 0.3166,
+        "eta": 0.2548,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 7,
-        "weights": {
-          "alpha": 0.2129,
-          "beta": 0.2006,
-          "gamma": 0.0739,
-          "delta": 0.3808,
-          "eta": 0.4478
-        },
-        "cost_sched": 21.066,
-        "cost_oracle": 20.933,
-        "regret_vs_oracle": 0.0064,
-        "regret_percent": 0.64,
+        "alpha": 0.2129,
+        "beta": 0.2006,
+        "gamma": 0.0739,
+        "delta": 0.3808,
+        "eta": 0.4478,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 8,
-        "weights": {
-          "alpha": 0.237,
-          "beta": 0.2207,
-          "gamma": 0.0759,
-          "delta": 0.3332,
-          "eta": 0.3374
-        },
-        "cost_sched": 21.127,
-        "cost_oracle": 21.279,
-        "regret_vs_oracle": -0.0071,
-        "regret_percent": -0.71,
+        "alpha": 0.237,
+        "beta": 0.2207,
+        "gamma": 0.0759,
+        "delta": 0.3332,
+        "eta": 0.3374,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 9,
-        "weights": {
-          "alpha": 0.1546,
-          "beta": 0.2493,
-          "gamma": 0.0721,
-          "delta": 0.3737,
-          "eta": 0.2993
-        },
-        "cost_sched": 21.057,
-        "cost_oracle": 20.784,
-        "regret_vs_oracle": 0.0131,
-        "regret_percent": 1.31,
+        "alpha": 0.1546,
+        "beta": 0.2493,
+        "gamma": 0.0721,
+        "delta": 0.3737,
+        "eta": 0.2993,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       },
       {
         "trial_id": 10,
-        "weights": {
-          "alpha": 0.2195,
-          "beta": 0.2218,
-          "gamma": 0.1012,
-          "delta": 0.3084,
-          "eta": 0.2838
-        },
-        "cost_sched": 20.752,
-        "cost_oracle": 20.896,
-        "regret_vs_oracle": -0.0069,
-        "regret_percent": -0.69,
+        "alpha": 0.2195,
+        "beta": 0.2218,
+        "gamma": 0.1012,
+        "delta": 0.3084,
+        "eta": 0.2838,
+        "cost_sched": 21.98,
+        "cost_oracle": 21.98,
+        "regret_vs_oracle": 0.0,
+        "regret_percent": 0.0,
         "stable": true,
-        "oom_failure": false
+        "oom_failure": false,
+        "routing_sequence": "research-expert -> mathematics-expert -> coding-expert -> physics-expert -> mathematics-expert"
       }
     ]
   }

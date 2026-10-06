@@ -3,7 +3,7 @@
 
 In a multi-model execution environment, task decomposition identifies \textit{what} capabilities are needed, while the memory pager determines \textit{how} weights are staged. The critical intermediary is the \textbf{Cognitive Scheduler}: deciding \textit{which} specific model executes each planned stage. Conventional model routers treat selection as an unconstrained dispatch problem, querying the single highest-accuracy model regardless of memory footprint or loading latency. Under constrained hardware resources, this myopic approach is fatal. A scheduler that ignores hardware memory does not optimize performance; it schedules failure. 
 
-In this section, we formulate \textbf{Resource-Aware Cognitive Scheduling}. We establish the multi-objective optimization problem under physical capacity bounds, derive the unified 6-term scoring formulation, explain empirical capability profiling via held-out benchmark probes, and analyze parameter sensitivity and decision boundary stability across workload regimes.
+In this section, we formulate \textbf{Resource-Aware Cognitive Scheduling}. We establish the multi-objective optimization problem under physical capacity bounds, derive the unified 6-term scoring formulation, explain deterministic capability-probe grounding via held-out benchmark fixtures, and analyze parameter sensitivity and decision boundary stability across workload regimes.
 
 \subsection{The Multi-Objective Optimization Problem}
 \label{sec:scheduling_problem}
@@ -55,7 +55,7 @@ Reflects the intrinsic capability match between model $m$ and target capability 
 \begin{equation}
 F_{\text{cap}}(m, C_t) = \text{CapabilityScore}(m, C_t) \cdot Q(m)
 \end{equation}
-where $\text{CapabilityScore}(m, C_t) \in [0.0, 1.0]$ is derived from empirical capability profiling (Section~\ref{sec:capability_profiling}). A domain specialist with state-of-the-art capability in mathematics receives $F_{\text{cap}} \approx 0.95 \times 0.92 = 0.874$, whereas an unspecialized model scores $F_{\text{cap}} \approx 0.50 \times 0.80 = 0.400$.
+where $\text{CapabilityScore}(m, C_t) \in [0.0, 1.0]$ is derived from deterministic capability-probe grounding (Section~\ref{sec:capability_profiling}). A domain specialist with state-of-the-art capability in mathematics receives $F_{\text{cap}} \approx 0.95 \times 0.92 = 0.874$, whereas an unspecialized model scores $F_{\text{cap}} \approx 0.50 \times 0.80 = 0.400$.
 
 \paragraph{2. Memory Cost ($M_{\text{cost}}$).}
 Penalizes the model's footprint relative to the active hardware memory budget $\mathcal{B}_{\text{RAM}}$:
