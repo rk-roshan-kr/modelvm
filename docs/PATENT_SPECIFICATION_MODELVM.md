@@ -175,3 +175,128 @@ where:
 Nominal parameter weights are $\alpha = 0.20, \beta = 0.25, \gamma = 0.10, \delta = 0.30, \eta = 0.35$.
 
 ---
+
+## PATENT CLAIMS
+
+### Family A: Predictive Model Weight Residency & Eviction Shielding
+We claim:
+
+1. A computing system for orchestrating execution of specialized neural networks under constrained physical memory, the system comprising:
+   - a processor;
+   - a primary physical memory having an enforced active memory capacity budget $\mathcal{B}_{\text{RAM}}$;
+   - a secondary storage device storing a catalog of a plurality of specialized neural network parameter weight files, wherein an aggregate memory footprint of said catalog exceeds said active memory capacity budget $\mathcal{B}_{\text{RAM}}$;
+   - a physical interconnect bus coupling said secondary storage device and said primary physical memory; and
+   - a memory management runtime module executed by said processor and configured to:
+     - receive a task execution graph comprising a plurality of procedural capability stages;
+     - determine a forward-looking working set of capabilities demanded across a future lookahead horizon of $k$ stages, where $k \ge 1$;
+     - identify, using said forward-looking working set, one or more specialized neural networks resident in said primary physical memory having predicted downstream utility;
+     - assign an eviction shielding multiplier to an eviction displacement cost of said identified resident specialized neural networks to preferentially protect them from cache eviction; and
+     - transfer parameter weight files of an upcoming specialized neural network from said secondary storage device across said physical interconnect bus into said primary physical memory prior to execution of an upcoming stage when available memory headroom satisfies a predetermined safety margin.
+
+2. The system of claim 1, wherein said eviction shielding multiplier comprises a scaling factor $\mu_{\text{shield}} \ge 1.5$ applied to the eviction displacement cost of candidate resident models demanded within said forward-looking working set.
+
+3. The system of claim 1, wherein said predetermined safety margin requires that an unallocated physical memory buffer remaining after admitting said upcoming specialized neural network is greater than or equal to a predetermined threshold buffer of at least 1.0 Gigabyte.
+
+4. The system of claim 1, wherein said primary physical memory comprises a host memory tier having host capacity budget $\mathcal{B}_{\text{host}}$ and an accelerator device memory tier having device capacity budget $\mathcal{B}_{\text{device}}$, and wherein said memory management runtime module enforces independent admission invariants ensuring that resident parameter weights and active execution workspaces allocated on said accelerator device memory tier remain bounded within $\mathcal{B}_{\text{device}}$, and runtime context and staging buffers allocated on said host memory tier remain bounded within $\mathcal{B}_{\text{host}}$.
+
+5. The system of claim 1, wherein said memory management runtime module transfers parameter weights of said upcoming specialized neural network across said physical interconnect bus via a background input/output thread in concurrency with execution of a current stage, wherein said transfer is gated by an atomic memory reservation token and subject to an abort signal upon detecting that active execution memory breaches a safety threshold.
+
+6. A computer-implemented method for virtualizing model weight residency in a memory-constrained computing system, the method comprising:
+   - decomposing, by a processor, an incoming computational goal into an execution graph comprising a plurality of dependent execution stages, each stage specifying a required technical capability;
+   - establishing an active memory envelope $\mathcal{B}_{\text{RAM}}$ enforced across a physical memory tier;
+   - computing a predictive working set $W(s_t, k)$ of capabilities required across a forward window of $k$ stages reachable from a current stage $s_t$;
+   - assigning an eviction shielding multiplier to models currently resident in said physical memory tier that match capabilities within $W(s_t, k)$;
+   - evicting an unshielded resident model having a lowest displacement cost when memory headroom is insufficient to admit an incoming specialist model; and
+   - streaming parameter weights of said incoming specialist model across a hardware bus into said physical memory tier to execute said current stage.
+
+7. The method of claim 6, wherein victim model eviction comprises selecting a minimal subset of resident models that satisfies required memory reclamation while minimizing total displacement cost, wherein candidate models demanded in $W(s_t, k)$ are scaled by an eviction shielding factor of at least 1.5.
+
+8. A non-transitory computer-readable storage medium storing instructions that, when executed by one or more processors, cause the one or more processors to perform operations comprising:
+   - parsing a computational task into an execution graph comprising a plurality of procedural capability stages;
+   - maintaining an active memory quota for neural network parameter residency on a host computing device;
+   - forecasting capability demand across a forward lookahead horizon of $k$ stages;
+   - preferentially shielding resident neural networks corresponding to forecasted future capabilities from cache eviction using an eviction penalty multiplier; and
+   - pre-staging parameter weights of a forecasted neural network across a peripheral interconnect into spare memory headroom prior to stage invocation conditionally upon satisfying an invariant that free physical memory minus required model weights is greater than or equal to 1.0 Gigabyte.
+
+---
+
+### Family B: Semantic State Virtualization & AST Verification
+
+9. A computing system for virtualizing semantic computational state across heterogeneous neural networks having incompatible tokenizers and hidden-state dimensions, the system comprising:
+   - a processor;
+   - a memory storing instructions; and
+   - a state virtualization runtime module executed by said processor and configured to:
+     - receive execution deliverables from a first neural network upon completion of a task stage;
+     - serialize intermediate computational state into a strongly typed 9-tuple state packet comprising a global goal ($\mathcal{G}$), cumulative verified facts ($\mathcal{F}$), structured calculations ($\mathcal{C}$), empirical evidence citations ($\mathcal{E}$), modeling assumptions ($\mathcal{A}$), epistemic uncertainties ($\mathcal{U}$), committed decisions ($\mathcal{D}$), open questions ($\mathcal{Q}$), and concrete artifacts ($\mathcal{O}$);
+     - verify declared mathematical calculations in said state packet using a deterministic Abstract Syntax Tree (AST) arithmetic verifier prior to state absorption; and
+     - serialize said typed 9-tuple state packet into a structured prompt context for input to a second neural network having a different tokenizer vocabulary and latent representation space from said first neural network.
+
+10. The system of claim 9, wherein said deterministic AST arithmetic verifier parses mathematical expressions using a restricted grammar permitting arithmetic operations and elementary transcendental functions, while strictly blocking arbitrary code execution, dynamic imports, and operating system calls.
+
+11. The system of claim 10, wherein said AST arithmetic verifier computes a numerical evaluation $V = \text{eval}(E)$ of a declared expression $E$ and verifies consistency with a claimed result $R$ using an adaptive tolerance rule:
+$$|V - R| \le \max\left(\epsilon_{\text{abs}}, \; |R| \cdot \epsilon_{\text{rel}}\right)$$
+wherein $\epsilon_{\text{abs}} \le 10^{-4}$ and $\epsilon_{\text{rel}} \le 10^{-3}$.
+
+12. The system of claim 9, wherein said state virtualization runtime module aggregates confidence scores of corroborated claims across distinct neural networks using a diversity-discounted combination rule:
+$$c_{\text{new}} = \min\left(0.99, \; \max\left(c_1, c_2, \; 1.0 - (1.0 - c_1)(1.0 - c_2)^{w_{\text{diversity}}}\right)\right)$$
+wherein $w_{\text{diversity}} \in (0, 1)$ penalizes correlated priors across neural network architectures, and wherein duplicate claims from identical model sources apply no confidence amplification.
+
+13. The system of claim 9, wherein said state virtualization runtime module isolates artifact conflicts by detecting when an incoming deliverable key matches an existing deliverable key with divergent content, creating a versioned key and flagging an explicit conflict indicator while preserving both deliverables in said state packet.
+
+14. A computer-implemented method for virtualizing task state across heterogeneous neural networks, the method comprising:
+   - executing a first capability stage using a first specialized neural network to generate an intermediate stage deliverable;
+   - extracting declared mathematical calculations from said deliverable into structured calculation records;
+   - parsing each extracted mathematical calculation into an Abstract Syntax Tree (AST) governed by a restricted arithmetic grammar;
+   - evaluating said AST to verify equality between a computed value and a declared numerical result within an adaptive tolerance;
+   - absorbing verified calculations, structured facts, and empirical evidence into a typed intermediate state representation; and
+   - rendering said typed intermediate state representation into a structured input context for execution by a second specialized neural network having an incompatible parameter architecture.
+
+15. A non-transitory computer-readable storage medium storing instructions that, when executed by one or more processors, cause the one or more processors to perform operations comprising:
+   - mediating computational state handoffs across neural networks having disparate parameter spaces by serializing intermediate execution deliverables into a typed 9-tuple state packet;
+   - parsing mathematical expressions declared in said deliverables into an abstract syntax tree governed by a restricted arithmetic operator grammar;
+   - computing an arithmetic evaluation of said parsed expressions and verifying consistency with declared numerical results against an adaptive tolerance threshold; and
+   - updating epistemic confidence scores of cross-model claims using a diversity-discounted aggregation function to mitigate circular reinforcement across language model architectures.
+
+---
+
+### Family C: Integrated Cognitive Runtime & Resource-Aware Scheduling
+
+16. An integrated cognitive execution runtime system, comprising:
+   - a processor;
+   - a physical memory having an enforced active memory budget $\mathcal{B}_{\text{RAM}}$;
+   - a storage device storing a catalog of a plurality of heterogeneous specialized neural networks having an aggregate parameter size exceeding $\mathcal{B}_{\text{RAM}}$;
+   - a memory paging subsystem configured to predictively manage parameter weight residency across a hardware interconnect bus using an eviction shielding factor based on forward capability demand;
+   - a state virtualization subsystem configured to transfer task state across said specialized neural networks via a typed intermediate state packet verified by an Abstract Syntax Tree arithmetic verifier; and
+   - a multi-objective cognitive scheduler configured to select an executing neural network for each stage of a task execution graph by evaluating a joint scoring function balancing capability fitness, memory footprint, load latency, energy consumption, resident model eviction penalty, and downstream stage reuse distance.
+
+17. The system of claim 16, wherein said multi-objective cognitive scheduler evaluates candidate models using the joint utility scoring formula:
+$$\text{Score}(m, C) = F_{\text{cap}}(m, C) - \alpha M_{\text{cost}}(m) - \beta L_{\text{load}}(m) - \gamma E_{\text{energy}}(m) - \delta E_{\text{evict}}(m) + \eta F_{\text{future}}(m)$$
+wherein $F_{\text{cap}}$ is empirical capability fitness, $M_{\text{cost}}$ is normalized memory allocation, $L_{\text{load}}$ is interconnect bus transfer latency, $E_{\text{energy}}$ is normalized energy consumption, $E_{\text{evict}}$ is eviction displacement cost including shielding multiplier, and $F_{\text{future}}$ is forecasted downstream stage reuse utility.
+
+18. The system of claim 16, further comprising a confidence controller configured to evaluate stage results and enforce a loop-protected bounded escalation protocol when an uncertainty metric breaches an escalation threshold, wherein said escalation dynamically pages in an alternative specialized neural network having a capability score exceeding the current model by at least a predetermined delta threshold $\epsilon \ge 0.02$, with a maximum escalation bound per stage.
+
+19. The system of claim 16, wherein said integrated runtime system operates as a user-space execution middleware communicating with hardware devices through existing operating system drivers without modifying kernel-level virtual memory page tables.
+
+20. A computer-implemented method for scheduling and executing heterogeneous neural networks under memory constraints, the method comprising:
+   - decomposing a task into an execution graph of dependent capability stages;
+   - evaluating a plurality of candidate specialized neural networks for a current stage using a 6-term utility scoring function balancing capability fit, memory footprint, bus load latency, energy consumption, eviction displacement cost, and future stage reuse;
+   - paging in the candidate neural network having a maximum utility score into an active physical memory envelope, evicting resident models having lowest displacement costs if required;
+   - executing said stage on said selected neural network;
+   - absorbing stage outputs into a typed intermediate state packet verified by an independent arithmetic syntax evaluator; and
+   - transitioning execution to a subsequent stage using said verified typed state packet.
+
+21. The method of claim 20, wherein candidate model selection achieves a cumulative schedule regret of less than or equal to 0.5% relative to an exact finite-state Dynamic Programming prescient offline oracle computed across feasible resident model subsets.
+
+22. A non-transitory computer-readable storage medium storing instructions that, when executed by one or more processors, cause the one or more processors to perform operations comprising:
+   - receiving a task execution graph comprising a plurality of procedural capability stages;
+   - forecasting working set capability demands across a future lookahead horizon of $k$ stages;
+   - selecting an executing specialized neural network for each stage using a multi-objective utility formula penalizing memory consumption, bus loading time, energy dissipation, and resident eviction penalties while rewarding stage capability and future reuse;
+   - shielding resident neural networks corresponding to forecasted future capabilities from cache eviction;
+   - executing stages on selected neural networks within an enforced physical memory envelope; and
+   - mediating inter-stage state transfer through a typed intermediate representation verified via Abstract Syntax Tree arithmetic parsing.
+
+---
+
+## ABSTRACT OF THE DISCLOSURE
+Systems, methods, and computer-readable media manage execution of heterogeneous machine-learning models under constrained memory budgets. A runtime decomposes a computational task into capability stages and predicts future model demand from an execution graph. A memory controller uses predicted demand to apply eviction shielding multipliers to resident models and conditionally pre-stages or pre-fetches model parameters when available memory satisfies a safety headroom threshold. A multi-objective scheduler selects models based on capability fitness, memory footprint, transfer latency, energy consumption, eviction displacement penalty, and downstream reuse distance. Intermediate task state is transferred between disparate models through a typed 9-tuple state packet containing verified calculations, structured facts, evidence, assumptions, uncertainties, decisions, open questions, and versioned artifacts. An arithmetic verification component parses declared expressions into an abstract syntax tree and validates computed results against declared values under an adaptive tolerance rule.
+
